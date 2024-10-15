@@ -1,7 +1,6 @@
 _default:
   just --list
 
-# error out if this isn't being run in a venv
 _require-venv:
     #!/usr/bin/env python
     import sys

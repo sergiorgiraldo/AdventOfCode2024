@@ -32,10 +32,12 @@ to make easier, I have this rule for [`ondir`](https://github.com/alecthomas/ond
 enter ~/source/AdventOfCode2024/(.*)
     alias pt="python -m tests --verbose"
     alias pr="python -m solution"
+    alias venv="source venv/bin/activate"
 
 leave ~/source/AdventOfCode2024/(.*)
     unalias pt
     unalias pr
+    unalias venv
 ```
 
 ## Commands

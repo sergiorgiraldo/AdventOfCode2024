@@ -112,6 +112,7 @@ class BaseSolution(ABC):
         if submit_to_aocd:
             self.submit_puzzle(part="a" if part == "1" else "b", res=res)
 
+
 # Concrete Solutions
 class InputAsStringSolution(BaseSolution):
     def __init__(self):
