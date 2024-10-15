@@ -16,9 +16,13 @@ My solutions to [Advent of Code 2024](https://adventofcode.com/2024) done in Pyt
 
 ## running a day
 
+`source venv/bin/activate` # always run on venv
+
 `cd` to the day
 
 `python -m tests --verbose` && `python -m solution`
+
+once done, `deactivate`
 
 to make easier, I have this rule for [`ondir`](https://github.com/alecthomas/ondir) 
 
