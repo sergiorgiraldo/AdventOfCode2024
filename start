@@ -6,6 +6,7 @@ from os import path;
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from datetime import date
 
 PARSER = argparse.ArgumentParser(
     prog="./start", description="Scaffold a new Advent of Code solution"
@@ -23,10 +24,12 @@ PARSER.add_argument(
 if __name__ == "__main__":
     ARGS = PARSER.parse_args()
 
-    day = ARGS.day
+    day = ARGS.day if ARGS.day is not None else date.today().day
 
     if not 1 <= day <= 25:
         PARSER.error(f"day {day} is not in range [1,25]")
+
+    print("doing day", day)
 
     day_dir = Path("solutions", f"day{day:02}")
 
