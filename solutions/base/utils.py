@@ -34,9 +34,8 @@ def shortest_path(s: V, t: V, get_neighbors: Callable[[V], Iterable[V]]) -> int:
     """
     Compute length of shortest path from source `s` to target `t`.
     """
-    dists = shortest_paths(
-        s, get_neighbors, stop_condition=lambda dists: t in dists)
+    dists = shortest_paths(s, get_neighbors, stop_condition=lambda dists: t in dists)
     if t in dists:
         return dists[t]
-    else:
-        raise RuntimeError(f"{t} is not reachable from {s}")
+
+    raise RuntimeError(f"{t} is not reachable from {s}")
