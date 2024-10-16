@@ -16,13 +16,9 @@ My solutions to [Advent of Code 2024](https://adventofcode.com/2024) done in Pyt
 
 ## running a day
 
-`source venv/bin/activate` # always run on venv
-
 `cd` to the day
 
 `python -m tests --verbose` && `python -m solution`
-
-once done, `deactivate`
 
 to make easier, I have this rule for [`ondir`](https://github.com/alecthomas/ondir) 
 
@@ -32,19 +28,25 @@ to make easier, I have this rule for [`ondir`](https://github.com/alecthomas/ond
 enter ~/source/AdventOfCode2024/(.*)
     alias pt="python -m tests --verbose"
     alias pr="python -m solution"
-    alias venv="source venv/bin/activate"
 
 leave ~/source/AdventOfCode2024/(.*)
     unalias pt
     unalias pr
-    unalias venv
 ```
 
 ## Commands
 
+### `./ruff.sh` 
+
+Lint and format
+
+#### Usage
+
+> `./ruff.sh`
+
 ### `./deploy.sh` 
 
-Create viewer, commit to Github and make PR
+Lint, format, create viewer, commit to Github and make PR
 
 #### Usage
 

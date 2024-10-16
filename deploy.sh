@@ -2,7 +2,7 @@
 
 ./build-viewer $1
 
-just lint
+./ruff.sh
 
 git bumpmajor
 
