@@ -50,6 +50,8 @@ Lint, format, create viewer, commit to Github and make PR
 
 #### Usage
 
+> run in **develop** branch
+>
 > `./deploy.sh [day]`
 
 ### `./start` 
