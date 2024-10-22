@@ -1,4 +1,4 @@
-# puzzle prompt: https://adventofcode.com/<YEAR>/day/<DAY>
+# puzzle prompt: https://adventofcode.com/2024/day/22
 
 import time
 import sys
@@ -7,13 +7,14 @@ sys.path.insert(0,"..")
 from base.advent import *
 
 class Solution(InputAsLinesSolution):
-    _year = <YEAR>
-    _day = <DAY>
+    _year = 2024
+    _day = 22
     
     _is_debugging = True
 
     def pt1(self, input):
-        self.debug(input)
+        x = [1,2]
+        self.debug(x)
 
         return ""
 
@@ -29,7 +30,7 @@ class Solution(InputAsLinesSolution):
 
         end_time = time.time()
 
-        self.solve("1", res, (end_time - start_time))
+        # self.solve("1", res, (end_time - start_time))
 
     def part_2(self):
         start_time = time.time()
