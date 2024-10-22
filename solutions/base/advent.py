@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import final
 from pprint import pprint
+from typing import final
+
 from aocd import submit
 
 
