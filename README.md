@@ -50,9 +50,9 @@ Lint, format, create viewer, commit to Github and make PR
 
 #### Usage
 
+> `./deploy.sh [day]` # *default current day*
 > run in **develop** branch
 >
-> `./deploy.sh [day]`
 
 ### `./start` 
 
@@ -60,7 +60,7 @@ Scaffold files to start a new Advent of Code solution and download the puzzle in
 
 #### Usage
 
-> `./start [-h] [--year YEAR] [day]`
+> `./start [-h] [--year YEAR] [day]` # *default current year and current day*
 
 ### `./build-viewer` 
 
@@ -68,5 +68,5 @@ Generate HTML for viewing the day's solution
 
 #### Usage
 
-> `./build-viewer [day]`
+> `./build-viewer {day}`
 

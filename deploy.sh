@@ -1,6 +1,12 @@
 #!/bin/sh
 
-./build-viewer $1
+param=$1
+
+if [ -z "$param" ]; then
+    param=$(date +%d)
+fi
+
+./build-viewer $param
 
 ./ruff.sh
 
@@ -8,7 +14,7 @@ git bumpmajor
 
 git add --all . 
 
-git commit -S -m 'feat!: day '"$1"' completed.'
+git commit -S -m 'feat!: day '"$param"' completed.'
 
 git push -u origin HEAD
 
