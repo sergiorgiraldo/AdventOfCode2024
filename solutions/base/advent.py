@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
+from pprint import pprint
 from typing import final
 
 from aocd import submit
@@ -13,6 +14,7 @@ class AoCException(Exception):
 class BaseSolution(ABC):
     _year: int
     _day: int
+    is_debugging: bool = False
 
     def __init__(
         cls,
@@ -103,6 +105,17 @@ class BaseSolution(ABC):
     @final
     def submit_puzzle(self, part, res):
         submit(res, part=part, day=self.day, year=self.year)
+
+    @final
+    def debug(self, *objects, trailing_newline=False):
+        if not self.is_debugging:
+            return
+
+        for o in objects:
+            pprint(o)
+
+        if trailing_newline:
+            print()
 
     def solve(self, part, res, tm, submit_to_aocd=True):
         self.save(part, str(res), tm)
