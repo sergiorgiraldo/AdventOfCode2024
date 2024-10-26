@@ -14,7 +14,7 @@ class AoCException(Exception):
 class BaseSolution(ABC):
     _year: int
     _day: int
-    is_debugging: bool = False
+    _is_debugging: bool = False
 
     def __init__(
         cls,
@@ -108,7 +108,7 @@ class BaseSolution(ABC):
 
     @final
     def debug(self, *objects, trailing_newline=False):
-        if not self.is_debugging:
+        if not self._is_debugging:
             return
 
         for o in objects:
@@ -122,8 +122,11 @@ class BaseSolution(ABC):
 
         print(f"Part {part} :: {res}")
 
-        if submit_to_aocd:
-            self.submit_puzzle(part="a" if part == "1" else "b", res=res)
+        if self._is_debugging:
+            print("********** Debug mode, skipping submission **********")
+        else:
+            if submit_to_aocd:
+                self.submit_puzzle(part="a" if part == "1" else "b", res=res)
 
 
 # Concrete Solutions
