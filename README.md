@@ -64,7 +64,7 @@ Lint, format, create viewer, commit to Github and make PR
 
 ### `./start`
 
-Scaffold files to start a new Advent of Code solution and download the puzzle input
+Scaffold files to start a new Advent of Code solution and download the puzzle input and puzzle test input
 
 #### Usage
 
