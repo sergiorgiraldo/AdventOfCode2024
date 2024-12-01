@@ -12,7 +12,7 @@ class Solution(InputAsLinesSolution):
     _year = 2024
     _day = 1
 
-    _is_debugging = False
+    _is_debugging = True
 
     def getArrays(self, input):
         column1 = []
@@ -44,7 +44,7 @@ class Solution(InputAsLinesSolution):
         similarity = 0
 
         for i in range(len(column1)):
-            similarity += column1[i] * sum(k == column1[i] for k in column2)
+            similarity += column1[i] * sum(id == column1[i] for id in column2)
 
         return similarity
 
