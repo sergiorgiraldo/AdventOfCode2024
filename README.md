@@ -7,12 +7,20 @@ My solutions to [Advent of Code 2024](https://adventofcode.com/2024) done in Pyt
 ## Performance
 
 ![](https://img.shields.io/badge/day%20📅-24-blue)
- 
+
 ![](https://img.shields.io/badge/stars%20⭐-50-yellow)
 
 ---
 
-# Based on @xavdid's Python Advent of Code Project Template
+- Based on @xavdid's Python Advent of Code Project Template
+
+## setup
+
+When advent begins, get the session cookie from the page and update these:
+
+- `./.env`
+- aoc_session in githib action secrets
+- aocd token in `~/.config/aocd/token`
 
 ## running a day
 
@@ -20,11 +28,11 @@ My solutions to [Advent of Code 2024](https://adventofcode.com/2024) done in Pyt
 
 `python -m tests --verbose` && `python -m solution`
 
-to make easier, I have this rule for [`ondir`](https://github.com/alecthomas/ondir) 
+to make easier, I have this rule for [`ondir`](https://github.com/alecthomas/ondir)
 
 > .ondirrc
 
-```
+```ondir
 enter ~/source/AdventOfCode2024/(.*)
     alias pt="python -m tests --verbose"
     alias pr="python -m solution"
@@ -36,7 +44,7 @@ leave ~/source/AdventOfCode2024/(.*)
 
 ## Commands
 
-### `./ruff.sh` 
+### `./ruff.sh`
 
 Lint and format
 
@@ -44,7 +52,7 @@ Lint and format
 
 > `./ruff.sh`
 
-### `./deploy.sh` 
+### `./deploy.sh`
 
 Lint, format, create viewer, commit to Github and make PR
 
@@ -54,7 +62,7 @@ Lint, format, create viewer, commit to Github and make PR
 > run in **develop** branch
 >
 
-### `./start` 
+### `./start`
 
 Scaffold files to start a new Advent of Code solution and download the puzzle input
 
@@ -62,11 +70,10 @@ Scaffold files to start a new Advent of Code solution and download the puzzle in
 
 > `./start [-h] [--year YEAR] [day]` # *default current year and current day*
 
-### `./build-viewer` 
+### `./build-viewer`
 
 Generate HTML for viewing the day's solution
 
 #### Usage
 
 > `./build-viewer {day}`
-
