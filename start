@@ -3,10 +3,9 @@
 import argparse
 from pathlib import Path
 from os import path;
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
 from datetime import date
+from aocd import get_data
+import subprocess
 
 PARSER = argparse.ArgumentParser(
     prog="./start", description="Scaffold a new Advent of Code solution"
@@ -37,41 +36,36 @@ if __name__ == "__main__":
 
     # bgn get input ##############
 
+    ## puzzle
+
     with open('.env') as f: aoc_session = f.read()
 
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-
-    # Replace value with your session cookie for AoC
-    session_cookie = {"name": "session", "value": aoc_session}
-
-    # initialize driver object and change the <path_to_chrome_driver> depending on your directory where your chromedriver should be
-    # https://www.kenst.com/installing-chromedriver-on-mac-osx/
-    driver = webdriver.Chrome(options=chrome_options, executable_path="/opt/homebrew/bin/chromedriver")
-
-    # URLs we need
-    url = "https://adventofcode.com/2024/day/"
-    url_input = "https://adventofcode.com/2024/day/" + day.__str__() + "/input"
-
-    # get request to target the site selenium is active on, add our cookies and go to input
-    driver.get(url)
-    driver.add_cookie(session_cookie)
-    driver.get(url_input)
-
-    # Find our text input on the input page, "pre" is our tag ID
-    content = driver.find_element(By.TAG_NAME, "pre").text    
+    content = get_data(day=day, year=2024, session=aoc_session)
 
     input_path = Path(day_dir, "input.txt")
 
-    # Save content to file
+    # always overwrite
     if path.exists(input_path): 
-        open(input_path, 'w').close() # always overwrite
-    f = open(input_path, "a")
-    for line in content:
-        f.write(line)
-    f.close()
-    # Remember to quit the driver
-    driver.quit()
+        open(input_path, 'w').close()
+    # save content to file
+    with open(input_path, "a") as f:
+        for line in content:
+            f.write(line)
+
+    ## test
+
+    command = "aocd " + str(day) + " 2024 --example"
+    result = subprocess.run(command, shell=True, text=True, capture_output=True)
+    content = result.stdout
+
+    input_test_path = Path(day_dir, "input.test.txt")
+    # always overwrite
+    if path.exists(input_test_path):
+        open(input_test_path, 'w').close()
+    # save content to file
+    with open(input_test_path, "a") as f:
+        for line in content:
+            f.write(line)
 
     # end get input ##############
 
@@ -91,3 +85,4 @@ if __name__ == "__main__":
         template = Path("misc/tests.py.tmpl").read_text()
         tests_path.write_text(template)
         print("Created a new Test file at", tests_path)
+
