@@ -5,6 +5,7 @@ from typing import final
 
 from aocd import submit
 
+
 class AoCException(Exception):
     pass
 
@@ -118,7 +119,7 @@ class BaseSolution(ABC):
 
     def solve(self, part, res, tm, submit_to_aocd=True):
         print(f"Part {part} :: {res}")
-        
+
         if self._is_debugging:
             print("********** Debug mode, skipping submission **********")
         else:
