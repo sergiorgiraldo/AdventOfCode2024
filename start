@@ -6,6 +6,7 @@ from os import path;
 from datetime import date
 from aocd import get_data
 import subprocess
+import webbrowser
 
 PARSER = argparse.ArgumentParser(
     prog="./start", description="Scaffold a new Advent of Code solution"
@@ -67,6 +68,8 @@ if __name__ == "__main__":
         for line in content:
             f.write(line)
 
+    print("Downloaded input files")
+
     # end get input ##############
 
     solution_path = Path(day_dir, "solution.py")
@@ -85,4 +88,8 @@ if __name__ == "__main__":
         template = Path("misc/tests.py.tmpl").read_text()
         tests_path.write_text(template)
         print("Created a new Test file at", tests_path)
+
+        print("Open AOC day in the browser")
+        url = "https://adventofcode.com/2024/day/" + str(day)
+        webbrowser.open(url)
 
