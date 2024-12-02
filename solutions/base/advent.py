@@ -24,8 +24,7 @@ class BaseSolution(ABC):
         int_csvline=False,
         block=False,
         separator=",",
-        to_int=False
-    ):
+        to_int=False):
         if lines:
             cls.input = cls.read_input().splitlines()
         else:
@@ -52,7 +51,10 @@ class BaseSolution(ABC):
 
                             cls.input = lines.split("\n\n")
                         else:  # if string:
-                            cls.input = cls.read_input()
+                            if to_int:
+                                cls.input = int(cls.read_input())
+                            else:
+                                cls.input = cls.read_input()
 
     @property
     def year(self):
@@ -142,6 +144,7 @@ class InputAsStringSolution(BaseSolution):
             two_dimensional=False,
             int_csvline=False,
             block=False,
+            to_int=False
         )
 
     def dummy(self):
