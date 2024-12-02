@@ -58,7 +58,7 @@ class Solution(InputAsCSVSolution):
 
             is_safe = self.CheckIfSafe(levels)
 
-            if is_safe == 1:
+            if is_safe:
                 total += 1
                 continue
             # else try with tolerance
@@ -69,7 +69,7 @@ class Solution(InputAsCSVSolution):
 
                 is_safe = self.CheckIfSafe(tolerance_levels)
 
-                if is_safe == 1:
+                if is_safe:
                     total += 1
                     break
 

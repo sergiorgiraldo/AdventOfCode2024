@@ -36,9 +36,10 @@
 <pre>
 <span># puzzle prompt: https://adventofcode.com/2024/day/2</span>
 <span></span>
-<span>import time</span>
 <span>import sys</span>
-<span>sys.path.insert(0,"..")</span>
+<span>import time</span>
+<span></span>
+<span>sys.path.insert(0, "..")</span>
 <span></span>
 <span>from base.advent import *</span>
 <span></span>
@@ -46,10 +47,10 @@
 <span>class Solution(InputAsCSVSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 2</span>
-<span>    </span>
+<span></span>
 <span>    _is_debugging = False</span>
 <span></span>
-<span>    def CheckIfSafe(self,levels):</span>
+<span>    def CheckIfSafe(self, levels):</span>
 <span>        is_safe = 0</span>
 <span>        is_increasing = None</span>
 <span>        for idx in range(0, len(levels) - 1):</span>
@@ -74,7 +75,7 @@
 <span>            is_safe = 1</span>
 <span></span>
 <span>        return is_safe</span>
-<span>        </span>
+<span></span>
 <span>    def GetSafeLevels(self, input):</span>
 <span>        total = 0</span>
 <span></span>
@@ -82,9 +83,9 @@
 <span>            levels = [int(lvl) for lvl in report]</span>
 <span></span>
 <span>            total += self.CheckIfSafe(levels)</span>
-<span>                    </span>
+<span></span>
 <span>        return total</span>
-<span>        </span>
+<span></span>
 <span>    def GetSafeLevelsWithTolerance(self, input):</span>
 <span>        total = 0</span>
 <span></span>
@@ -93,18 +94,18 @@
 <span></span>
 <span>            is_safe = self.CheckIfSafe(levels)</span>
 <span></span>
-<span>            if (is_safe == 1):</span>
+<span>            if is_safe:</span>
 <span>                total += 1</span>
 <span>                continue</span>
-<span>            #else try with tolerance        </span>
+<span>            # else try with tolerance</span>
 <span></span>
 <span>            # Brute force, always go for the simplest implementation</span>
 <span>            for j in range(0, len(levels)):</span>
 <span>                tolerance_levels = levels[:j] + levels[j + 1 :]</span>
-<span>                </span>
+<span></span>
 <span>                is_safe = self.CheckIfSafe(tolerance_levels)</span>
 <span></span>
-<span>                if (is_safe == 1):</span>
+<span>                if is_safe:</span>
 <span>                    total += 1</span>
 <span>                    break</span>
 <span></span>
@@ -123,10 +124,9 @@
 <span>        total = self.GetSafeLevelsWithTolerance(input)</span>
 <span></span>
 <span>        return total</span>
-<span>        </span>
+<span></span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
-<span></span>
 <span></span>
 <span>        res = self.pt1(self.input)</span>
 <span></span>
@@ -143,10 +143,12 @@
 <span></span>
 <span>        self.solve("2", res, (end_time - start_time))</span>
 <span></span>
-<span>if __name__ == '__main__':</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
 <span>    solution = Solution(separator=" ")</span>
 <span></span>
 <span>    solution.part_1()</span>
-<span>    </span>
+<span></span>
 <span>    solution.part_2()</span>
+<span></span>
 </pre>
