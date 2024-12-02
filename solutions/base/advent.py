@@ -155,9 +155,14 @@ class InputAsLinesSolution(BaseSolution):
 
 
 class InputAsCSVSolution(BaseSolution):
-    def __init__(self):
+    def __init__(self, separator=","):
         super().__init__(
-            lines=False, csv=True, two_dimensional=False, int_csvline=False, block=False
+            lines=False,
+            csv=True,
+            two_dimensional=False,
+            int_csvline=False,
+            block=False,
+            separator=separator,
         )
 
     def dummy(self):

@@ -19,7 +19,7 @@ My solutions to [Advent of Code 2024](https://adventofcode.com/2024) done in Pyt
 When advent begins, get the session cookie from the page and update these:
 
 - `./.env`
-- aoc_session in githib action secrets
+- aoc_session in gh action secret
 - aocd token in `~/.config/aocd/token`
 
 ## running a day

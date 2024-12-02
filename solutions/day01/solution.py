@@ -12,7 +12,7 @@ class Solution(InputAsLinesSolution):
     _year = 2024
     _day = 1
 
-    _is_debugging = False
+    _is_debugging = True
 
     def getArrays(self, input):
         column1 = []
@@ -28,7 +28,7 @@ class Solution(InputAsLinesSolution):
 
         return column1, column2
 
-    def getDistance(self, input):
+    def GetDistance(self, input):
         column1, column2 = self.getArrays(input)
 
         distance = 0
@@ -38,25 +38,25 @@ class Solution(InputAsLinesSolution):
 
         return distance
 
-    def getSimilarity(self, input):
+    def GetSimilarity(self, input):
         column1, column2 = self.getArrays(input)
 
         similarity = 0
 
         for i in range(len(column1)):
-            similarity += column1[i] * sum(k == column1[i] for k in column2)
+            similarity += column1[i] * sum(id == column1[i] for id in column2)
 
         return similarity
 
     def pt1(self, input):
         self.debug(input)
 
-        return self.getDistance(input)
+        return self.GetDistance(input)
 
     def pt2(self, input):
         self.debug(input)
 
-        return self.getSimilarity(input)
+        return self.GetSimilarity(input)
 
     def part_1(self):
         start_time = time.time()

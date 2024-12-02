@@ -1,0 +1,152 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 02</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/2</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span></span>
+<span></span>
+<span>class Solution(InputAsCSVSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 2</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    def CheckIfSafe(self,levels):</span>
+<span>        is_safe = 0</span>
+<span>        is_increasing = None</span>
+<span>        for idx in range(0, len(levels) - 1):</span>
+<span>            level_A = levels[idx]</span>
+<span>            level_B = levels[idx + 1]</span>
+<span></span>
+<span>            if level_A > level_B:</span>
+<span>                if is_increasing is None:</span>
+<span>                    is_increasing = False</span>
+<span>                elif is_increasing:</span>
+<span>                    break</span>
+<span>            else:</span>
+<span>                if is_increasing is None:</span>
+<span>                    is_increasing = True</span>
+<span>                elif not is_increasing:</span>
+<span>                    break</span>
+<span></span>
+<span>            diff = abs(level_A - level_B)</span>
+<span>            if diff < 1 or diff > 3:</span>
+<span>                break</span>
+<span>        else:  # no break i.e. no increase nor decrease nor big differences</span>
+<span>            is_safe = 1</span>
+<span></span>
+<span>        return is_safe</span>
+<span>        </span>
+<span>    def GetSafeLevels(self, input):</span>
+<span>        total = 0</span>
+<span></span>
+<span>        for report in input:</span>
+<span>            levels = [int(lvl) for lvl in report]</span>
+<span></span>
+<span>            total += self.CheckIfSafe(levels)</span>
+<span>                    </span>
+<span>        return total</span>
+<span>        </span>
+<span>    def GetSafeLevelsWithTolerance(self, input):</span>
+<span>        total = 0</span>
+<span></span>
+<span>        for report in input:</span>
+<span>            levels = [int(lvl) for lvl in report]</span>
+<span></span>
+<span>            is_safe = self.CheckIfSafe(levels)</span>
+<span></span>
+<span>            if (is_safe == 1):</span>
+<span>                total += 1</span>
+<span>                continue</span>
+<span>            #else try with tolerance        </span>
+<span></span>
+<span>            # Brute force, always go for the simplest implementation</span>
+<span>            for j in range(0, len(levels)):</span>
+<span>                tolerance_levels = levels[:j] + levels[j + 1 :]</span>
+<span>                </span>
+<span>                is_safe = self.CheckIfSafe(tolerance_levels)</span>
+<span></span>
+<span>                if (is_safe == 1):</span>
+<span>                    total += 1</span>
+<span>                    break</span>
+<span></span>
+<span>        return total</span>
+<span></span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        total = self.GetSafeLevels(input)</span>
+<span></span>
+<span>        return total</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        total = self.GetSafeLevelsWithTolerance(input)</span>
+<span></span>
+<span>        return total</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution(separator=" ")</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>
