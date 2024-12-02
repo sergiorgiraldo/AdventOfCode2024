@@ -5,10 +5,8 @@ from typing import final
 
 from aocd import submit
 
-
 class AoCException(Exception):
     pass
-
 
 # Abstract Solution
 class BaseSolution(ABC):
@@ -134,7 +132,6 @@ class BaseSolution(ABC):
             if submit_to_aocd:
                 self.submit_puzzle(part="a" if part == "1" else "b", res=res)
 
-
 # Concrete Solutions
 class InputAsStringSolution(BaseSolution):
     def __init__(self):
@@ -150,7 +147,6 @@ class InputAsStringSolution(BaseSolution):
     def dummy(self):
         pass
 
-
 class InputAsLinesSolution(BaseSolution):
     def __init__(self):
         super().__init__(
@@ -163,7 +159,6 @@ class InputAsLinesSolution(BaseSolution):
 
     def dummy(self):
         pass
-
 
 class InputAsCSVSolution(BaseSolution):
     def __init__(self, separator=",", to_int=False):
@@ -180,7 +175,6 @@ class InputAsCSVSolution(BaseSolution):
     def dummy(self):
         pass
 
-
 class InputAsIntCSVLineSolution(BaseSolution):
     def __init__(self, separator=","):
         super().__init__(
@@ -195,7 +189,6 @@ class InputAsIntCSVLineSolution(BaseSolution):
     def dummy(self):
         pass
 
-
 class InputAs2DSolution(BaseSolution):
     def __init__(self):
         super().__init__(
@@ -204,7 +197,6 @@ class InputAs2DSolution(BaseSolution):
 
     def dummy(self):
         pass
-
 
 class InputAsBlockSolution(BaseSolution):
     def __init__(self):
