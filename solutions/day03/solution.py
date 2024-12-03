@@ -19,7 +19,6 @@ class Solution(InputAsStringSolution):
         self.debug(input)
 
         regex = r"mul\((\d+),(\d+)\)"
-
         result = 0
 
         for a, b in re.findall(regex, input):
@@ -31,7 +30,6 @@ class Solution(InputAsStringSolution):
         self.debug(input)
 
         regex = r"mul\((\d+),(\d+)\)|(do\(\))|(don't\(\))"
-
         result = 0
         enabled = True
 

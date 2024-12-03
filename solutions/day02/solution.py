@@ -15,28 +15,27 @@ class Solution(InputAsCSVSolution):
     _is_debugging = False
 
     def CheckIfSafe(self, levels):
-        is_safe = 0
+        is_safe = False
         is_increasing = None
+        
         for idx in range(0, len(levels) - 1):
             level_A = levels[idx]
             level_B = levels[idx + 1]
 
-            if level_A > level_B:
-                if is_increasing is None:
+            if is_increasing is None:
+                if level_A > level_B:
                     is_increasing = False
-                elif is_increasing:
-                    break
-            else:
-                if is_increasing is None:
+                else:
                     is_increasing = True
-                elif not is_increasing:
-                    break
+
+            if  (level_A > level_B and is_increasing) or (level_A <= level_B and not is_increasing):
+                break
 
             diff = abs(level_A - level_B)
             if diff < 1 or diff > 3:
                 break
         else:  # no break i.e. no increase nor decrease nor big differences
-            is_safe = 1
+            is_safe = True
 
         return is_safe
 
@@ -44,9 +43,7 @@ class Solution(InputAsCSVSolution):
         total = 0
 
         for report in input:
-            # levels = [int(lvl) for lvl in report]
-
-            total += self.CheckIfSafe(report)
+            total += int(self.CheckIfSafe(report))
 
         return total
 
@@ -54,8 +51,6 @@ class Solution(InputAsCSVSolution):
         total = 0
 
         for report in input:
-            # levels = [int(lvl) for lvl in report]
-
             is_safe = self.CheckIfSafe(report)
 
             if is_safe:
