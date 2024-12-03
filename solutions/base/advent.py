@@ -5,8 +5,10 @@ from typing import final
 
 from aocd import submit
 
+
 class AoCException(Exception):
     pass
+
 
 # Abstract Solution
 class BaseSolution(ABC):
@@ -22,7 +24,8 @@ class BaseSolution(ABC):
         int_csvline=False,
         block=False,
         separator=",",
-        to_int=False):
+        to_int=False,
+    ):
         if lines:
             cls.input = cls.read_input().splitlines()
         else:
@@ -30,7 +33,9 @@ class BaseSolution(ABC):
                 lines = cls.read_input().splitlines()
 
                 if to_int:
-                    cls.input = [[int(d) for d in line.split(separator)] for line in lines]
+                    cls.input = [
+                        [int(d) for d in line.split(separator)] for line in lines
+                    ]
                 else:
                     cls.input = [line.split(separator) for line in lines]
             else:
@@ -132,6 +137,7 @@ class BaseSolution(ABC):
             if submit_to_aocd:
                 self.submit_puzzle(part="a" if part == "1" else "b", res=res)
 
+
 # Concrete Solutions
 class InputAsStringSolution(BaseSolution):
     def __init__(self):
@@ -141,24 +147,22 @@ class InputAsStringSolution(BaseSolution):
             two_dimensional=False,
             int_csvline=False,
             block=False,
-            to_int=False
+            to_int=False,
         )
 
     def dummy(self):
         pass
+
 
 class InputAsLinesSolution(BaseSolution):
     def __init__(self):
         super().__init__(
-            lines=True, 
-            csv=False, 
-            two_dimensional=False, 
-            int_csvline=False, 
-            block=False
+            lines=True, csv=False, two_dimensional=False, int_csvline=False, block=False
         )
 
     def dummy(self):
         pass
+
 
 class InputAsCSVSolution(BaseSolution):
     def __init__(self, separator=",", to_int=False):
@@ -169,25 +173,27 @@ class InputAsCSVSolution(BaseSolution):
             int_csvline=False,
             block=False,
             separator=separator,
-            to_int=to_int
+            to_int=to_int,
         )
 
     def dummy(self):
         pass
+
 
 class InputAsIntCSVLineSolution(BaseSolution):
     def __init__(self, separator=","):
         super().__init__(
-            lines=False, 
-            csv=False, 
-            two_dimensional=False, 
-            int_csvline=True, 
+            lines=False,
+            csv=False,
+            two_dimensional=False,
+            int_csvline=True,
             block=False,
-            separator=separator
+            separator=separator,
         )
 
     def dummy(self):
         pass
+
 
 class InputAs2DSolution(BaseSolution):
     def __init__(self):
@@ -197,6 +203,7 @@ class InputAs2DSolution(BaseSolution):
 
     def dummy(self):
         pass
+
 
 class InputAsBlockSolution(BaseSolution):
     def __init__(self):

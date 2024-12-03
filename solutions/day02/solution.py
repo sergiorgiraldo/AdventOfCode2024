@@ -7,6 +7,7 @@ sys.path.insert(0, "..")
 
 from base.advent import *
 
+
 class Solution(InputAsCSVSolution):
     _year = 2024
     _day = 2
