@@ -24,6 +24,7 @@ class BaseSolution(ABC):
         int_csvline=False,
         block=False,
         separator=",",
+        to_int=False,
     ):
         if lines:
             cls.input = cls.read_input().splitlines()
@@ -31,7 +32,12 @@ class BaseSolution(ABC):
             if csv:
                 lines = cls.read_input().splitlines()
 
-                cls.input = [line.split(separator) for line in lines]
+                if to_int:
+                    cls.input = [
+                        [int(d) for d in line.split(separator)] for line in lines
+                    ]
+                else:
+                    cls.input = [line.split(separator) for line in lines]
             else:
                 if two_dimensional:
                     lines = cls.read_input().splitlines()
@@ -48,7 +54,10 @@ class BaseSolution(ABC):
 
                             cls.input = lines.split("\n\n")
                         else:  # if string:
-                            cls.input = cls.read_input()
+                            if to_int:
+                                cls.input = int(cls.read_input())
+                            else:
+                                cls.input = cls.read_input()
 
     @property
     def year(self):
@@ -138,6 +147,7 @@ class InputAsStringSolution(BaseSolution):
             two_dimensional=False,
             int_csvline=False,
             block=False,
+            to_int=False,
         )
 
     def dummy(self):
@@ -155,7 +165,7 @@ class InputAsLinesSolution(BaseSolution):
 
 
 class InputAsCSVSolution(BaseSolution):
-    def __init__(self, separator=","):
+    def __init__(self, separator=",", to_int=False):
         super().__init__(
             lines=False,
             csv=True,
@@ -163,6 +173,7 @@ class InputAsCSVSolution(BaseSolution):
             int_csvline=False,
             block=False,
             separator=separator,
+            to_int=to_int,
         )
 
     def dummy(self):
@@ -170,9 +181,14 @@ class InputAsCSVSolution(BaseSolution):
 
 
 class InputAsIntCSVLineSolution(BaseSolution):
-    def __init__(self):
+    def __init__(self, separator=","):
         super().__init__(
-            lines=False, csv=False, two_dimensional=False, int_csvline=True, block=False
+            lines=False,
+            csv=False,
+            two_dimensional=False,
+            int_csvline=True,
+            block=False,
+            separator=separator,
         )
 
     def dummy(self):

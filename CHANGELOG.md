@@ -2,7 +2,6 @@
 
 ## [2.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v1.0.0...v2.0.0) (2024-12-02)
 
-
 ### ⚠ BREAKING CHANGES
 
 * day 02 completed.
@@ -12,7 +11,6 @@
 * day 02 completed. ([ce4bb1e](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/ce4bb1ef3cc10341c8a6b513c6a4db7a2fa399df))
 
 ## 1.0.0 (2024-12-01)
-
 
 ### ⚠ BREAKING CHANGES
 

@@ -10,6 +10,8 @@ fi
 
 ./ruff.sh
 
+markdownlint-cli2 "*.md" --fix
+
 git bumpmajor
 
 git add --all . 

@@ -44,9 +44,9 @@ class Solution(InputAsCSVSolution):
         total = 0
 
         for report in input:
-            levels = [int(lvl) for lvl in report]
+            # levels = [int(lvl) for lvl in report]
 
-            total += self.CheckIfSafe(levels)
+            total += self.CheckIfSafe(report)
 
         return total
 
@@ -54,22 +54,22 @@ class Solution(InputAsCSVSolution):
         total = 0
 
         for report in input:
-            levels = [int(lvl) for lvl in report]
+            # levels = [int(lvl) for lvl in report]
 
-            is_safe = self.CheckIfSafe(levels)
+            is_safe = self.CheckIfSafe(report)
 
-            if is_safe == 1:
+            if is_safe:
                 total += 1
                 continue
             # else try with tolerance
 
             # Brute force, always go for the simplest implementation
-            for j in range(0, len(levels)):
-                tolerance_levels = levels[:j] + levels[j + 1 :]
+            for j in range(0, len(report)):
+                tolerance_levels = report[:j] + report[j + 1 :]
 
                 is_safe = self.CheckIfSafe(tolerance_levels)
 
-                if is_safe == 1:
+                if is_safe:
                     total += 1
                     break
 
@@ -109,7 +109,7 @@ class Solution(InputAsCSVSolution):
 
 
 if __name__ == "__main__":
-    solution = Solution(separator=" ")
+    solution = Solution(separator=" ", to_int=True)
 
     solution.part_1()
 
