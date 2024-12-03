@@ -21,8 +21,8 @@ class Solution(InputAsStringSolution):
         regex = r"mul\((\d+),(\d+)\)"
         result = 0
 
-        for a, b in re.findall(regex, input):
-            result += int(a) * int(b)
+        for multiplicand, multiplier in re.findall(regex, input):
+            result += int(multiplicand) * int(multiplier)
 
         return result
 
@@ -33,11 +33,11 @@ class Solution(InputAsStringSolution):
         result = 0
         enabled = True
 
-        for a, b, do, dont in re.findall(regex, input):
+        for multiplicand, multiplier, do, dont in re.findall(regex, input):
             if do or dont:
                 enabled = bool(do)
             elif enabled:
-                result += int(a) * int(b)
+                result += int(multiplicand) * int(multiplier)
 
         return result
 
