@@ -17,7 +17,7 @@ class Solution(InputAsCSVSolution):
     def CheckIfSafe(self, levels):
         is_safe = False
         is_increasing = None
-        
+
         for idx in range(0, len(levels) - 1):
             level_A = levels[idx]
             level_B = levels[idx + 1]
@@ -28,7 +28,9 @@ class Solution(InputAsCSVSolution):
                 else:
                     is_increasing = True
 
-            if  (level_A > level_B and is_increasing) or (level_A <= level_B and not is_increasing):
+            if (level_A > level_B and is_increasing) or (
+                level_A <= level_B and not is_increasing
+            ):
                 break
 
             diff = abs(level_A - level_B)
