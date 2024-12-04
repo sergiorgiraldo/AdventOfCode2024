@@ -2,7 +2,6 @@
 
 ## [3.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v2.0.0...v3.0.0) (2024-12-03)
 
-
 ### ⚠ BREAKING CHANGES
 
 * day 03 completed.

@@ -1,0 +1,124 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 04</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/4</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>from collections import defaultdict</span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 4</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    def GetMatrix(self, input):</span>
+<span>        m = defaultdict(lambda:'.')</span>
+<span>        for i, line in enumerate(input):</span>
+<span>            for j, c in enumerate(line):</span>
+<span>                m[i+1j*j] = c  #treat each cell as a complex number</span>
+<span>        k = list(m.keys())</span>
+<span>        return m, k </span>
+<span></span>
+<span>    def FindXMAS(self, input):</span>
+<span>        matrix, coords = self.GetMatrix(input)</span>
+<span></span>
+<span>        self.debug(matrix)</span>
+<span>        count = 0</span>
+<span></span>
+<span>        for offset in (1, -1, 1j, -1j, 1+1j, 1-1j, -1-1j, -1+1j):</span>
+<span>            for coord in coords:</span>
+<span>                count += matrix[coord] == 'X'          and \</span>
+<span>                         matrix[coord+offset] == 'M'   and \</span>
+<span>                         matrix[coord+2*offset] == 'A' and \</span>
+<span>                         matrix[coord+3*offset] == 'S'</span>
+<span></span>
+<span>        return count</span>
+<span>    </span>
+<span>    def FindMasaM(self, input):</span>
+<span>        matrix, coords = self.GetMatrix(input)</span>
+<span></span>
+<span>        count = 0</span>
+<span>        for coord in coords:</span>
+<span>            count +=  matrix[coord] == 'A' and \</span>
+<span>                    ((matrix[coord-1-1j] == 'M' and matrix[coord+1+1j] == 'S') or (matrix[coord-1-1j] == 'S' and matrix[coord+1+1j] == 'M')) and \</span>
+<span>                    ((matrix[coord-1+1j] == 'M' and matrix[coord+1-1j] == 'S') or (matrix[coord-1+1j] == 'S' and matrix[coord+1-1j] == 'M'))</span>
+<span></span>
+<span>        return count</span>
+<span></span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        count = self.FindXMAS(input)</span>
+<span></span>
+<span>        return count</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        count = self.FindMasaM(input)</span>
+<span></span>
+<span>        return count</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>

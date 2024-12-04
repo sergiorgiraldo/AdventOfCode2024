@@ -14,9 +14,8 @@ class Solution(InputAsLinesSolution):
 
     _is_debugging = True
 
-    def getArrays(self, input):
-        column1 = []
-        column2 = []
+    def GetArrays(self, input):
+        column1, column2 = [], []
 
         for line in input:
             ids = line.split("   ")
@@ -29,7 +28,7 @@ class Solution(InputAsLinesSolution):
         return column1, column2
 
     def GetDistance(self, input):
-        column1, column2 = self.getArrays(input)
+        column1, column2 = self.GetArrays(input)
 
         distance = 0
 
@@ -39,7 +38,7 @@ class Solution(InputAsLinesSolution):
         return distance
 
     def GetSimilarity(self, input):
-        column1, column2 = self.getArrays(input)
+        column1, column2 = self.GetArrays(input)
 
         similarity = 0
 
