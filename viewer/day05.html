@@ -1,0 +1,111 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 05</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/5</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span></span>
+<span>class Solution(InputAsBlockSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 5</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    def GetMiddlePages(self, input):</span>
+<span>        rules = {tuple(r.split("|")) for r in input[0]}</span>
+<span></span>
+<span>        totals = [0, 0]</span>
+<span></span>
+<span>        for pages in input[1]:</span>
+<span>            current, fixed = pages.split(","), []</span>
+<span></span>
+<span>            for page in current * 20: #hack: the amount of pages is little but there are a lot of rules</span>
+<span>                                      #i would need to iterate over and over again to find the correct pages</span>
+<span>                                      #if I replicate the pages, then I can iterate over the rules using all</span>
+<span>                if page in fixed: continue #since I replicated the pages, i need to account for duplicates</span>
+<span></span>
+<span>                if all(b in fixed for b, a in rules if page == a and b in current):</span>
+<span>                    fixed.append(page)</span>
+<span>            </span>
+<span>            totals[fixed != current] += int(fixed[len(fixed)//2]) #in part 1, we want the sum of correct pages (new == old) </span>
+<span>                                                                  #in part 2, we want the sum of incorrect pages (new != old)</span>
+<span>                                                                  #so, flip the bool  </span>
+<span>        </span>
+<span>        return totals</span>
+<span></span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        totals = self.GetMiddlePages(input)</span>
+<span></span>
+<span>        return totals[0]</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        totals = self.GetMiddlePages(input)</span>
+<span></span>
+<span>        return totals[1]</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>
