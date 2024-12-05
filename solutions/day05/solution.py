@@ -19,25 +19,26 @@ class Solution(InputAsBlockSolution):
 
         totals = [0, 0]
 
+        longest = len(max(input[1], key=lambda x: len(x.split(","))).split(","))
+
         for pages in input[1]:
             current, fixed = pages.split(","), []
 
-            for page in (
-                current * 20
-            ):  # hack: the amount of pages is little but there are a lot of rules
-                # i would need to iterate over and over again to find the correct pages
-                # if I replicate the pages, then I can iterate over the rules using all
+            # hack: there are a lot of rules
+            # I would need to iterate over and over again to find the correct pages,
+            # if I replicate the pages, then I can iterate over the rules using all.
+            # I use the longest line for the worst case when pages are all wrong
+            for page in (current * longest):  
                 if page in fixed:
                     continue  # since I replicated the pages, i need to account for duplicates
 
                 if all(b in fixed for b, a in rules if page == a and b in current):
                     fixed.append(page)
 
-            totals[fixed != current] += int(
-                fixed[len(fixed) // 2]
-            )  # in part 1, we want the sum of correct pages (new == old)
-            # in part 2, we want the sum of incorrect pages (new != old)
+            # in part 1, we want the sum of correct pages (fixed == current)
+            # in part 2, we want the sum of incorrect pages (fixed != current)
             # so, flip the bool
+            totals[fixed != current] += int(fixed[len(fixed) // 2])  
 
         return totals
 
