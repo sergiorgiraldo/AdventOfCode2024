@@ -25,7 +25,7 @@ class Solution(InputAsLinesSolution):
         return m, k
 
     # XMAS SAMX
-    # X S   X        S 
+    # X S   X        S
     # M A    M      A
     # A M     A    M
     # S X      S  X
@@ -46,9 +46,9 @@ class Solution(InputAsLinesSolution):
                 )
 
         return count
-    
+
     # M S
-    #  A 
+    #  A
     # M S
     # find mas in cross
     def FindMSAMS(self, input):

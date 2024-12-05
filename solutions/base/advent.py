@@ -51,8 +51,14 @@ class BaseSolution(ABC):
                     else:
                         if block:  # blocks separated by newline
                             lines = cls.read_input()
+                            blocks = lines.split("\n\n")
+                            arr = []
+                            for i in range(len(blocks)):
+                                blocks[i] = blocks[i].strip().split("\n")
+                                arr.append(blocks[i])
 
-                            cls.input = lines.split("\n\n")
+                            cls.input = arr
+
                         else:  # if string:
                             if to_int:
                                 cls.input = int(cls.read_input())
