@@ -24,9 +24,11 @@ class Solution(InputAsLinesSolution):
         k = list(m.keys())
         return m, k
 
-    # ooo
-    # o_o
-    # ooo
+    # XMAS SAMX
+    # X S   X        S 
+    # M A    M      A
+    # A M     A    M
+    # S X      S  X
     # horizontal, vertical or diagonal
     def FindXMAS(self, input):
         matrix, coords = self.GetMatrix(input)
@@ -44,11 +46,12 @@ class Solution(InputAsLinesSolution):
                 )
 
         return count
-    # MoS
-    # oAo
-    # MoS
+    
+    # M S
+    #  A 
+    # M S
     # find mas in cross
-    def FindMasaM(self, input):
+    def FindMSAMS(self, input):
         matrix, coords = self.GetMatrix(input)
 
         count = 0
@@ -77,7 +80,7 @@ class Solution(InputAsLinesSolution):
     def pt2(self, input):
         self.debug(input)
 
-        count = self.FindMasaM(input)
+        count = self.FindMSAMS(input)
 
         return count
 
