@@ -40,7 +40,7 @@ class Tests(unittest.TestCase):
                 "97,13,75,29,47",
             ],
         ]
-        # self.assertEqual(solution.pt1(input), 143, "Oops")
+        self.assertEqual(solution.pt1(input), 143, "Oops")
 
     def test_part2(self):
         input = [

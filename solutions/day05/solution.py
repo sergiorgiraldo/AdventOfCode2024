@@ -14,31 +14,31 @@ class Solution(InputAsBlockSolution):
 
     _is_debugging = False
 
-    def GetMiddlePages(self, input):
+    def GetMiddlePages(self, input, reorder = False):
         rules = {tuple(r.split("|")) for r in input[0]}
 
         totals = [0, 0]
 
-        longest = len(max(input[1], key=lambda x: len(x.split(","))).split(","))
+        longest = len(max(input[1], key=lambda x: len(x.split(","))).split(",")) if reorder else 1
 
         for pages in input[1]:
-            current, fixed = pages.split(","), []
+            original, fixed = pages.split(","), []
 
             # hack: there are a lot of rules
-            # I would need to iterate over and over again to find the correct pages,
+            # I would need to iterate over and over again to order pages for part 2,
             # if I replicate the pages, then I can iterate over the rules using all.
-            # I use the longest line for the worst case when pages are all wrong
-            for page in (current * longest):  
-                if page in fixed:
-                    continue  # since I replicated the pages, i need to account for duplicates
+            # I use the longest line for the worst case when pages are all wrong in reverse order
+            for page in (original * longest):  
+                if reorder and page in fixed:
+                    continue  # since I replicated the pages for part 2, i need to account for duplicates
 
-                if all(b in fixed for b, a in rules if page == a and b in current):
+                if all(b in fixed for b, a in rules if page == a and b in original):
                     fixed.append(page)
 
-            # in part 1, we want the sum of correct pages (fixed == current)
-            # in part 2, we want the sum of incorrect pages (fixed != current)
+            # in part 1, we want the sum of middle pages without reorder (fixed == current)
+            # in part 2, we want the sum of middle pages with reorder (fixed != current)
             # so, flip the bool
-            totals[fixed != current] += int(fixed[len(fixed) // 2])  
+            totals[fixed != original] += int(fixed[len(fixed) // 2])  
 
         return totals
 
@@ -52,7 +52,7 @@ class Solution(InputAsBlockSolution):
     def pt2(self, input):
         self.debug(input)
 
-        totals = self.GetMiddlePages(input)
+        totals = self.GetMiddlePages(input, True)
 
         return totals[1]
 

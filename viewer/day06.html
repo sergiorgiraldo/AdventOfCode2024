@@ -1,0 +1,231 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 06</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/6</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 6</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    def GetMaze(self, input):</span>
+<span>        maze = {}</span>
+<span></span>
+<span>        for row, line in enumerate(input):</span>
+<span>            for col, cell in enumerate(line):</span>
+<span>                maze[(row, col)] = cell</span>
+<span>                if cell == "^":</span>
+<span>                    curr = (row, col)</span>
+<span></span>
+<span>        return maze, curr</span>
+<span></span>
+<span>    # just walk the maze until out of bounds</span>
+<span>    def GetGuardRoute(self,input):</span>
+<span>        def Set():</span>
+<span>            maze[curr] = "."</span>
+<span>            maze[curr] = "^"</span>
+<span>            visited.add(curr)</span>
+<span></span>
+<span>        maze, curr = self.GetMaze(input)</span>
+<span>        visited = set()</span>
+<span></span>
+<span>        height = len(input)</span>
+<span>        width = len(input[0])</span>
+<span></span>
+<span>        direction = "up"</span>
+<span>        visited.add(curr)</span>
+<span></span>
+<span>        while True:</span>
+<span>            if direction == "up":</span>
+<span>                if curr[0] - 1 < 0: # out of bounds</span>
+<span>                    break</span>
+<span>                elif maze[(curr[0] - 1, curr[1])] == "#":</span>
+<span>                    direction = "right"</span>
+<span>                else:</span>
+<span>                    curr = (curr[0] - 1, curr[1])</span>
+<span>                    Set()</span>
+<span>            elif direction == "down":</span>
+<span>                if curr[0] + 1 >= height:# out of bounds</span>
+<span>                    break</span>
+<span>                elif maze[(curr[0] + 1, curr[1])] == "#":</span>
+<span>                    direction = "left"</span>
+<span>                else:</span>
+<span>                    curr = (curr[0] + 1, curr[1])</span>
+<span>                    Set()</span>
+<span>            elif direction == "right":</span>
+<span>                if curr[1] + 1 >= width:# out of bounds</span>
+<span>                    break</span>
+<span>                elif maze[(curr[0], curr[1] + 1)] == "#":</span>
+<span>                    direction = "down"</span>
+<span>                else:</span>
+<span>                    curr = (curr[0], curr[1] + 1)</span>
+<span>                    Set()</span>
+<span>            elif direction == "left":</span>
+<span>                if curr[1] - 1 < 0:# out of bounds</span>
+<span>                    break</span>
+<span>                elif maze[(curr[0], curr[1] - 1)] == "#":</span>
+<span>                    direction = "up"</span>
+<span>                else:</span>
+<span>                    curr = (curr[0], curr[1] - 1)</span>
+<span>                    Set()</span>
+<span></span>
+<span>        return len(visited)</span>
+<span></span>
+<span>    # took the simplest implementation, i make the guard walk and check if</span>
+<span>    # he already visited the cell</span>
+<span>    def TrapTheGuard(self, input):</span>
+<span>        def InLoop():</span>
+<span>            if (curr, direction) in visited:</span>
+<span>                return True</span>
+<span>            else:</span>
+<span>                visited.add((curr, direction))</span>
+<span>                return False</span>
+<span>            </span>
+<span>        maze, start = self.GetMaze(input)</span>
+<span>        obstructions = 0</span>
+<span></span>
+<span>        height = len(input)</span>
+<span>        width = len(input[0])</span>
+<span></span>
+<span>        for cell in maze.keys():</span>
+<span>            if maze[cell] != ".":</span>
+<span>                continue</span>
+<span></span>
+<span>            maze[cell] = "#" #obstruction</span>
+<span></span>
+<span>            curr = start</span>
+<span>            direction = "up"</span>
+<span>            visited = set()</span>
+<span>            visited.add((curr, direction))</span>
+<span></span>
+<span>            while True:</span>
+<span>                if direction == "up":</span>
+<span>                    if curr[0] - 1 < 0:</span>
+<span>                        break</span>
+<span>                    elif maze[(curr[0] - 1, curr[1])] == "#":</span>
+<span>                        direction = "right"</span>
+<span>                    else:</span>
+<span>                        maze[curr] = "."</span>
+<span>                        curr = (curr[0] - 1, curr[1])</span>
+<span>                        maze[curr] = "^"</span>
+<span></span>
+<span>                        if InLoop():obstructions += 1;break</span>
+<span>                elif direction == "down":</span>
+<span>                    if curr[0] + 1 >= height:</span>
+<span>                        break</span>
+<span>                    elif maze[(curr[0] + 1, curr[1])] == "#":</span>
+<span>                        direction = "left"</span>
+<span>                    else:</span>
+<span>                        maze[curr] = "."</span>
+<span>                        curr = (curr[0] + 1, curr[1])</span>
+<span>                        maze[curr] = "^"</span>
+<span></span>
+<span>                        if InLoop():obstructions += 1;break</span>
+<span>                elif direction == "right":</span>
+<span>                    if curr[1] + 1 >= width:</span>
+<span>                        break</span>
+<span>                    elif maze[(curr[0], curr[1] + 1)] == "#":</span>
+<span>                        direction = "down"</span>
+<span>                    else:</span>
+<span>                        maze[curr] = "."</span>
+<span>                        curr = (curr[0], curr[1] + 1)</span>
+<span>                        maze[curr] = "^"</span>
+<span></span>
+<span>                        if InLoop():obstructions += 1;break</span>
+<span>                elif direction == "left":</span>
+<span>                    if curr[1] - 1 < 0:</span>
+<span>                        break</span>
+<span>                    elif maze[(curr[0], curr[1] - 1)] == "#":</span>
+<span>                        direction = "up"</span>
+<span>                    else:</span>
+<span>                        maze[curr] = "."</span>
+<span>                        curr = (curr[0], curr[1] - 1)</span>
+<span>                        maze[curr] = "^"</span>
+<span></span>
+<span>                        if InLoop():obstructions += 1;break</span>
+<span></span>
+<span>            # restore the original cells</span>
+<span>            maze[curr] = "."</span>
+<span>            maze[cell] = "." </span>
+<span></span>
+<span>        return obstructions</span>
+<span></span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res = self.GetGuardRoute(input)</span>
+<span></span>
+<span>        return res</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res = self.TrapTheGuard(input)</span>
+<span></span>
+<span>        return res</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>
