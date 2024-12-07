@@ -1,0 +1,118 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 07</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/7</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 7</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    ADD = lambda self, x, y: x * y</span>
+<span>    MUL = lambda self, x, y: x + y</span>
+<span>    CONCAT = lambda self, x, y: int(f"{x}{y}")</span>
+<span></span>
+<span>    #straightforward solution, try all combinations of operators between numbers</span>
+<span></span>
+<span>    def GetEquations(self, input):</span>
+<span>        equations = [equation.split(": ") for equation in input]</span>
+<span></span>
+<span>        equations = [(int(result), list(map(int, numbers.split()))) for result, numbers in equations]</span>
+<span></span>
+<span>        return equations</span>
+<span>    </span>
+<span>    def SolveEquation(self,result, numbers, operators):</span>
+<span>        def inner(result, numbers, curr):</span>
+<span>            if curr > result:</span>
+<span>                return False</span>
+<span>            match numbers:</span>
+<span>                case []: # no more arguments, test the result</span>
+<span>                    return curr == result</span>
+<span>                case [arg, *rest]: # test the next argument with all operators</span>
+<span>                    return any(inner(result, rest, op(curr, arg)) for op in operators)</span>
+<span></span>
+<span>        return inner(result, numbers[1:], numbers[0]) </span>
+<span></span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        equations = self.GetEquations(input)</span>
+<span></span>
+<span>        res = sum(result for result, numbers in equations if self.SolveEquation(result, numbers, [self.ADD, self.MUL]))</span>
+<span></span>
+<span>        return res</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        equations = self.GetEquations(input)</span>
+<span></span>
+<span>        res = sum(result for result, numbers in equations if self.SolveEquation(result, numbers, [self.ADD, self.MUL, self.CONCAT]))</span>
+<span></span>
+<span>        return res</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>
