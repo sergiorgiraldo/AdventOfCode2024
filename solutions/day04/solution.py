@@ -18,10 +18,13 @@ class Solution(InputAsLinesSolution):
 
     def GetMatrix(self, input):
         m = defaultdict(lambda: ".")
+
         for i, line in enumerate(input):
             for j, c in enumerate(line):
                 m[i + 1j * j] = c  # treat each cell as a complex number
+        
         k = list(m.keys())
+        
         return m, k
 
     # XMAS SAMX
@@ -39,10 +42,10 @@ class Solution(InputAsLinesSolution):
         for offset in (1, -1, 1j, -1j, 1 + 1j, 1 - 1j, -1 - 1j, -1 + 1j):
             for coord in coords:
                 count += (
-                    matrix[coord] == "X"
-                    and matrix[coord + offset] == "M"
-                    and matrix[coord + 2 * offset] == "A"
-                    and matrix[coord + 3 * offset] == "S"
+                    matrix[coord]                   == "X"
+                    and matrix[coord + offset]      == "M"
+                    and matrix[coord + 2 * offset]  == "A"
+                    and matrix[coord + 3 * offset]  == "S"
                 )
 
         return count
@@ -59,11 +62,11 @@ class Solution(InputAsLinesSolution):
             count += (
                 matrix[coord] == "A"
                 and (
-                    (matrix[coord - 1 - 1j] == "M" and matrix[coord + 1 + 1j] == "S")
+                    (matrix[coord - 1 - 1j] == "M" and matrix[coord + 1 + 1j]    == "S")
                     or (matrix[coord - 1 - 1j] == "S" and matrix[coord + 1 + 1j] == "M")
                 )
                 and (
-                    (matrix[coord - 1 + 1j] == "M" and matrix[coord + 1 - 1j] == "S")
+                    (matrix[coord - 1 + 1j] == "M" and matrix[coord + 1 - 1j]    == "S")
                     or (matrix[coord - 1 + 1j] == "S" and matrix[coord + 1 - 1j] == "M")
                 )
             )
