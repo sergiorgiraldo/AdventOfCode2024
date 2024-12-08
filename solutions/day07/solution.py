@@ -14,11 +14,9 @@ class Solution(InputAsLinesSolution):
     
     _is_debugging = False
 
-    ADD = lambda self, x, y: x * y
-    MUL = lambda self, x, y: x + y
-    CONCAT = lambda self, x, y: int(f"{x}{y}")
-
-    #straightforward solution, try all combinations of operators between numbers
+    ADD     = lambda self, x, y: x * y
+    MUL     = lambda self, x, y: x + y
+    CONCAT  = lambda self, x, y: int(f"{x}{y}")
 
     def GetEquations(self, input):
         equations = [equation.split(": ") for equation in input]
@@ -27,24 +25,26 @@ class Solution(InputAsLinesSolution):
 
         return equations
     
+    #straightforward solution, try all combinations of operators between numbers
     def SolveEquation(self,result, numbers, operators):
-        def inner(result, numbers, curr):
+        def calc(result, numbers, curr):
             if curr > result:
                 return False
             match numbers:
-                case []: # no more arguments, test the result
+                case []: # no more numbers, test the result
                     return curr == result
-                case [arg, *rest]: # test the next argument with all operators
-                    return any(inner(result, rest, op(curr, arg)) for op in operators)
+                case [arg, *rest]: # test the next number with all operators
+                    return any(calc(result, rest, operator(curr, arg)) for operator in operators)
 
-        return inner(result, numbers[1:], numbers[0]) 
+        return calc(result, numbers[1:], numbers[0]) 
 
     def pt1(self, input):
         self.debug(input)
 
         equations = self.GetEquations(input)
 
-        res = sum(result for result, numbers in equations if self.SolveEquation(result, numbers, [self.ADD, self.MUL]))
+        res = sum(result for result, numbers in equations 
+                  if self.SolveEquation(result, numbers, [self.ADD, self.MUL]))
 
         return res
 
@@ -53,7 +53,8 @@ class Solution(InputAsLinesSolution):
 
         equations = self.GetEquations(input)
 
-        res = sum(result for result, numbers in equations if self.SolveEquation(result, numbers, [self.ADD, self.MUL, self.CONCAT]))
+        res = sum(result for result, numbers in equations 
+                  if self.SolveEquation(result, numbers, [self.ADD, self.MUL, self.CONCAT]))
 
         return res
         

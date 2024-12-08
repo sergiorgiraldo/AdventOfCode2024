@@ -1,0 +1,137 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 08</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/8</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>from collections import defaultdict</span>
+<span>from math import gcd</span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 8</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    def GetNodes(self, input):</span>
+<span>        nodes = defaultdict(set)</span>
+<span>        indexes = {}</span>
+<span>        for i, row in enumerate(input):</span>
+<span>            for j, c in enumerate(row):</span>
+<span>                indexes[(i, j)] = 0</span>
+<span>                if c != ".":</span>
+<span>                    nodes[c].add((i, j))</span>
+<span>        return nodes, indexes</span>
+<span></span>
+<span>    def FindUniqueLocations(self, input):</span>
+<span>        def node_diff(a, b):</span>
+<span>            return (a[0] - b[0], a[1] - b[1])        </span>
+<span>        </span>
+<span>        nodes, indexes = self.GetNodes(input)    </span>
+<span></span>
+<span>        antinodes = set()</span>
+<span>        antinodes_antennas = set()</span>
+<span></span>
+<span>        for _, antennas in nodes.items():</span>
+<span>            for antenna_1 in antennas:</span>
+<span>                antinodes_antennas.add(antenna_1)</span>
+<span>                for antenna_2 in antennas:</span>
+<span>                    if antenna_1 == antenna_2:</span>
+<span>                        continue</span>
+<span></span>
+<span>                    diff = node_diff(antenna_1, antenna_2)</span>
+<span>                    div = gcd(abs(diff[0]), abs(diff[1])) # antinodes in line but not multiple of distance between antennas</span>
+<span>                    diff = (diff[0] // div, diff[1] // div)</span>
+<span>                    </span>
+<span>                    try:</span>
+<span>                        candidate = (antenna_1[0] + diff[0], antenna_1[1] + diff[1])</span>
+<span>                        indexes[candidate]</span>
+<span></span>
+<span>                        antinodes.add(candidate)</span>
+<span>                        antinodes_antennas.add(candidate)</span>
+<span>                        </span>
+<span>                        while True:</span>
+<span>                            candidate = (candidate[0] + diff[0], candidate[1] + diff[1])</span>
+<span>                            indexes[candidate]</span>
+<span>                            antinodes_antennas.add(candidate)</span>
+<span>                    except KeyError:</span>
+<span>                        continue</span>
+<span></span>
+<span>        return antinodes, antinodes_antennas </span>
+<span></span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res, _ = self.FindUniqueLocations(input)</span>
+<span></span>
+<span>        return len(res)</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        _, res = self.FindUniqueLocations(input)</span>
+<span></span>
+<span>        return len(res)</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>
