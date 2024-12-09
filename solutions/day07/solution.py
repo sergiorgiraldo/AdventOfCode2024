@@ -5,6 +5,8 @@ import time
 
 sys.path.insert(0,"..")
 
+from operator import add, mul
+
 from base.advent import *
 
 
@@ -14,8 +16,6 @@ class Solution(InputAsLinesSolution):
     
     _is_debugging = False
 
-    ADD     = lambda self, x, y: x * y
-    MUL     = lambda self, x, y: x + y
     CONCAT  = lambda self, x, y: int(f"{x}{y}")
 
     def GetEquations(self, input):
@@ -44,7 +44,7 @@ class Solution(InputAsLinesSolution):
         equations = self.GetEquations(input)
 
         res = sum(result for result, numbers in equations 
-                  if self.SolveEquation(result, numbers, [self.ADD, self.MUL]))
+                  if self.SolveEquation(result, numbers, [add, mul]))
 
         return res
 
@@ -54,7 +54,7 @@ class Solution(InputAsLinesSolution):
         equations = self.GetEquations(input)
 
         res = sum(result for result, numbers in equations 
-                  if self.SolveEquation(result, numbers, [self.ADD, self.MUL, self.CONCAT]))
+                  if self.SolveEquation(result, numbers, [add, mul, self.CONCAT]))
 
         return res
         

@@ -19,19 +19,19 @@ class Solution(InputAsLinesSolution):
 
     def GetNodes(self, input):
         nodes = defaultdict(set)
-        indexes = {}
+        map = {}
         for i, row in enumerate(input):
             for j, c in enumerate(row):
-                indexes[(i, j)] = 0
+                map[(i, j)] = 0
                 if c != ".":
                     nodes[c].add((i, j))
-        return nodes, indexes
+        return nodes, map
 
     def FindUniqueLocations(self, input):
-        def node_diff(a, b):
+        def get_distance(a, b):
             return (a[0] - b[0], a[1] - b[1])        
         
-        nodes, indexes = self.GetNodes(input)    
+        nodes, map = self.GetNodes(input)    
 
         antinodes = set()
         antinodes_antennas = set()
@@ -42,23 +42,24 @@ class Solution(InputAsLinesSolution):
                 for antenna_2 in antennas:
                     if antenna_1 == antenna_2:
                         continue
-
-                    diff = node_diff(antenna_1, antenna_2)
-                    div = gcd(abs(diff[0]), abs(diff[1])) # antinodes in line but not multiple of distance between antennas
-                    diff = (diff[0] // div, diff[1] // div)
+                    distance = get_distance(antenna_1, antenna_2)
+                    div = gcd(abs(distance[0]), abs(distance[1])) # antinodes in line but not multiple of distance between antennas
+                    distance = (distance[0] // div, distance[1] // div)
                     
                     try:
-                        candidate = (antenna_1[0] + diff[0], antenna_1[1] + diff[1])
-                        indexes[candidate]
+                        candidate = (antenna_1[0] + distance[0], antenna_1[1] + distance[1])
+                        map[candidate] # hack: check out of bounds
 
                         antinodes.add(candidate)
                         antinodes_antennas.add(candidate)
                         
                         while True:
-                            candidate = (candidate[0] + diff[0], candidate[1] + diff[1])
-                            indexes[candidate]
+                            # antinodes in line: i keep adding the distance until out of bounds
+                            candidate = (candidate[0] + distance[0], candidate[1] + distance[1])
+                            map[candidate] # hack: check out of bounds
+                            
                             antinodes_antennas.add(candidate)
-                    except KeyError:
+                    except KeyError: # thrown when out of bounds (when accesing the map)
                         continue
 
         return antinodes, antinodes_antennas 

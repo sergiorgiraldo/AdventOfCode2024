@@ -1,0 +1,175 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 09</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/9</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span></span>
+<span>class Solution(InputAsStringSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 9</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    def ComputeChecksum(self, space):</span>
+<span>        total = 0</span>
+<span>        for i, n in enumerate(space):</span>
+<span>            if n == ".":</span>
+<span>                continue</span>
+<span>            total += int(n) * i</span>
+<span>        return total</span>
+<span></span>
+<span>    def GetOriginalState(self, input):</span>
+<span>        disk = []</span>
+<span>        free = False</span>
+<span>        id = 0</span>
+<span>        free_space = {}</span>
+<span>        for c in input:</span>
+<span>            amount = int(c)</span>
+<span>            if free:</span>
+<span>                free_space[len(disk)] = amount</span>
+<span>                for _ in range(amount):</span>
+<span>                    disk.append(".")</span>
+<span>            else:</span>
+<span>                for _ in range(amount):</span>
+<span>                    disk.append(str(id))</span>
+<span>                id += 1</span>
+<span>            free = not free # switch between free and used</span>
+<span></span>
+<span>        return disk, free_space</span>
+<span>    </span>
+<span>    def CompactByBlocks(self, input):</span>
+<span>        disk, _ = self.GetOriginalState(input)</span>
+<span></span>
+<span>        for i, c in enumerate(disk): #find first free space</span>
+<span>            if c == ".":</span>
+<span>                l = i</span>
+<span>                break</span>
+<span></span>
+<span>        r = len(disk) - 1</span>
+<span>        while l < r:</span>
+<span>            if disk[l] != ".":</span>
+<span>                l += 1</span>
+<span>                continue</span>
+<span>            if disk[r] == ".":</span>
+<span>                r -= 1</span>
+<span>                continue</span>
+<span>            disk[l] = disk[r]</span>
+<span>            disk[r] = "."</span>
+<span>            l += 1</span>
+<span>            r -= 1</span>
+<span></span>
+<span>        return disk</span>
+<span></span>
+<span>    def CompactByFiles(self, input):</span>
+<span>        disk, free_space = self.GetOriginalState(input)</span>
+<span></span>
+<span>        r = len(disk) - 1</span>
+<span>        seen = set()</span>
+<span>        while r > 0:</span>
+<span>            if disk[r] == ".":</span>
+<span>                r -= 1</span>
+<span>                continue</span>
+<span>            c = disk[r]</span>
+<span>            if c in seen:</span>
+<span>                r -= 1</span>
+<span>                continue</span>
+<span>            seen.add(c)</span>
+<span></span>
+<span>            file_size = 0</span>
+<span>            while disk[r] == c and r >= 0:</span>
+<span>                file_size += 1</span>
+<span>                r -= 1</span>
+<span></span>
+<span>            candidates = [(k, v) for (k, v) in free_space.items() if k <= r and v >= file_size]</span>
+<span>            if len(candidates) == 0:</span>
+<span>                continue</span>
+<span></span>
+<span>            i, length = min(candidates, key=lambda x: x[0])</span>
+<span>            for j in range(i, i + file_size):</span>
+<span>                disk[j] = c</span>
+<span>            for j in range(r + 1, r + 1 + file_size):</span>
+<span>                disk[j] = "."</span>
+<span>            del free_space[i]</span>
+<span></span>
+<span>            if file_size < length:</span>
+<span>                free_space[i + file_size] = length - file_size</span>
+<span></span>
+<span>        return disk</span>
+<span></span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        better_disk = self.CompactByBlocks(input)</span>
+<span></span>
+<span>        return self.ComputeChecksum(better_disk)</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        better_disk = self.CompactByFiles(input)</span>
+<span></span>
+<span>        return self.ComputeChecksum(better_disk)</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>
