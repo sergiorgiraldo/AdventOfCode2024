@@ -36,13 +36,16 @@
 <pre>
 <span># puzzle prompt: https://adventofcode.com/2024/day/8</span>
 <span></span>
-<span>import time</span>
 <span>import sys</span>
+<span>import time</span>
+<span></span>
 <span>sys.path.insert(0,"..")</span>
 <span></span>
-<span>from base.advent import *</span>
 <span>from collections import defaultdict</span>
 <span>from math import gcd</span>
+<span></span>
+<span>from base.advent import *</span>
+<span></span>
 <span></span>
 <span>class Solution(InputAsLinesSolution):</span>
 <span>    _year = 2024</span>
@@ -52,19 +55,19 @@
 <span></span>
 <span>    def GetNodes(self, input):</span>
 <span>        nodes = defaultdict(set)</span>
-<span>        indexes = {}</span>
+<span>        map = {}</span>
 <span>        for i, row in enumerate(input):</span>
 <span>            for j, c in enumerate(row):</span>
-<span>                indexes[(i, j)] = 0</span>
+<span>                map[(i, j)] = 0</span>
 <span>                if c != ".":</span>
 <span>                    nodes[c].add((i, j))</span>
-<span>        return nodes, indexes</span>
+<span>        return nodes, map</span>
 <span></span>
 <span>    def FindUniqueLocations(self, input):</span>
-<span>        def node_diff(a, b):</span>
+<span>        def get_distance(a, b):</span>
 <span>            return (a[0] - b[0], a[1] - b[1])        </span>
 <span>        </span>
-<span>        nodes, indexes = self.GetNodes(input)    </span>
+<span>        nodes, map = self.GetNodes(input)    </span>
 <span></span>
 <span>        antinodes = set()</span>
 <span>        antinodes_antennas = set()</span>
@@ -75,23 +78,24 @@
 <span>                for antenna_2 in antennas:</span>
 <span>                    if antenna_1 == antenna_2:</span>
 <span>                        continue</span>
-<span></span>
-<span>                    diff = node_diff(antenna_1, antenna_2)</span>
-<span>                    div = gcd(abs(diff[0]), abs(diff[1])) # antinodes in line but not multiple of distance between antennas</span>
-<span>                    diff = (diff[0] // div, diff[1] // div)</span>
+<span>                    distance = get_distance(antenna_1, antenna_2)</span>
+<span>                    div = gcd(abs(distance[0]), abs(distance[1])) # antinodes in line but not multiple of distance between antennas</span>
+<span>                    distance = (distance[0] // div, distance[1] // div)</span>
 <span>                    </span>
 <span>                    try:</span>
-<span>                        candidate = (antenna_1[0] + diff[0], antenna_1[1] + diff[1])</span>
-<span>                        indexes[candidate]</span>
+<span>                        candidate = (antenna_1[0] + distance[0], antenna_1[1] + distance[1])</span>
+<span>                        map[candidate] # hack: check out of bounds</span>
 <span></span>
 <span>                        antinodes.add(candidate)</span>
 <span>                        antinodes_antennas.add(candidate)</span>
 <span>                        </span>
 <span>                        while True:</span>
-<span>                            candidate = (candidate[0] + diff[0], candidate[1] + diff[1])</span>
-<span>                            indexes[candidate]</span>
+<span>                            # antinodes in line: i keep adding the distance until out of bounds</span>
+<span>                            candidate = (candidate[0] + distance[0], candidate[1] + distance[1])</span>
+<span>                            map[candidate] # hack: check out of bounds</span>
+<span>                            </span>
 <span>                            antinodes_antennas.add(candidate)</span>
-<span>                    except KeyError:</span>
+<span>                    except KeyError: # thrown when out of bounds (when accesing the map)</span>
 <span>                        continue</span>
 <span></span>
 <span>        return antinodes, antinodes_antennas </span>

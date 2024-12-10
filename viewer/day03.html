@@ -36,28 +36,29 @@
 <pre>
 <span># puzzle prompt: https://adventofcode.com/2024/day/3</span>
 <span></span>
-<span>import time</span>
 <span>import re</span>
 <span>import sys</span>
-<span>sys.path.insert(0,"..")</span>
+<span>import time</span>
+<span></span>
+<span>sys.path.insert(0, "..")</span>
 <span></span>
 <span>from base.advent import *</span>
+<span></span>
 <span></span>
 <span>class Solution(InputAsStringSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 3</span>
-<span>    </span>
+<span></span>
 <span>    _is_debugging = False</span>
 <span></span>
 <span>    def pt1(self, input):</span>
 <span>        self.debug(input)</span>
 <span></span>
 <span>        regex = r"mul\((\d+),(\d+)\)"</span>
-<span></span>
 <span>        result = 0</span>
 <span></span>
-<span>        for a, b in re.findall(regex, input):</span>
-<span>            result += int(a) * int(b)</span>
+<span>        for multiplicand, multiplier in re.findall(regex, input):</span>
+<span>            result += int(multiplicand) * int(multiplier)</span>
 <span></span>
 <span>        return result</span>
 <span></span>
@@ -65,18 +66,17 @@
 <span>        self.debug(input)</span>
 <span></span>
 <span>        regex = r"mul\((\d+),(\d+)\)|(do\(\))|(don't\(\))"</span>
-<span></span>
 <span>        result = 0</span>
 <span>        enabled = True</span>
 <span></span>
-<span>        for a, b, do, dont in re.findall(regex, input):</span>
+<span>        for multiplicand, multiplier, do, dont in re.findall(regex, input):</span>
 <span>            if do or dont:</span>
 <span>                enabled = bool(do)</span>
-<span>            elif enabled: </span>
-<span>                result += int(a) * int(b)</span>
+<span>            elif enabled:</span>
+<span>                result += int(multiplicand) * int(multiplier)</span>
 <span></span>
 <span>        return result</span>
-<span>        </span>
+<span></span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
 <span></span>
@@ -95,10 +95,12 @@
 <span></span>
 <span>        self.solve("2", res, (end_time - start_time))</span>
 <span></span>
-<span>if __name__ == '__main__':</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
 <span>    solution = Solution()</span>
 <span></span>
 <span>    solution.part_1()</span>
-<span>    </span>
+<span></span>
 <span>    solution.part_2()</span>
+<span></span>
 </pre>

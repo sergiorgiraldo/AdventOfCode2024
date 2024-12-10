@@ -36,50 +36,76 @@
 <pre>
 <span># puzzle prompt: https://adventofcode.com/2024/day/4</span>
 <span></span>
-<span>import time</span>
 <span>import sys</span>
-<span>sys.path.insert(0,"..")</span>
+<span>import time</span>
+<span></span>
+<span>sys.path.insert(0, "..")</span>
+<span></span>
+<span>from collections import defaultdict</span>
 <span></span>
 <span>from base.advent import *</span>
-<span>from collections import defaultdict</span>
+<span></span>
 <span></span>
 <span>class Solution(InputAsLinesSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 4</span>
-<span>    </span>
+<span></span>
 <span>    _is_debugging = False</span>
 <span></span>
 <span>    def GetMatrix(self, input):</span>
-<span>        m = defaultdict(lambda:'.')</span>
+<span>        m = defaultdict(lambda: ".")</span>
+<span></span>
 <span>        for i, line in enumerate(input):</span>
 <span>            for j, c in enumerate(line):</span>
-<span>                m[i+1j*j] = c  #treat each cell as a complex number</span>
+<span>                m[i + 1j * j] = c  # treat each cell as a complex number</span>
+<span>        </span>
 <span>        k = list(m.keys())</span>
-<span>        return m, k </span>
+<span>        </span>
+<span>        return m, k</span>
 <span></span>
+<span>    # XMAS SAMX</span>
+<span>    # X S   X        S</span>
+<span>    # M A    M      A</span>
+<span>    # A M     A    M</span>
+<span>    # S X      S  X</span>
+<span>    # horizontal, vertical or diagonal</span>
 <span>    def FindXMAS(self, input):</span>
 <span>        matrix, coords = self.GetMatrix(input)</span>
 <span></span>
 <span>        self.debug(matrix)</span>
 <span>        count = 0</span>
 <span></span>
-<span>        for offset in (1, -1, 1j, -1j, 1+1j, 1-1j, -1-1j, -1+1j):</span>
+<span>        for offset in (1, -1, 1j, -1j, 1 + 1j, 1 - 1j, -1 - 1j, -1 + 1j):</span>
 <span>            for coord in coords:</span>
-<span>                count += matrix[coord] == 'X'          and \</span>
-<span>                         matrix[coord+offset] == 'M'   and \</span>
-<span>                         matrix[coord+2*offset] == 'A' and \</span>
-<span>                         matrix[coord+3*offset] == 'S'</span>
+<span>                count += (</span>
+<span>                    matrix[coord]                   == "X"</span>
+<span>                    and matrix[coord + offset]      == "M"</span>
+<span>                    and matrix[coord + 2 * offset]  == "A"</span>
+<span>                    and matrix[coord + 3 * offset]  == "S"</span>
+<span>                )</span>
 <span></span>
 <span>        return count</span>
-<span>    </span>
-<span>    def FindMasaM(self, input):</span>
+<span></span>
+<span>    # M S</span>
+<span>    #  A</span>
+<span>    # M S</span>
+<span>    # find mas in cross</span>
+<span>    def FindMSAMS(self, input):</span>
 <span>        matrix, coords = self.GetMatrix(input)</span>
 <span></span>
 <span>        count = 0</span>
 <span>        for coord in coords:</span>
-<span>            count +=  matrix[coord] == 'A' and \</span>
-<span>                    ((matrix[coord-1-1j] == 'M' and matrix[coord+1+1j] == 'S') or (matrix[coord-1-1j] == 'S' and matrix[coord+1+1j] == 'M')) and \</span>
-<span>                    ((matrix[coord-1+1j] == 'M' and matrix[coord+1-1j] == 'S') or (matrix[coord-1+1j] == 'S' and matrix[coord+1-1j] == 'M'))</span>
+<span>            count += (</span>
+<span>                matrix[coord] == "A"</span>
+<span>                and (</span>
+<span>                    (matrix[coord - 1 - 1j] == "M" and matrix[coord + 1 + 1j]    == "S")</span>
+<span>                    or (matrix[coord - 1 - 1j] == "S" and matrix[coord + 1 + 1j] == "M")</span>
+<span>                )</span>
+<span>                and (</span>
+<span>                    (matrix[coord - 1 + 1j] == "M" and matrix[coord + 1 - 1j]    == "S")</span>
+<span>                    or (matrix[coord - 1 + 1j] == "S" and matrix[coord + 1 - 1j] == "M")</span>
+<span>                )</span>
+<span>            )</span>
 <span></span>
 <span>        return count</span>
 <span></span>
@@ -93,10 +119,10 @@
 <span>    def pt2(self, input):</span>
 <span>        self.debug(input)</span>
 <span></span>
-<span>        count = self.FindMasaM(input)</span>
+<span>        count = self.FindMSAMS(input)</span>
 <span></span>
 <span>        return count</span>
-<span>        </span>
+<span></span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
 <span></span>
@@ -115,10 +141,12 @@
 <span></span>
 <span>        self.solve("2", res, (end_time - start_time))</span>
 <span></span>
-<span>if __name__ == '__main__':</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
 <span>    solution = Solution()</span>
 <span></span>
 <span>    solution.part_1()</span>
-<span>    </span>
+<span></span>
 <span>    solution.part_2()</span>
+<span></span>
 </pre>
