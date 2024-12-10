@@ -36,8 +36,9 @@
 <pre>
 <span># puzzle prompt: https://adventofcode.com/2024/day/9</span>
 <span></span>
-<span>import time</span>
 <span>import sys</span>
+<span>import time</span>
+<span></span>
 <span>sys.path.insert(0,"..")</span>
 <span></span>
 <span>from base.advent import *</span>
@@ -48,13 +49,11 @@
 <span>    </span>
 <span>    _is_debugging = False</span>
 <span></span>
-<span>    def ComputeChecksum(self, space):</span>
-<span>        total = 0</span>
-<span>        for i, n in enumerate(space):</span>
-<span>            if n == ".":</span>
-<span>                continue</span>
-<span>            total += int(n) * i</span>
-<span>        return total</span>
+<span>    def ComputeChecksum(self, disk):</span>
+<span>        return sum(</span>
+<span>                    map(lambda item: int(item[1]) * item[0], </span>
+<span>                        filter(lambda item: item[1] != ".", enumerate(disk)))</span>
+<span>                    )</span>
 <span></span>
 <span>    def GetOriginalState(self, input):</span>
 <span>        disk = []</span>
@@ -102,19 +101,22 @@
 <span>        disk, free_space = self.GetOriginalState(input)</span>
 <span></span>
 <span>        r = len(disk) - 1</span>
+<span>        </span>
 <span>        seen = set()</span>
+<span></span>
 <span>        while r > 0:</span>
 <span>            if disk[r] == ".":</span>
 <span>                r -= 1</span>
 <span>                continue</span>
-<span>            c = disk[r]</span>
-<span>            if c in seen:</span>
+<span></span>
+<span>            file = disk[r]</span>
+<span>            if file in seen:</span>
 <span>                r -= 1</span>
 <span>                continue</span>
-<span>            seen.add(c)</span>
+<span>            seen.add(file)</span>
 <span></span>
 <span>            file_size = 0</span>
-<span>            while disk[r] == c and r >= 0:</span>
+<span>            while disk[r] == file and r >= 0:</span>
 <span>                file_size += 1</span>
 <span>                r -= 1</span>
 <span></span>
@@ -124,7 +126,7 @@
 <span></span>
 <span>            i, length = min(candidates, key=lambda x: x[0])</span>
 <span>            for j in range(i, i + file_size):</span>
-<span>                disk[j] = c</span>
+<span>                disk[j] = file</span>
 <span>            for j in range(r + 1, r + 1 + file_size):</span>
 <span>                disk[j] = "."</span>
 <span>            del free_space[i]</span>
@@ -139,14 +141,18 @@
 <span></span>
 <span>        better_disk = self.CompactByBlocks(input)</span>
 <span></span>
-<span>        return self.ComputeChecksum(better_disk)</span>
+<span>        checksum = self.ComputeChecksum(better_disk)</span>
+<span>        </span>
+<span>        return checksum</span>
 <span></span>
 <span>    def pt2(self, input):</span>
 <span>        self.debug(input)</span>
 <span></span>
 <span>        better_disk = self.CompactByFiles(input)</span>
 <span></span>
-<span>        return self.ComputeChecksum(better_disk)</span>
+<span>        checksum = self.ComputeChecksum(better_disk)</span>
+<span>        </span>
+<span>        return checksum</span>
 <span>        </span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>

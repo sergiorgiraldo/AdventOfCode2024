@@ -36,21 +36,22 @@
 <pre>
 <span># puzzle prompt: https://adventofcode.com/2024/day/1</span>
 <span></span>
-<span>import time</span>
 <span>import sys</span>
-<span>sys.path.insert(0,"..")</span>
+<span>import time</span>
+<span></span>
+<span>sys.path.insert(0, "..")</span>
 <span></span>
 <span>from base.advent import *</span>
+<span></span>
 <span></span>
 <span>class Solution(InputAsLinesSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 1</span>
-<span>    </span>
-<span>    _is_debugging = False</span>
 <span></span>
-<span>    def getArrays(self, input):</span>
-<span>        column1 = []</span>
-<span>        column2 = []</span>
+<span>    _is_debugging = True</span>
+<span></span>
+<span>    def GetArrays(self, input):</span>
+<span>        column1, column2 = [], []</span>
 <span></span>
 <span>        for line in input:</span>
 <span>            ids = line.split("   ")</span>
@@ -62,9 +63,9 @@
 <span></span>
 <span>        return column1, column2</span>
 <span></span>
-<span>    def getDistance(self, input):</span>
-<span>        column1, column2 = self.getArrays(input)</span>
-<span>        </span>
+<span>    def GetDistance(self, input):</span>
+<span>        column1, column2 = self.GetArrays(input)</span>
+<span></span>
 <span>        distance = 0</span>
 <span></span>
 <span>        for i in range(len(column1)):</span>
@@ -72,25 +73,25 @@
 <span></span>
 <span>        return distance</span>
 <span></span>
-<span>    def getSimilarity(self, input):</span>
-<span>        column1, column2 = self.getArrays(input)</span>
+<span>    def GetSimilarity(self, input):</span>
+<span>        column1, column2 = self.GetArrays(input)</span>
 <span></span>
 <span>        similarity = 0</span>
 <span></span>
 <span>        for i in range(len(column1)):</span>
-<span>           similarity += (column1[i] * sum(k == column1[i] for k in column2))</span>
+<span>            similarity += column1[i] * sum(id == column1[i] for id in column2)</span>
 <span></span>
 <span>        return similarity</span>
 <span></span>
 <span>    def pt1(self, input):</span>
 <span>        self.debug(input)</span>
 <span></span>
-<span>        return self.getDistance(input)</span>
+<span>        return self.GetDistance(input)</span>
 <span></span>
 <span>    def pt2(self, input):</span>
 <span>        self.debug(input)</span>
 <span></span>
-<span>        return self.getSimilarity(input)</span>
+<span>        return self.GetSimilarity(input)</span>
 <span></span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
@@ -110,10 +111,12 @@
 <span></span>
 <span>        self.solve("2", res, (end_time - start_time))</span>
 <span></span>
-<span>if __name__ == '__main__':</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
 <span>    solution = Solution()</span>
 <span></span>
 <span>    solution.part_1()</span>
-<span>    </span>
+<span></span>
 <span>    solution.part_2()</span>
+<span></span>
 </pre>

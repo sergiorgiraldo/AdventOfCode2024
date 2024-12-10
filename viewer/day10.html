@@ -32,65 +32,65 @@
 <button onclick="navigateTo('prev')">Previous Day</button>
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
-<h1>Day 07</h1>
+<h1>Day 10</h1>
 <pre>
-<span># puzzle prompt: https://adventofcode.com/2024/day/7</span>
+<span># puzzle prompt: https://adventofcode.com/2024/day/10</span>
 <span></span>
-<span>import sys</span>
 <span>import time</span>
-<span></span>
+<span>import sys</span>
 <span>sys.path.insert(0,"..")</span>
 <span></span>
-<span>from operator import add, mul</span>
-<span></span>
 <span>from base.advent import *</span>
-<span></span>
+<span>from collections import defaultdict</span>
 <span></span>
 <span>class Solution(InputAsLinesSolution):</span>
 <span>    _year = 2024</span>
-<span>    _day = 7</span>
+<span>    _day = 10</span>
 <span>    </span>
 <span>    _is_debugging = False</span>
 <span></span>
-<span>    CONCAT  = lambda self, x, y: int(f"{x}{y}")</span>
+<span>    # complex numbers, same idea from day 04</span>
+<span>    def GetMatrix(input):</span>
+<span>        m = defaultdict(int)</span>
 <span></span>
-<span>    def GetEquations(self, input):</span>
-<span>        equations = [equation.split(": ") for equation in input]</span>
-<span></span>
-<span>        equations = [(int(result), list(map(int, numbers.split()))) for result, numbers in equations]</span>
-<span></span>
-<span>        return equations</span>
+<span>        for i, line in enumerate(input):</span>
+<span>            for j, c in enumerate(line):</span>
+<span>                m[i + 1j * j] = int(c)  </span>
+<span>        </span>
+<span>        return m</span>
 <span>    </span>
-<span>    #straightforward solution, try all combinations of operators between numbers</span>
-<span>    def SolveEquation(self,result, numbers, operators):</span>
-<span>        def calc(result, numbers, curr):</span>
-<span>            if curr > result:</span>
-<span>                return False</span>
-<span>            match numbers:</span>
-<span>                case []: # no more numbers, test the result</span>
-<span>                    return curr == result</span>
-<span>                case [arg, *rest]: # test the next number with all operators</span>
-<span>                    return any(calc(result, rest, operator(curr, arg)) for operator in operators)</span>
+<span>    def Hike(self, coords, current, unique, some=0):</span>
+<span>        if coords[current] == 9: </span>
+<span>            unique.add(current)</span>
+<span>            return 1</span>
+<span>        </span>
+<span>        for offset in [1, 1j, -1, -1j]: #walk 1 step in each direction</span>
+<span>            if coords.get(current + offset) == coords[current] + 1:</span>
+<span>                some += self.Hike(coords, current + offset, unique)</span>
 <span></span>
-<span>        return calc(result, numbers[1:], numbers[0]) </span>
+<span>        return some</span>
+<span></span>
+<span>    def FindTrailheads(self, input):</span>
+<span>        matrix = self.GetMatrix(input)</span>
+<span></span>
+<span>        paths, ratings = {c: set() for c in matrix}, 0</span>
+<span>        for c in matrix:</span>
+<span>            if matrix[c] == 0:</span>
+<span>                ratings += self.Hike(matrix, c, paths[c])</span>
+<span></span>
+<span>        return sum(map(len, paths.values())), ratings</span>
 <span></span>
 <span>    def pt1(self, input):</span>
 <span>        self.debug(input)</span>
 <span></span>
-<span>        equations = self.GetEquations(input)</span>
-<span></span>
-<span>        res = sum(result for result, numbers in equations </span>
-<span>                  if self.SolveEquation(result, numbers, [add, mul]))</span>
+<span>        res, _ = self.FindTrailheads(input)</span>
 <span></span>
 <span>        return res</span>
 <span></span>
 <span>    def pt2(self, input):</span>
 <span>        self.debug(input)</span>
 <span></span>
-<span>        equations = self.GetEquations(input)</span>
-<span></span>
-<span>        res = sum(result for result, numbers in equations </span>
-<span>                  if self.SolveEquation(result, numbers, [add, mul, self.CONCAT]))</span>
+<span>        _, res = self.FindTrailheads(input)</span>
 <span></span>
 <span>        return res</span>
 <span>        </span>

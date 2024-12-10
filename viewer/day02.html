@@ -51,47 +51,44 @@
 <span>    _is_debugging = False</span>
 <span></span>
 <span>    def CheckIfSafe(self, levels):</span>
-<span>        is_safe = 0</span>
+<span>        is_safe = False</span>
 <span>        is_increasing = None</span>
+<span></span>
 <span>        for idx in range(0, len(levels) - 1):</span>
 <span>            level_A = levels[idx]</span>
 <span>            level_B = levels[idx + 1]</span>
 <span></span>
-<span>            if level_A > level_B:</span>
-<span>                if is_increasing is None:</span>
+<span>            if is_increasing is None:</span>
+<span>                if level_A > level_B:</span>
 <span>                    is_increasing = False</span>
-<span>                elif is_increasing:</span>
-<span>                    break</span>
-<span>            else:</span>
-<span>                if is_increasing is None:</span>
+<span>                else:</span>
 <span>                    is_increasing = True</span>
-<span>                elif not is_increasing:</span>
-<span>                    break</span>
+<span></span>
+<span>            if (level_A > level_B and is_increasing) or (</span>
+<span>                level_A <= level_B and not is_increasing</span>
+<span>            ):</span>
+<span>                break</span>
 <span></span>
 <span>            diff = abs(level_A - level_B)</span>
 <span>            if diff < 1 or diff > 3:</span>
 <span>                break</span>
 <span>        else:  # no break i.e. no increase nor decrease nor big differences</span>
-<span>            is_safe = 1</span>
+<span>            is_safe = True</span>
 <span></span>
 <span>        return is_safe</span>
 <span></span>
 <span>    def GetSafeLevels(self, input):</span>
 <span>        total = 0</span>
 <span></span>
-<span>        for report in input:</span>
-<span>            levels = [int(lvl) for lvl in report]</span>
-<span></span>
-<span>            total += self.CheckIfSafe(levels)</span>
+<span>        for levels in input:</span>
+<span>            total += int(self.CheckIfSafe(levels))</span>
 <span></span>
 <span>        return total</span>
 <span></span>
 <span>    def GetSafeLevelsWithTolerance(self, input):</span>
 <span>        total = 0</span>
 <span></span>
-<span>        for report in input:</span>
-<span>            levels = [int(lvl) for lvl in report]</span>
-<span></span>
+<span>        for levels in input:</span>
 <span>            is_safe = self.CheckIfSafe(levels)</span>
 <span></span>
 <span>            if is_safe:</span>
@@ -145,7 +142,7 @@
 <span></span>
 <span></span>
 <span>if __name__ == "__main__":</span>
-<span>    solution = Solution(separator=" ")</span>
+<span>    solution = Solution(separator=" ", to_int=True)</span>
 <span></span>
 <span>    solution.part_1()</span>
 <span></span>

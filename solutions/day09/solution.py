@@ -14,13 +14,11 @@ class Solution(InputAsStringSolution):
     
     _is_debugging = False
 
-    def ComputeChecksum(self, space):
-        total = 0
-        for i, n in enumerate(space):
-            if n == ".":
-                continue
-            total += int(n) * i
-        return total
+    def ComputeChecksum(self, disk):
+        return sum(
+                    map(lambda item: int(item[1]) * item[0], 
+                        filter(lambda item: item[1] != ".", enumerate(disk)))
+                    )
 
     def GetOriginalState(self, input):
         disk = []
@@ -68,19 +66,22 @@ class Solution(InputAsStringSolution):
         disk, free_space = self.GetOriginalState(input)
 
         r = len(disk) - 1
+        
         seen = set()
+
         while r > 0:
             if disk[r] == ".":
                 r -= 1
                 continue
-            c = disk[r]
-            if c in seen:
+
+            file = disk[r]
+            if file in seen:
                 r -= 1
                 continue
-            seen.add(c)
+            seen.add(file)
 
             file_size = 0
-            while disk[r] == c and r >= 0:
+            while disk[r] == file and r >= 0:
                 file_size += 1
                 r -= 1
 
@@ -90,7 +91,7 @@ class Solution(InputAsStringSolution):
 
             i, length = min(candidates, key=lambda x: x[0])
             for j in range(i, i + file_size):
-                disk[j] = c
+                disk[j] = file
             for j in range(r + 1, r + 1 + file_size):
                 disk[j] = "."
             del free_space[i]
@@ -105,14 +106,18 @@ class Solution(InputAsStringSolution):
 
         better_disk = self.CompactByBlocks(input)
 
-        return self.ComputeChecksum(better_disk)
+        checksum = self.ComputeChecksum(better_disk)
+        
+        return checksum
 
     def pt2(self, input):
         self.debug(input)
 
         better_disk = self.CompactByFiles(input)
 
-        return self.ComputeChecksum(better_disk)
+        checksum = self.ComputeChecksum(better_disk)
+        
+        return checksum
         
     def part_1(self):
         start_time = time.time()
