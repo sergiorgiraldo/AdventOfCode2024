@@ -1,0 +1,111 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 11</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/11</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>from collections import Counter</span>
+<span></span>
+<span>class Solution(InputAsStringSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 11</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    def Blink(self, input):</span>
+<span>        res = []</span>
+<span>        stones = Counter([int(val) for val in input.split()])</span>
+<span></span>
+<span>        for i in range(75):</span>
+<span>            for val, occurrences in list(stones.items()):</span>
+<span>                if val == 0:                                #when 0 then 1</span>
+<span>                    stones[1] += occurrences</span>
+<span>                elif len(value := str(val)) % 2 == 0:       #when len is even, split</span>
+<span>                    stones[int(value[:len(value)//2])] += occurrences</span>
+<span>                    stones[int(value[len(value)//2:])] += occurrences</span>
+<span>                else:</span>
+<span>                    stones[val * 2024] += occurrences       #fallback, mul by 2024</span>
+<span></span>
+<span>                stones[val] -= occurrences</span>
+<span></span>
+<span>            if i in (24, 74): # magic numbers from the puzzle</span>
+<span>                res.append(sum(stones.values()))</span>
+<span></span>
+<span>        return res</span>
+<span>    </span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res = self.Blink(input)[0]</span>
+<span></span>
+<span>        return res</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res = self.Blink(input)[1]</span>
+<span></span>
+<span>        return res</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>

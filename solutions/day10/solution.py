@@ -17,7 +17,7 @@ class Solution(InputAsLinesSolution):
     _is_debugging = False
 
     # complex numbers, same idea from day 04
-    def GetMatrix(input):
+    def GetMatrix(self,input):
         m = defaultdict(int)
 
         for i, line in enumerate(input):
@@ -40,12 +40,13 @@ class Solution(InputAsLinesSolution):
     def FindTrailheads(self, input):
         matrix = self.GetMatrix(input)
 
-        paths, ratings = {c: set() for c in matrix}, 0
+        uphill_paths, all_paths = {c: set() for c in matrix}, 0
+
         for c in matrix:
             if matrix[c] == 0:
-                ratings += self.Hike(matrix, c, paths[c])
+                all_paths += self.Hike(matrix, c, uphill_paths[c])
 
-        return sum(map(len, paths.values())), ratings
+        return sum(map(len, uphill_paths.values())), all_paths
 
     def pt1(self, input):
         self.debug(input)
