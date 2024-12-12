@@ -52,6 +52,8 @@ class Solution(InputAsLinesSolution):
         matrix = self.GetMatrix(input)
 
         for coord, _ in matrix.items():
+            self.debug(coord)
+
             if coord in self.visited: continue
 
             perimeter, corners = 0, set()
@@ -61,12 +63,27 @@ class Solution(InputAsLinesSolution):
 
                 for corner in self.FindAdjacent(r, plot_corners):
                     k = [adjacent for adjacent in self.FindAdjacent(corner, plot_corners) if adjacent in region]
-                    
-                    # Each straight section of fence counts as a side, regardless of how long it is.
+                    self.debug("adjacents", k)
+
+                    #  ⎯
+                    # | |
+
+                    #  _
+                    # |_
+
+                    # _ 
+                    # _|
+
+                    #  | |
+                    #   ⎯
                     if len(k) in [1, 3]:
                         corners.add(corner)
-                    elif abs(k[0] - k[1]) != 1:
-                        corners |= {corner, corner+0.1}
+                    # Each straight section of fence counts as a side, regardless of how long it is.
+                    elif abs(k[0] - k[1]) > 1:
+                        self.debug("else",corner + 0.1)
+                        self.debug("else",corner + 0.1)
+                        corners.add(corner)
+                        corners.add(corner + 0.1)
 
             s1 += perimeter * len(region)
             s2 += len(corners) * len(region)
