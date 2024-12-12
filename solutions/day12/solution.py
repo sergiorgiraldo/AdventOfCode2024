@@ -26,8 +26,8 @@ class Solution(InputAsLinesSolution):
 
         return matrix
 
-    def FindAdjacent(self, coord, dirs=[1, 1j, -1, -1j]):
-        return [coord + d for d in dirs]
+    def FindAdjacent(self, coord, offsets=[1, 1j, -1, -1j]):
+        return [coord + offset for offset in offsets]
 
     def FillRegion(self, matrix, c):
         self.visited.add(c)
