@@ -1,0 +1,147 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 12</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/12</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>from collections import defaultdict</span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 12</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    # complex numbers, same idea from day 04</span>
+<span>    def GetMatrix(self,input):</span>
+<span>        matrix = defaultdict()</span>
+<span></span>
+<span>        for i, line in enumerate(input):</span>
+<span>            for j, c in enumerate(line):</span>
+<span>                matrix[i + 1j * j] = c  </span>
+<span></span>
+<span>        return matrix</span>
+<span></span>
+<span>    def FindAdjacent(self, coord, dirs=[1, 1j, -1, -1j]):</span>
+<span>        return [coord + d for d in dirs]</span>
+<span></span>
+<span>    def FillRegion(self, matrix, c):</span>
+<span>        self.visited.add(c)</span>
+<span>        region = [c]</span>
+<span></span>
+<span>        for adjacent in self.FindAdjacent(c):</span>
+<span>            if matrix.get(adjacent) == matrix[c] and adjacent not in self.visited:</span>
+<span>                region += self.FillRegion(matrix, adjacent)</span>
+<span>        </span>
+<span>        return region</span>
+<span></span>
+<span>    def CheckGarden(self, input):</span>
+<span>        s1 = s2 = 0</span>
+<span></span>
+<span>        # x . x</span>
+<span>        # . o .</span>
+<span>        # x . x</span>
+<span>        plot_corners = [.5+.5j, .5-.5j, -.5+.5j, -.5-.5j]</span>
+<span></span>
+<span>        self.visited = set()</span>
+<span></span>
+<span>        matrix = self.GetMatrix(input)</span>
+<span></span>
+<span>        for coord, _ in matrix.items():</span>
+<span>            if coord in self.visited: continue</span>
+<span></span>
+<span>            perimeter, corners = 0, set()</span>
+<span></span>
+<span>            for r in (region := self.FillRegion(matrix, coord)):</span>
+<span>                perimeter += sum(adjacent not in region for adjacent in self.FindAdjacent(r))</span>
+<span></span>
+<span>                for corner in self.FindAdjacent(r, plot_corners):</span>
+<span>                    k = [adjacent for adjacent in self.FindAdjacent(corner, plot_corners) if adjacent in region]</span>
+<span>                    </span>
+<span>                    # Each straight section of fence counts as a side, regardless of how long it is.</span>
+<span>                    if len(k) in [1, 3]:</span>
+<span>                        corners.add(corner)</span>
+<span>                    elif abs(k[0] - k[1]) != 1:</span>
+<span>                        corners |= {corner, corner+0.1}</span>
+<span></span>
+<span>            s1 += perimeter * len(region)</span>
+<span>            s2 += len(corners) * len(region)</span>
+<span>        </span>
+<span>        return s1, s2</span>
+<span></span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res, _ = self.CheckGarden(input)</span>
+<span></span>
+<span>        return res</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        _, res = self.CheckGarden(input)</span>
+<span></span>
+<span>        return res</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>
