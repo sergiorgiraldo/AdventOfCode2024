@@ -2,7 +2,6 @@
 
 ## [12.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v11.0.0...v12.0.0) (2024-12-12)
 
-
 ### ⚠ BREAKING CHANGES
 
 * day 12 completed.
@@ -13,7 +12,6 @@
 
 ## [11.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v10.0.0...v11.0.0) (2024-12-11)
 
-
 ### ⚠ BREAKING CHANGES
 
 * day 11 completed.
@@ -23,7 +21,6 @@
 * day 11 completed. ([d5821c4](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/d5821c4beda7036dba50280bb0db30f6b97c5c25))
 
 ## [10.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v9.0.0...v10.0.0) (2024-12-10)
-
 
 ### ⚠ BREAKING CHANGES
 

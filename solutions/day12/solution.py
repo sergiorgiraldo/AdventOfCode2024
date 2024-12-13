@@ -26,21 +26,26 @@ class Solution(InputAsLinesSolution):
 
         return matrix
 
+    # . x .
+    # x o x
+    # . x .
     def FindAdjacent(self, coord, offsets=[1, 1j, -1, -1j]):
         return [coord + offset for offset in offsets]
 
-    def FillRegion(self, matrix, c):
-        self.visited.add(c)
-        region = [c]
+    def FillGarden(self, matrix, coord):
+        self.visited.add(coord)
 
-        for adjacent in self.FindAdjacent(c):
-            if matrix.get(adjacent) == matrix[c] and adjacent not in self.visited:
-                region += self.FillRegion(matrix, adjacent)
-        
+        region = [coord]
+        plant = matrix[coord]
+
+        for adjacent in self.FindAdjacent(coord):
+            if matrix.get(adjacent) == plant and adjacent not in self.visited:
+                region += self.FillGarden(matrix, adjacent)
+
         return region
 
     def CheckGarden(self, input):
-        s1 = s2 = 0
+        price_1 = price_2 = 0
 
         # x . x
         # . o .
@@ -58,7 +63,7 @@ class Solution(InputAsLinesSolution):
 
             perimeter, corners = 0, set()
 
-            for r in (region := self.FillRegion(matrix, coord)):
+            for r in (region := self.FillGarden(matrix, coord)):
                 perimeter += sum(adjacent not in region for adjacent in self.FindAdjacent(r))
 
                 for corner in self.FindAdjacent(r, plot_corners):
@@ -77,18 +82,20 @@ class Solution(InputAsLinesSolution):
                     #  | |
                     #   ⎯
                     if len(k) in [1, 3]:
+                        self.debug("if",corner)
                         corners.add(corner)
                     # Each straight section of fence counts as a side, regardless of how long it is.
                     elif abs(k[0] - k[1]) > 1:
-                        self.debug("else",corner + 0.1)
-                        self.debug("else",corner + 0.1)
+                        self.debug("else",corner, corner + 0.5)
                         corners.add(corner)
-                        corners.add(corner + 0.1)
+                        corners.add(corner + 0.5)
 
-            s1 += perimeter * len(region)
-            s2 += len(corners) * len(region)
+            regions = len(region)
+
+            price_1 += perimeter * regions
+            price_2 += len(corners) * regions
         
-        return s1, s2
+        return price_1, price_2
 
     def pt1(self, input):
         self.debug(input)
