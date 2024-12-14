@@ -44,9 +44,13 @@ leave ~/source/AdventOfCode2024/(.*)
 
 ## Commands
 
+### markdownlint-cli2
+
+Lint and format markdown files
+
 ### `./ruff.sh`
 
-Lint and format
+Lint
 
 #### Usage
 
