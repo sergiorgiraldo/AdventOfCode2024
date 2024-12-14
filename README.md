@@ -6,9 +6,9 @@ My solutions to [Advent of Code 2024](https://adventofcode.com/2024) done in Pyt
 
 ## Performance
 
-![](https://img.shields.io/badge/day%20📅-12-blue)
+![](https://img.shields.io/badge/day%20📅-14-blue)
 
-![](https://img.shields.io/badge/stars%20⭐-24-yellow)
+![](https://img.shields.io/badge/stars%20⭐-28-yellow)
 
 ---
 
@@ -44,9 +44,13 @@ leave ~/source/AdventOfCode2024/(.*)
 
 ## Commands
 
+### markdownlint-cli2
+
+Lint and format markdown files
+
 ### `./ruff.sh`
 
-Lint and format
+Lint
 
 #### Usage
 
