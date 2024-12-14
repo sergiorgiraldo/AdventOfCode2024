@@ -1,0 +1,160 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 14</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/14</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>from collections import Counter</span>
+<span>from functools import reduce </span>
+<span>import operator</span>
+<span>import re</span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 14</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    WIDTH = 101 #magic numbers from the puzzle</span>
+<span>    HEIGHT = 103</span>
+<span>  </span>
+<span>    def GetSpaceForTest(self):</span>
+<span>        self.WIDTH = 11 #magic numbers from the puzzle</span>
+<span>        self.HEIGHT = 7</span>
+<span></span>
+<span>    def GetRobots(self, input):</span>
+<span>        robots = []</span>
+<span></span>
+<span>        for line in input:</span>
+<span>            px, py, vx, vy = map(int, re.findall(r"(-?\d+)", line))</span>
+<span>            robots.append((px, py, vx, vy))</span>
+<span></span>
+<span>        return robots</span>
+<span></span>
+<span>    def EvaluatePosition(self, robot, time):</span>
+<span>        px, py, vx, vy = robot</span>
+<span></span>
+<span>        return ((px + vx * time) % self.WIDTH, (py + vy * time) % self.HEIGHT)</span>
+<span></span>
+<span>    def FindQuadrant(self, position):</span>
+<span>        px, py = position</span>
+<span>        </span>
+<span>        if px == self.WIDTH // 2 or py == self.HEIGHT // 2:</span>
+<span>            return None</span>
+<span>        </span>
+<span>        return (px < self.WIDTH // 2, py < self.HEIGHT // 2)</span>
+<span>    </span>
+<span>    def CountRobots(self, input):</span>
+<span>        robots = self.GetRobots(input)</span>
+<span></span>
+<span>        quadrants = Counter()</span>
+<span></span>
+<span>        for robot in robots:</span>
+<span>            new_position = self.EvaluatePosition(robot, 100)</span>
+<span>            quadrant = self.FindQuadrant(new_position)</span>
+<span>            if quadrant is not None:</span>
+<span>                quadrants[quadrant] += 1</span>
+<span></span>
+<span>        safety_factor = reduce(operator.mul, map(lambda v: v, quadrants.values()), 1)</span>
+<span></span>
+<span>        return safety_factor</span>
+<span></span>
+<span>    def FindAdjacent(self, positions):</span>
+<span>        adjacents = 0</span>
+<span>        pos_set = set(positions)</span>
+<span></span>
+<span>        for y in range(self.HEIGHT):</span>
+<span>            for x in range(self.WIDTH - 1):</span>
+<span>                if (x, y) in pos_set and (x + 1, y) in pos_set:</span>
+<span>                    adjacents += 1</span>
+<span>        </span>
+<span>        return adjacents</span>
+<span></span>
+<span>    #the tree must be a set of connected positions i.e. adjacent to each other</span>
+<span>    def FindEasterEgg(self, input):</span>
+<span>        robots = self.GetRobots(input)</span>
+<span></span>
+<span>        for time in range(10000): #arbitrary time limit, tried with 1000, 5000, then 10000</span>
+<span>            positions = [self.EvaluatePosition(robot, time) for robot in robots]</span>
+<span>            adjacencies = self.FindAdjacent(positions)</span>
+<span>            if adjacencies > 100: #arbitrary number of points</span>
+<span>                return time</span>
+<span>        </span>
+<span>        raise Exception("Easter egg not found")</span>
+<span></span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        safety_factor = self.CountRobots(input)</span>
+<span></span>
+<span>        return safety_factor</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        time = self.FindEasterEgg(input)</span>
+<span></span>
+<span>        return time</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>
