@@ -34,7 +34,7 @@ class Solution(InputAsBlockSolution):
                 #variables
                 a, b = z3.Int("a"), z3.Int("b")
 
-                #restrictions
+                #constraints
                 solver.add(prize_x + add == a * a_x + b * b_x)
                 solver.add(prize_y + add == a * a_y + b * b_y)
                 
@@ -44,6 +44,7 @@ class Solution(InputAsBlockSolution):
                 if solver.check() == z3.sat:
                     model = solver.model()
                     res[i] += model.eval(a).as_long() * 3 + model.eval(b).as_long()
+
         return res
 
     def pt1(self, input):
