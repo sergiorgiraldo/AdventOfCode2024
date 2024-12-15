@@ -1,0 +1,203 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 15</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/15</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span></span>
+<span>class Solution(InputAsBlockSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 15</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    def GetCoord(self, position):</span>
+<span>        return int(position.imag) * 100 + int(position.real)</span>
+<span></span>
+<span>    def GetGrid(self, input):</span>
+<span>        grid = {}</span>
+<span></span>
+<span>        for y, row in enumerate(input):</span>
+<span>            for x, cell in enumerate(row):</span>
+<span>                location = x + y * 1j</span>
+<span>                grid[location] = cell</span>
+<span>                if cell == "@":</span>
+<span>                    self.curr_location = location</span>
+<span></span>
+<span>        return grid</span>
+<span></span>
+<span>    def GetWiderGrid(self, input):</span>
+<span>        wider_input = []</span>
+<span></span>
+<span>        for item in input:</span>
+<span>            new_item = item.replace("#","##").replace("O", "[]").replace(".", "..").replace("@", "@.")</span>
+<span>            wider_input.append(new_item)</span>
+<span></span>
+<span>        grid = self.GetGrid(wider_input)</span>
+<span></span>
+<span>        return grid</span>
+<span></span>
+<span>    def CollectBoxes(self, input, wider=False):</span>
+<span>        offset = {</span>
+<span>            ">": 1,</span>
+<span>            "<": -1,</span>
+<span>            "^": -1j,</span>
+<span>            "v": 1j</span>
+<span>        }</span>
+<span></span>
+<span>        field, instructions = input</span>
+<span></span>
+<span>        if wider:</span>
+<span>            grid = self.GetWiderGrid(field) </span>
+<span>            condition = "["</span>
+<span>        else: </span>
+<span>            grid = self.GetGrid(field)</span>
+<span>            condition = "O"</span>
+<span></span>
+<span>        for moves in instructions:</span>
+<span>            for move in moves:</span>
+<span>                if wider: </span>
+<span>                    self.curr_location = self.WalkTheRobot_wh2(grid, offset[move])</span>
+<span>                else: </span>
+<span>                    self.curr_location = self.WalkTheRobot_wh1(grid, offset[move])</span>
+<span>                </span>
+<span>        gps = sum([self.GetCoord(position) for position, cell in grid.items() if cell == condition ])</span>
+<span>        </span>
+<span>        return gps</span>
+<span></span>
+<span>    def WalkTheRobot_wh1(self,grid, move):</span>
+<span>        new_location = self.curr_location + move</span>
+<span>        boxes_to_push = []</span>
+<span>        while grid[new_location] == "O":</span>
+<span>            new_location = new_location + move</span>
+<span>            boxes_to_push.append(new_location)</span>
+<span></span>
+<span>        if grid[new_location] == "#":</span>
+<span>            return self.curr_location</span>
+<span>        if grid[new_location] == ".":</span>
+<span>            for box in boxes_to_push:</span>
+<span>                grid[box] = "O"</span>
+<span>            grid[self.curr_location] = "."</span>
+<span>            self.curr_location = self.curr_location + move</span>
+<span>            grid[self.curr_location] = "@"</span>
+<span>            return self.curr_location</span>
+<span>    </span>
+<span>    def WalkTheRobot_wh2(self, grid, move):</span>
+<span>        if grid[self.curr_location + move] == "#":</span>
+<span>            return self.curr_location</span>
+<span>        </span>
+<span>        locations_to_push_from = [self.curr_location]</span>
+<span>        boxes_to_push = []</span>
+<span></span>
+<span>        while any([grid[location + move] in "[]" for location in locations_to_push_from]):</span>
+<span>            if any([grid[location + move] == "#" for location in locations_to_push_from]):</span>
+<span>                return self.curr_location</span>
+<span>            new_locations_to_push_from = []</span>
+<span>            for location in locations_to_push_from:</span>
+<span>                boxes = []</span>
+<span>                if grid[location + move] == "[":</span>
+<span>                    boxes = [location + move]</span>
+<span>                    if move in [1j, -1j]:</span>
+<span>                        boxes.append(location + move + 1)</span>
+<span>                elif grid[location + move] == "]":</span>
+<span>                    boxes = [location + move]</span>
+<span>                    if move in [1j, -1j]:</span>
+<span>                        boxes.append(location + move - 1)</span>
+<span>                boxes_to_push.extend(boxes)</span>
+<span>                new_locations_to_push_from.extend(boxes)</span>
+<span>            locations_to_push_from = new_locations_to_push_from</span>
+<span></span>
+<span>        if any([grid[box+move] == "#" for box in boxes_to_push]):</span>
+<span>            return self.curr_location</span>
+<span></span>
+<span>        new_symbols = {}</span>
+<span>        for box in boxes_to_push:</span>
+<span>            symbol = grid[box]</span>
+<span>            new_symbols[box + move] = symbol</span>
+<span>        for box in boxes_to_push:</span>
+<span>            grid[box] = "."</span>
+<span>        for box, symbol in new_symbols.items():</span>
+<span>            grid[box] = symbol</span>
+<span></span>
+<span>        grid[self.curr_location] = "."</span>
+<span>        self.curr_location = self.curr_location + move</span>
+<span>        grid[self.curr_location] = "@"</span>
+<span></span>
+<span>        return self.curr_location</span>
+<span></span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res = self.CollectBoxes(input)</span>
+<span></span>
+<span>        return res</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res = self.CollectBoxes(input, True)</span>
+<span></span>
+<span>        return res</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>
