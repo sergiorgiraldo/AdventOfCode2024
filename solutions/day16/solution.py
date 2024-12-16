@@ -45,6 +45,15 @@ class Solution(InputAsLinesSolution):
 
         raise ValueError("No robot found")
 
+    def draw(self, grid, path):
+        for row in range(len(grid)):
+            print()   
+            for col in range(len(grid[0])):
+                if (row, col) in path and grid[row][col] == ".":
+                    print("X", end="")
+                else:
+                    print(grid[row][col], end="")
+
     def WalkTheMaze(self, input):
         start_row, start_col = self.FindRobot(input, "S")
         end_row, end_col = self.FindRobot(input, "E")
@@ -82,9 +91,9 @@ class Solution(InputAsLinesSolution):
 
         return -1
 
-    def FindSeat(self, grid):
-        start_row, start_col = self.FindRobot(grid, "S")
-        end_row, end_col = self.FindRobot(grid, "E")
+    def FindSeat(self, input):
+        start_row, start_col = self.FindRobot(input, "S")
+        end_row, end_col = self.FindRobot(input, "E")
 
         pq = [(0, start_row, start_col, Face.EAST.value, [])]
         best_scores = {}
@@ -112,9 +121,9 @@ class Solution(InputAsLinesSolution):
             new_r, new_c = r + offset_r, c + offset_c
 
             if (
-                0 <= new_r < len(grid)
-                and 0 <= new_c < len(grid[0])
-                and grid[new_r][new_c] != "#"
+                0 <= new_r < len(input)
+                and 0 <= new_c < len(input[0])
+                and input[new_r][new_c] != "#"
             ):
                 heappush(pq, (score + 1, new_r, new_c, facing.value, path + [(r, c)]))
 
@@ -123,6 +132,8 @@ class Solution(InputAsLinesSolution):
 
             new_facing = facing.RotateCounterClockwise()
             heappush(pq, (score + 1000, r, c, new_facing.value, path + [(r, c)]))
+
+        # self.draw(input, path)
 
         return len(seats[min_end_score]) + 1
 

@@ -36,12 +36,15 @@
 <pre>
 <span># puzzle prompt: https://adventofcode.com/2024/day/10</span>
 <span></span>
-<span>import time</span>
 <span>import sys</span>
+<span>import time</span>
+<span></span>
 <span>sys.path.insert(0,"..")</span>
 <span></span>
-<span>from base.advent import *</span>
 <span>from collections import defaultdict</span>
+<span></span>
+<span>from base.advent import *</span>
+<span></span>
 <span></span>
 <span>class Solution(InputAsLinesSolution):</span>
 <span>    _year = 2024</span>
@@ -50,7 +53,7 @@
 <span>    _is_debugging = False</span>
 <span></span>
 <span>    # complex numbers, same idea from day 04</span>
-<span>    def GetMatrix(input):</span>
+<span>    def GetMatrix(self,input):</span>
 <span>        m = defaultdict(int)</span>
 <span></span>
 <span>        for i, line in enumerate(input):</span>
@@ -73,12 +76,13 @@
 <span>    def FindTrailheads(self, input):</span>
 <span>        matrix = self.GetMatrix(input)</span>
 <span></span>
-<span>        paths, ratings = {c: set() for c in matrix}, 0</span>
+<span>        uphill_paths, all_paths = {c: set() for c in matrix}, 0</span>
+<span></span>
 <span>        for c in matrix:</span>
 <span>            if matrix[c] == 0:</span>
-<span>                ratings += self.Hike(matrix, c, paths[c])</span>
+<span>                all_paths += self.Hike(matrix, c, uphill_paths[c])</span>
 <span></span>
-<span>        return sum(map(len, paths.values())), ratings</span>
+<span>        return sum(map(len, uphill_paths.values())), all_paths</span>
 <span></span>
 <span>    def pt1(self, input):</span>
 <span>        self.debug(input)</span>

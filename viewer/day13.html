@@ -36,13 +36,16 @@
 <pre>
 <span># puzzle prompt: https://adventofcode.com/2024/day/13</span>
 <span></span>
-<span>import time</span>
 <span>import sys</span>
+<span>import time</span>
+<span></span>
 <span>sys.path.insert(0,"..")</span>
 <span></span>
-<span>from base.advent import *</span>
 <span>import re</span>
+<span></span>
 <span>import z3</span>
+<span>from base.advent import *</span>
+<span></span>
 <span></span>
 <span>class Solution(InputAsBlockSolution):</span>
 <span>    _year = 2024</span>
@@ -67,7 +70,7 @@
 <span>                #variables</span>
 <span>                a, b = z3.Int("a"), z3.Int("b")</span>
 <span></span>
-<span>                #restrictions</span>
+<span>                #constraints</span>
 <span>                solver.add(prize_x + add == a * a_x + b * b_x)</span>
 <span>                solver.add(prize_y + add == a * a_y + b * b_y)</span>
 <span>                </span>
@@ -77,6 +80,7 @@
 <span>                if solver.check() == z3.sat:</span>
 <span>                    model = solver.model()</span>
 <span>                    res[i] += model.eval(a).as_long() * 3 + model.eval(b).as_long()</span>
+<span></span>
 <span>        return res</span>
 <span></span>
 <span>    def pt1(self, input):</span>
