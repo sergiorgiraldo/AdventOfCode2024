@@ -1,0 +1,200 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 16</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/16</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>from collections import defaultdict, deque</span>
+<span>from enum import Enum</span>
+<span>from heapq import heappush, heappop</span>
+<span>from itertools import product</span>
+<span></span>
+<span>class Face(Enum):</span>
+<span>    NORTH = 0</span>
+<span>    EAST = 1</span>
+<span>    SOUTH = 2</span>
+<span>    WEST = 3</span>
+<span></span>
+<span>    def RotateCounterClockwise(self):</span>
+<span>        return Face((self.value - 1) % 4)</span>
+<span></span>
+<span>    def RotateClockwise(self):</span>
+<span>        return Face((self.value + 1) % 4)</span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 16</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    DIRECTION = {</span>
+<span>        Face.NORTH: (-1,  0),</span>
+<span>        Face.EAST:  ( 0,  1),</span>
+<span>        Face.SOUTH: ( 1,  0),</span>
+<span>        Face.WEST:  ( 0, -1)</span>
+<span>    }</span>
+<span></span>
+<span>    def FindRobot(self, grid, face):</span>
+<span>        for row, col in product(range(len(grid)), range(len(grid[0]))):</span>
+<span>            if grid[row][col] == face:</span>
+<span>                return row, col</span>
+<span></span>
+<span>        raise ValueError("No robot found")</span>
+<span></span>
+<span>    def WalkTheMaze(self, input):</span>
+<span>        start_row, start_col = self.FindRobot(input, "S")</span>
+<span>        end_row, end_col = self.FindRobot(input, "E")</span>
+<span></span>
+<span>        pq = [(0, start_row, start_col, Face.EAST.value)]</span>
+<span>        best_scores = {}</span>
+<span></span>
+<span>        while pq:</span>
+<span>            score, r, c, facing = heappop(pq)</span>
+<span>            facing = Face(facing)</span>
+<span></span>
+<span>            if score >= best_scores.get((r, c, facing), float("inf")):</span>
+<span>                continue</span>
+<span></span>
+<span>            best_scores[(r, c, facing)] = score</span>
+<span></span>
+<span>            if (r, c) == (end_row, end_col):</span>
+<span>                return score</span>
+<span></span>
+<span>            offset_r, offset_c = self.DIRECTION[facing]</span>
+<span>            new_r, new_c = r + offset_r, c + offset_c</span>
+<span></span>
+<span>            if (</span>
+<span>                0 <= new_r < len(input)</span>
+<span>                and 0 <= new_c < len(input[0])</span>
+<span>                and input[new_r][new_c] != "#"</span>
+<span>            ):</span>
+<span>                heappush(pq, (score + 1, new_r, new_c, facing.value))</span>
+<span></span>
+<span>            new_facing = facing.RotateClockwise()</span>
+<span>            heappush(pq, (score + 1000, r, c, new_facing.value))</span>
+<span></span>
+<span>            new_facing = facing.RotateCounterClockwise()</span>
+<span>            heappush(pq, (score + 1000, r, c, new_facing.value))</span>
+<span></span>
+<span>        return -1</span>
+<span></span>
+<span>    def FindSeat(self, grid):</span>
+<span>        start_row, start_col = self.FindRobot(grid, "S")</span>
+<span>        end_row, end_col = self.FindRobot(grid, "E")</span>
+<span></span>
+<span>        pq = [(0, start_row, start_col, Face.EAST.value, [])]</span>
+<span>        best_scores = {}</span>
+<span>        min_end_score = float("inf")</span>
+<span>        seats = {}</span>
+<span></span>
+<span>        while pq:</span>
+<span>            score, r, c, facing, path = heappop(pq)</span>
+<span>            facing = Face(facing)</span>
+<span></span>
+<span>            if (r, c) == (end_row, end_col):</span>
+<span>                if score <= min_end_score:</span>
+<span>                    min_end_score = score</span>
+<span>                    if min_end_score not in seats:</span>
+<span>                        seats[min_end_score] = set()</span>
+<span>                    seats[min_end_score].update(path)</span>
+<span>                continue</span>
+<span></span>
+<span>            if best_scores.get((r, c, facing), float("inf")) < score:</span>
+<span>                continue</span>
+<span></span>
+<span>            best_scores[(r, c, facing)] = score</span>
+<span></span>
+<span>            offset_r, offset_c = self.DIRECTION[facing]</span>
+<span>            new_r, new_c = r + offset_r, c + offset_c</span>
+<span></span>
+<span>            if (</span>
+<span>                0 <= new_r < len(grid)</span>
+<span>                and 0 <= new_c < len(grid[0])</span>
+<span>                and grid[new_r][new_c] != "#"</span>
+<span>            ):</span>
+<span>                heappush(pq, (score + 1, new_r, new_c, facing.value, path + [(r, c)]))</span>
+<span></span>
+<span>            new_facing = facing.RotateClockwise()</span>
+<span>            heappush(pq, (score + 1000, r, c, new_facing.value, path + [(r, c)]))</span>
+<span></span>
+<span>            new_facing = facing.RotateCounterClockwise()</span>
+<span>            heappush(pq, (score + 1000, r, c, new_facing.value, path + [(r, c)]))</span>
+<span></span>
+<span>        return len(seats[min_end_score]) + 1</span>
+<span></span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res = self.WalkTheMaze(input)</span>
+<span></span>
+<span>        return res</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res = self.FindSeat(input)</span>
+<span></span>
+<span>        return res</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>
