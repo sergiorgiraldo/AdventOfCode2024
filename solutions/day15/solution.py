@@ -26,7 +26,7 @@ class Solution(InputAsBlockSolution):
                 grid[location] = cell
                 if cell == "@":
                     self.curr_location = location
-
+                    
         return grid
 
     def GetWiderGrid(self, input):
