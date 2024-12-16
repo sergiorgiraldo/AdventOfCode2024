@@ -36,15 +36,18 @@
 <pre>
 <span># puzzle prompt: https://adventofcode.com/2024/day/14</span>
 <span></span>
-<span>import time</span>
 <span>import sys</span>
+<span>import time</span>
+<span></span>
 <span>sys.path.insert(0,"..")</span>
 <span></span>
-<span>from base.advent import *</span>
-<span>from collections import Counter</span>
-<span>from functools import reduce </span>
 <span>import operator</span>
 <span>import re</span>
+<span>from collections import Counter</span>
+<span>from functools import reduce</span>
+<span></span>
+<span>from base.advent import *</span>
+<span></span>
 <span></span>
 <span>class Solution(InputAsLinesSolution):</span>
 <span>    _year = 2024</span>
@@ -115,9 +118,24 @@
 <span>            positions = [self.EvaluatePosition(robot, time) for robot in robots]</span>
 <span>            adjacencies = self.FindAdjacent(positions)</span>
 <span>            if adjacencies > 100: #arbitrary number of points</span>
+<span>                # self.draw(positions)</span>
 <span>                return time</span>
 <span>        </span>
 <span>        raise Exception("Easter egg not found")</span>
+<span></span>
+<span>    def draw(self, positions):</span>
+<span>        grid = [[' ' for _ in range(self.WIDTH)] for _ in range(self.HEIGHT)]</span>
+<span>        pos_set = set(positions)</span>
+<span></span>
+<span>        for y in range(self.HEIGHT):</span>
+<span>            for x in range(self.WIDTH - 1):</span>
+<span>                if (x, y) in pos_set:</span>
+<span>                    grid[y][x]='#'</span>
+<span>                else:</span>
+<span>                    grid[y][x]=' '</span>
+<span></span>
+<span>        for row in grid:</span>
+<span>            print((' '.join(row)))</span>
 <span></span>
 <span>    def pt1(self, input):</span>
 <span>        self.debug(input)</span>

@@ -36,11 +36,13 @@
 <pre>
 <span># puzzle prompt: https://adventofcode.com/2024/day/15</span>
 <span></span>
-<span>import time</span>
 <span>import sys</span>
+<span>import time</span>
+<span></span>
 <span>sys.path.insert(0,"..")</span>
 <span></span>
 <span>from base.advent import *</span>
+<span></span>
 <span></span>
 <span>class Solution(InputAsBlockSolution):</span>
 <span>    _year = 2024</span>
@@ -60,7 +62,7 @@
 <span>                grid[location] = cell</span>
 <span>                if cell == "@":</span>
 <span>                    self.curr_location = location</span>
-<span></span>
+<span>                    </span>
 <span>        return grid</span>
 <span></span>
 <span>    def GetWiderGrid(self, input):</span>

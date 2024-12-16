@@ -36,15 +36,18 @@
 <pre>
 <span># puzzle prompt: https://adventofcode.com/2024/day/16</span>
 <span></span>
-<span>import time</span>
 <span>import sys</span>
+<span>import time</span>
+<span></span>
 <span>sys.path.insert(0,"..")</span>
 <span></span>
-<span>from base.advent import *</span>
 <span>from collections import defaultdict, deque</span>
 <span>from enum import Enum</span>
-<span>from heapq import heappush, heappop</span>
+<span>from heapq import heappop, heappush</span>
 <span>from itertools import product</span>
+<span></span>
+<span>from base.advent import *</span>
+<span></span>
 <span></span>
 <span>class Face(Enum):</span>
 <span>    NORTH = 0</span>
@@ -77,6 +80,15 @@
 <span>                return row, col</span>
 <span></span>
 <span>        raise ValueError("No robot found")</span>
+<span></span>
+<span>    def draw(self, grid, path):</span>
+<span>        for row in range(len(grid)):</span>
+<span>            print()   </span>
+<span>            for col in range(len(grid[0])):</span>
+<span>                if (row, col) in path and grid[row][col] == ".":</span>
+<span>                    print("X", end="")</span>
+<span>                else:</span>
+<span>                    print(grid[row][col], end="")</span>
 <span></span>
 <span>    def WalkTheMaze(self, input):</span>
 <span>        start_row, start_col = self.FindRobot(input, "S")</span>
@@ -115,9 +127,9 @@
 <span></span>
 <span>        return -1</span>
 <span></span>
-<span>    def FindSeat(self, grid):</span>
-<span>        start_row, start_col = self.FindRobot(grid, "S")</span>
-<span>        end_row, end_col = self.FindRobot(grid, "E")</span>
+<span>    def FindSeat(self, input):</span>
+<span>        start_row, start_col = self.FindRobot(input, "S")</span>
+<span>        end_row, end_col = self.FindRobot(input, "E")</span>
 <span></span>
 <span>        pq = [(0, start_row, start_col, Face.EAST.value, [])]</span>
 <span>        best_scores = {}</span>
@@ -145,9 +157,9 @@
 <span>            new_r, new_c = r + offset_r, c + offset_c</span>
 <span></span>
 <span>            if (</span>
-<span>                0 <= new_r < len(grid)</span>
-<span>                and 0 <= new_c < len(grid[0])</span>
-<span>                and grid[new_r][new_c] != "#"</span>
+<span>                0 <= new_r < len(input)</span>
+<span>                and 0 <= new_c < len(input[0])</span>
+<span>                and input[new_r][new_c] != "#"</span>
 <span>            ):</span>
 <span>                heappush(pq, (score + 1, new_r, new_c, facing.value, path + [(r, c)]))</span>
 <span></span>
@@ -156,6 +168,8 @@
 <span></span>
 <span>            new_facing = facing.RotateCounterClockwise()</span>
 <span>            heappush(pq, (score + 1000, r, c, new_facing.value, path + [(r, c)]))</span>
+<span></span>
+<span>        # self.draw(input, path)</span>
 <span></span>
 <span>        return len(seats[min_end_score]) + 1</span>
 <span></span>
