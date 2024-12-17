@@ -1,0 +1,196 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 17</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/17</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span>import copy</span>
+<span>from base.advent import *</span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 17</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    def Setup(self, input):</span>
+<span>        self.OriginalRegisterList = []</span>
+<span>        for t in input:</span>
+<span>            Line = t.strip()</span>
+<span>            if Line.startswith("Reg"):</span>
+<span>                _, _, A = Line.split()</span>
+<span>                self.OriginalRegisterList.append(int(A))</span>
+<span>            elif Line.startswith("Pro"):</span>
+<span>                _, A = Line.split()</span>
+<span>                self.Originalprogram = tuple(map(int, A.split(",")))</span>
+<span>                self.CompareString = A</span>
+<span>        self.OriginalRegisterT = tuple(self.OriginalRegisterList)</span>
+<span></span>
+<span>    def Program(self, RegA, RegisterTuple, Part):</span>
+<span>        ProgramLength = len(self.Originalprogram)</span>
+<span>        Register = {}</span>
+<span>        for v, r in enumerate(["A","B","C"]):</span>
+<span>            Register[r] = RegisterTuple[v]</span>
+<span>        Pointer = 0</span>
+<span>        OutputList = []</span>
+<span>        Register["A"] = RegA</span>
+<span></span>
+<span>        def Combo(Operand):</span>
+<span>            if Operand < 4:</span>
+<span>                return Operand</span>
+<span>            if Operand == 4:</span>
+<span>                return Register["A"]</span>
+<span>            if Operand == 5:</span>
+<span>                return Register["B"]</span>
+<span>            if Operand == 6:</span>
+<span>                return Register["C"]</span>
+<span>            else:</span>
+<span>                print("7 combo detected")</span>
+<span></span>
+<span>        while Pointer < ProgramLength-1:</span>
+<span>            PointerJump = True</span>
+<span>            Operator, Operand = self.Originalprogram[Pointer:Pointer+2]</span>
+<span>            if Operator == 0: #adv</span>
+<span>                Numerator = Register["A"]</span>
+<span>                Denom = 2**Combo(Operand)</span>
+<span>                Register["A"] = Numerator // Denom</span>
+<span>            elif Operator == 1: #bxl</span>
+<span>                B = Register["B"]</span>
+<span>                Register["B"] = B ^ Operand</span>
+<span>            elif Operator == 2: #bst</span>
+<span>                Register["B"] = Combo(Operand) % 8</span>
+<span>            elif Operator == 3: #jnz</span>
+<span>                if Register["A"] != 0:</span>
+<span>                    Pointer = Operand</span>
+<span>                    PointerJump = False</span>
+<span>            elif Operator == 4: #bxc</span>
+<span>                B, C = Register["B"], Register["C"]</span>
+<span>                Register["B"] = B ^ C</span>
+<span>            elif Operator == 5: #out</span>
+<span>                Output = Combo(Operand) % 8</span>
+<span>                if Part == 2:</span>
+<span>                    return Output, Register["A"]</span>
+<span>                OutputList.append(Output)</span>
+<span></span>
+<span>            elif Operator == 6: #bdv</span>
+<span>                Numerator = Register["A"]</span>
+<span>                Denom = 2**Combo(Operand)</span>
+<span>                Register["B"] = Numerator // Denom</span>
+<span>            elif Operator == 7: #cdv</span>
+<span>                Numerator = Register["A"]</span>
+<span>                Denom = 2**Combo(Operand)</span>
+<span>                Register["C"] = Numerator // Denom</span>
+<span></span>
+<span>            if PointerJump:</span>
+<span>                Pointer += 2</span>
+<span></span>
+<span>        OutputString = ""</span>
+<span>        for t in OutputList:</span>
+<span>            OutputString += str(t)</span>
+<span>            OutputString += ","</span>
+<span>        OutputString = OutputString[:-1]</span>
+<span>        if Part == 1:</span>
+<span>            return OutputString</span>
+<span>        else:</span>
+<span>            return True, OutputString</span>
+<span></span>
+<span>    def Replicate(self):</span>
+<span>        Place = len(self.Originalprogram)-1</span>
+<span>        CurrentRegAs = [0]</span>
+<span></span>
+<span>        while Place >= 0:</span>
+<span>            NextRegAs = []</span>
+<span>            ExpectedOutput = self.Originalprogram[Place]</span>
+<span>            #print(ExpectedOutput, Place)</span>
+<span>            for RA in CurrentRegAs:</span>
+<span>                NewRA = RA*8</span>
+<span>                for y in range(8):</span>
+<span>                    CRA = NewRA + y</span>
+<span>                    NewOutput, PassedA = self.Program(CRA, self.OriginalRegisterT, 2)</span>
+<span>                    #print(CRA, NewOutput, NewOutput==ExpectedOutput, PassedA)</span>
+<span>                    if NewOutput == ExpectedOutput:</span>
+<span>                        NextRegAs.append(CRA)</span>
+<span></span>
+<span>            Place -= 1</span>
+<span>            CurrentRegAs = copy.deepcopy(NextRegAs)</span>
+<span></span>
+<span>        return min(CurrentRegAs)</span>
+<span>    </span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        self.Setup(input)</span>
+<span></span>
+<span>        res = self.Program(self.OriginalRegisterT[0], self.OriginalRegisterT, 1)</span>
+<span></span>
+<span>        return res</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        self.Setup(input)</span>
+<span></span>
+<span>        res = self.Replicate()</span>
+<span></span>
+<span>        return res</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>
