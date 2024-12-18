@@ -1,0 +1,142 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 18</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/18</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>import networkx as nx</span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 18</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    def setup(self, input, test = False):</span>
+<span>        if test:</span>
+<span>            offset = 12</span>
+<span>            start = 0</span>
+<span>            end = 6 + 6j</span>
+<span>        else:</span>
+<span>            offset = 1024</span>
+<span>            start = 0</span>
+<span>            end = 70 + 70j</span>
+<span></span>
+<span>        fallen_bytes = set()</span>
+<span>        for i in range(offset):</span>
+<span>            x,y = input[i].split(",")</span>
+<span>            fallen_bytes.add((int(x) + int(y) * 1j))</span>
+<span></span>
+<span>        return start, end, fallen_bytes</span>
+<span>    </span>
+<span>    def shortest_path_to_end(self, start, end, fallen_bytes):</span>
+<span>        queue = [(start, 0)]</span>
+<span>        visited = set()</span>
+<span>        while queue:</span>
+<span>            pos, steps = queue.pop(0)</span>
+<span>            if pos == end:</span>
+<span>                return steps</span>
+<span>            if pos in visited:</span>
+<span>                continue</span>
+<span>            visited.add(pos)</span>
+<span>            for move in [1, -1, 1j, -1j]:</span>
+<span>                new_pos = pos + move</span>
+<span>                if new_pos in fallen_bytes:</span>
+<span>                    continue</span>
+<span>                if new_pos.real < 0 or new_pos.imag < 0:</span>
+<span>                    continue</span>
+<span>                if new_pos.real > end.real or new_pos.imag > end.imag:</span>
+<span>                    continue</span>
+<span>                queue.append((new_pos, steps + 1))</span>
+<span>        return -1</span>
+<span></span>
+<span>    def GetExit(self, input):</span>
+<span>        start, end, fallen_bytes = self.setup(input)</span>
+<span></span>
+<span>        for i in range(1024, len(input)):</span>
+<span>            x,y = input[i].split(",")</span>
+<span>            fallen_bytes.add((int(x) + int(y) * 1j))</span>
+<span>            if self.shortest_path_to_end(start, end, fallen_bytes) == -1:</span>
+<span>                res = input[i]</span>
+<span>                break</span>
+<span></span>
+<span>        return res</span>
+<span>    </span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        start, end, fallen_bytes = self.setup(input)</span>
+<span></span>
+<span>        res = self.shortest_path_to_end(start, end, fallen_bytes)</span>
+<span></span>
+<span>        return res</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res = self.GetExit(input)</span>
+<span></span>
+<span>        return res</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>

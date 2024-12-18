@@ -16,114 +16,104 @@ class Solution(InputAsLinesSolution):
     _is_debugging = False
 
     def Setup(self, input):
-        self.OriginalRegisterList = []
-        for t in input:
-            Line = t.strip()
-            if Line.startswith("Reg"):
-                _, _, A = Line.split()
-                self.OriginalRegisterList.append(int(A))
-            elif Line.startswith("Pro"):
-                _, A = Line.split()
-                self.Originalprogram = tuple(map(int, A.split(",")))
-                self.CompareString = A
-        self.OriginalRegisterT = tuple(self.OriginalRegisterList)
+        self.original_register_list = []
 
-    def Program(self, RegA, RegisterTuple, Part):
-        ProgramLength = len(self.Originalprogram)
-        Register = {}
+        for line in input:
+            if line.startswith("Reg"):
+                reg = line.split(": ")[1]
+                self.original_register_list.append(int(reg))
+            elif line.startswith("Pro"):
+                program = line.split(": ")[1]
+                self.original_program = tuple(map(int, program.split(",")))
+
+        self.original_register_tuple = tuple(self.original_register_list)
+
+    def Run(self, register_A, registers, part = 1):
+        length = len(self.original_program)
+        register = {}
         for v, r in enumerate(["A","B","C"]):
-            Register[r] = RegisterTuple[v]
-        Pointer = 0
-        OutputList = []
-        Register["A"] = RegA
+            register[r] = registers[v]
+        cmd = 0
+        output = []
+        register["A"] = register_A
 
-        def Combo(Operand):
-            if Operand < 4:
-                return Operand
-            if Operand == 4:
-                return Register["A"]
-            if Operand == 5:
-                return Register["B"]
-            if Operand == 6:
-                return Register["C"]
+        def Combo(operand):
+            if operand < 4:
+                return operand
+            if operand == 4:
+                return register["A"]
+            if operand == 5:
+                return register["B"]
+            if operand == 6:
+                return register["C"]
             else:
                 print("7 combo detected")
 
-        while Pointer < ProgramLength-1:
-            PointerJump = True
-            Operator, Operand = self.Originalprogram[Pointer:Pointer+2]
-            if Operator == 0: #adv
-                Numerator = Register["A"]
-                Denom = 2**Combo(Operand)
-                Register["A"] = Numerator // Denom
-            elif Operator == 1: #bxl
-                B = Register["B"]
-                Register["B"] = B ^ Operand
-            elif Operator == 2: #bst
-                Register["B"] = Combo(Operand) % 8
-            elif Operator == 3: #jnz
-                if Register["A"] != 0:
-                    Pointer = Operand
-                    PointerJump = False
-            elif Operator == 4: #bxc
-                B, C = Register["B"], Register["C"]
-                Register["B"] = B ^ C
-            elif Operator == 5: #out
-                Output = Combo(Operand) % 8
-                if Part == 2:
-                    return Output, Register["A"]
-                OutputList.append(Output)
+        while cmd < length - 1:
+            to_jump = True
+            
+            operator, operand = self.original_program[cmd:cmd+2]
+            
+            if operator == 0: #adv
+                register["A"] = register["A"] // (2**Combo(operand))
+            elif operator == 1: #bxl
+                register["B"] = register["B"] ^ operand
+            elif operator == 2: #bst
+                register["B"] = Combo(operand) % 8
+            elif operator == 3: #jnz
+                if register["A"] != 0:
+                    cmd = operand
+                    to_jump = False
+            elif operator == 4: #bxc
+                register["B"] = register["B"] ^ register["C"]
+            elif operator == 5: #out
+                val = Combo(operand) % 8
+                # self.debug("D:",register, ">>", val)
+                if part == 2:
+                    return val
+                output.append(val)
+            elif operator == 6: #bdv
+                register["B"] = register["A"] // (2**Combo(operand))
+            elif operator == 7: #cdv
+                register["C"] = register["A"] // 2**Combo(operand)
 
-            elif Operator == 6: #bdv
-                Numerator = Register["A"]
-                Denom = 2**Combo(Operand)
-                Register["B"] = Numerator // Denom
-            elif Operator == 7: #cdv
-                Numerator = Register["A"]
-                Denom = 2**Combo(Operand)
-                Register["C"] = Numerator // Denom
+            if to_jump:
+                cmd += 2
 
-            if PointerJump:
-                Pointer += 2
-
-        OutputString = ""
-        for t in OutputList:
-            OutputString += str(t)
-            OutputString += ","
-        OutputString = OutputString[:-1]
-        if Part == 1:
-            return OutputString
-        else:
-            return True, OutputString
+            # self.debug("D:cmd",cmd, ":", register)
+        res = ",".join(map(str, output))
+        
+        return res
 
     def Replicate(self):
-        Place = len(self.Originalprogram)-1
-        CurrentRegAs = [0]
+        offset = len(self.original_program)-1
+        current_As = [0]
 
-        while Place >= 0:
-            NextRegAs = []
-            ExpectedOutput = self.Originalprogram[Place]
-            #print(ExpectedOutput, Place)
-            for RA in CurrentRegAs:
-                NewRA = RA*8
+        while offset >= 0:
+            next_As = []
+            expected = self.original_program[offset]
+            
+            for register_A in current_As:
+                new_register_A = register_A * 8
+
+                # check decompile, program runs in batches of 8 commands
                 for y in range(8):
-                    CRA = NewRA + y
-                    NewOutput, PassedA = self.Program(CRA, self.OriginalRegisterT, 2)
-                    #print(CRA, NewOutput, NewOutput==ExpectedOutput, PassedA)
-                    if NewOutput == ExpectedOutput:
-                        NextRegAs.append(CRA)
+                    current_A = new_register_A + y
+                    output = self.Run(current_A, self.original_register_tuple, 2)
+                    if output == expected:
+                        next_As.append(current_A)
 
-            Place -= 1
-            CurrentRegAs = copy.deepcopy(NextRegAs)
+            offset -= 1
+            current_As = copy.deepcopy(next_As)
 
-        return min(CurrentRegAs)
+        return min(current_As)
     
     def pt1(self, input):
         self.debug(input)
 
         self.Setup(input)
 
-        res = self.Program(self.OriginalRegisterT[0], self.OriginalRegisterT, 1)
+        res = self.Run(self.original_register_tuple[0], self.original_register_tuple)
 
         return res
 
