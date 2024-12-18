@@ -8,7 +8,6 @@ import copy
 
 from base.advent import *
 
-
 class Solution(InputAsLinesSolution):
     _year = 2024
     _day = 17
@@ -68,7 +67,7 @@ class Solution(InputAsLinesSolution):
                 register["B"] = register["B"] ^ register["C"]
             elif operator == 5: #out
                 val = Combo(operand) % 8
-                # self.debug("D:",register, ">>", val)
+                # print("D:",register, ">>", val)
                 if part == 2:
                     return val
                 output.append(val)
@@ -80,11 +79,13 @@ class Solution(InputAsLinesSolution):
             if to_jump:
                 cmd += 2
 
-            # self.debug("D:cmd",cmd, ":", register)
+            # print("D:cmd",cmd, ":", register)
         res = ",".join(map(str, output))
         
         return res
 
+    # I solved part 3 brute-force to get the star. Then I knew that I could decompile the program
+    # and made it run the math operations. See `alternative.py`
     def Replicate(self):
         offset = len(self.original_program)-1
         current_As = [0]

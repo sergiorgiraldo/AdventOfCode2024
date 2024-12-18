@@ -193,4 +193,51 @@
 <span>    solution.part_1()</span>
 <span>    </span>
 <span>    solution.part_2()</span>
+
+<span>----------------------------------------------------------------</span>
+<span> </span>
+<span></span>
+<span>import functools</span>
+<span></span> 
+<span>target_output = "2413750314475530"</span>
+<span></span>
+<span>#see `decompile`</span>
+<span>def simulate(a):</span>
+<span>  b, c = 0, 0</span>
+<span>  ans = []</span>
+<span>  while a:</span>
+<span>    b = a % 8</span>
+<span>    b = b ^ 3</span>
+<span>    c = a // (2 ** b)</span>
+<span>    a = a // 8</span>
+<span>    b = b ^ 4</span>
+<span>    b = b ^ c</span>
+<span>    ans.append(b % 8)</span>
+<span>  return ans</span>
+<span></span>
+<span>class Sim:</span>
+<span>  def __init__(self, prog):</span>
+<span>    self.prog = prog</span>
+<span>    self.minback = 1e20</span>
+<span></span>
+<span>  @functools.cache</span>
+<span>  def rec(self, back, shift):</span>
+<span>    if shift == 16:</span>
+<span>      x = simulate(back)</span>
+<span>      if x[:shift] == self.prog[:shift]:</span>
+<span>        self.minback = min(self.minback, back)</span>
+<span>      return</span>
+<span>    for i in range(256 * 8):</span>
+<span>      stable = 2 ** (3 * shift)</span>
+<span>      n = back + i * stable</span>
+<span>      x = simulate(n)</span>
+<span>      if x[:shift + 1] == self.prog[:shift + 1]:</span>
+<span>        self.rec(n % (2 ** (3 * shift + 3)), shift + 1)</span>
+<span></span>
+<span>  def search(self):</span>
+<span>    self.rec(0, 0)</span>
+<span>    return self.minback</span>
+<span></span>
+<span>s = Sim([2,4,1,3,7,5,0,3,1,4,4,7,5,5,3,0])</span>
+<span>print(s.search())</span>
 </pre>
