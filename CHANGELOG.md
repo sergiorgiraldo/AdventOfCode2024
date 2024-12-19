@@ -1,5 +1,12 @@
 # Changelog
 
+## [19.1.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v19.0.0...v19.1.0) (2024-12-19)
+
+
+### Features
+
+* rebuilding some files ([bf6dfc5](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/bf6dfc55690b788adff16a6261ceb59ceae71359))
+
 ## [19.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v18.0.0...v19.0.0) (2024-12-19)
 
 
