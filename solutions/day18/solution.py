@@ -26,22 +26,29 @@ class Solution(InputAsLinesSolution):
             end = 70 + 70j
 
         fallen_bytes = set()
+
         for i in range(offset):
             x,y = input[i].split(",")
             fallen_bytes.add((int(x) + int(y) * 1j))
 
         return start, end, fallen_bytes
     
-    def shortest_path_to_end(self, start, end, fallen_bytes):
+    def FindShortestPath2Exit(self, input):
+        start, end, fallen_bytes = self.setup(input)
+
         queue = [(start, 0)]
         visited = set()
+
         while queue:
             pos, steps = queue.pop(0)
             if pos == end:
                 return steps
+            
             if pos in visited:
                 continue
+            
             visited.add(pos)
+
             for move in [1, -1, 1j, -1j]:
                 new_pos = pos + move
                 if new_pos in fallen_bytes:
@@ -53,13 +60,13 @@ class Solution(InputAsLinesSolution):
                 queue.append((new_pos, steps + 1))
         return -1
 
-    def GetExit(self, input):
+    def GetBadByte(self, input):
         start, end, fallen_bytes = self.setup(input)
 
         for i in range(1024, len(input)):
             x,y = input[i].split(",")
             fallen_bytes.add((int(x) + int(y) * 1j))
-            if self.shortest_path_to_end(start, end, fallen_bytes) == -1:
+            if self.FindShortestPath2Exit(start, end, fallen_bytes) == -1:
                 res = input[i]
                 break
 
@@ -68,16 +75,14 @@ class Solution(InputAsLinesSolution):
     def pt1(self, input):
         self.debug(input)
 
-        start, end, fallen_bytes = self.setup(input)
-
-        res = self.shortest_path_to_end(start, end, fallen_bytes)
+        res = self.FindShortestPath2Exit(input)
 
         return res
 
     def pt2(self, input):
         self.debug(input)
 
-        res = self.GetExit(input)
+        res = self.GetBadByte(input)
 
         return res
         

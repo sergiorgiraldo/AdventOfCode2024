@@ -1,0 +1,111 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 19</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/19</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>from itertools import product</span>
+<span></span>
+<span>class Solution(InputAsBlockSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 19</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    def DesignTowels(self, input):</span>
+<span>        patterns, designs = input[0][0], input[1]</span>
+<span>        patterns = patterns.split(", ")</span>
+<span></span>
+<span>        towels = [self.FindArrangements(design, patterns) for design in designs]</span>
+<span></span>
+<span>        return sum(map(bool, towels)), sum(towels)</span>
+<span></span>
+<span>    def FindArrangements(self, design, patterns):</span>
+<span>        candidate = [1] + [0] * len(design)</span>
+<span></span>
+<span>        positions = [</span>
+<span>                (i, pattern) for i, pattern in product(range(len(design)), patterns)</span>
+<span>                if design[i:].startswith(pattern)</span>
+<span>            ]</span>
+<span>            </span>
+<span>        for i, pattern in positions:</span>
+<span>            candidate[i + len(pattern)] += candidate[i]</span>
+<span>        </span>
+<span>        return candidate[-1]</span>
+<span></span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res, _ = self.DesignTowels(input)</span>
+<span></span>
+<span>        return res</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        _, res = self.DesignTowels(input)</span>
+<span></span>
+<span>        return res</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>
