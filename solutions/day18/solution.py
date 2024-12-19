@@ -5,9 +5,7 @@ import time
 
 sys.path.insert(0,"..")
 
-import networkx as nx
 from base.advent import *
-
 
 class Solution(InputAsLinesSolution):
     _year = 2024

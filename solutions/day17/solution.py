@@ -4,68 +4,62 @@ import sys
 import time
 
 sys.path.insert(0,"..")
-import copy
 
 from base.advent import *
+import re
 
-
-class Solution(InputAsLinesSolution):
+class Solution(InputAsBlockSolution):
     _year = 2024
     _day = 17
     
     _is_debugging = False
 
     def Setup(self, input):
-        self.original_register_list = []
+        regs, program = input[0], input[1]
+        self.registers = {}
+        
+        regex = r"(A|B|C):\ (\d+)"
+        for reg in regs:
+            match = re.search(regex, reg)
+            self.registers[match.group(1)] = int(match.group(2))
+        
+        self.program = [int(op) for op in program[0].split(": ")[1].split(",")]
 
-        for line in input:
-            if line.startswith("Reg"):
-                reg = line.split(": ")[1]
-                self.original_register_list.append(int(reg))
-            elif line.startswith("Pro"):
-                program = line.split(": ")[1]
-                self.original_program = tuple(map(int, program.split(",")))
-
-        self.original_register_tuple = tuple(self.original_register_list)
-
-    def Run(self, register_A, registers, part = 1):
-        length = len(self.original_program)
-        register = {}
-        for v, r in enumerate(["A","B","C"]):
-            register[r] = registers[v]
-        cmd = 0
-        output = []
-        register["A"] = register_A
-
+    #pass registers as parameter for part 2, to simulate the program and keep regs B and c zeroed
+    def Run(self, registers, part = 1):
         def Combo(operand):
             if operand < 4:
                 return operand
             if operand == 4:
-                return register["A"]
+                return registers["A"]
             if operand == 5:
-                return register["B"]
+                return registers["B"]
             if operand == 6:
-                return register["C"]
+                return registers["C"]
             else:
-                print("7 combo detected")
+                raise("combo 7 is reserved")
 
-        while cmd < length - 1:
+        length = len(self.program)
+        ip = 0
+        output = []
+
+        while ip < length - 1:
             to_jump = True
             
-            operator, operand = self.original_program[cmd:cmd+2]
+            operator, operand = self.program[ip:ip+2]
             
             if operator == 0: #adv
-                register["A"] = register["A"] // (2**Combo(operand))
+                registers["A"] = registers["A"] // (2**Combo(operand))
             elif operator == 1: #bxl
-                register["B"] = register["B"] ^ operand
+                registers["B"] = registers["B"] ^ operand
             elif operator == 2: #bst
-                register["B"] = Combo(operand) % 8
+                registers["B"] = Combo(operand) % 8
             elif operator == 3: #jnz
-                if register["A"] != 0:
-                    cmd = operand
+                if registers["A"] != 0:
+                    ip = operand
                     to_jump = False
             elif operator == 4: #bxc
-                register["B"] = register["B"] ^ register["C"]
+                registers["B"] = registers["B"] ^ registers["C"]
             elif operator == 5: #out
                 val = Combo(operand) % 8
                 # print("D:",register, ">>", val)
@@ -73,13 +67,12 @@ class Solution(InputAsLinesSolution):
                     return val
                 output.append(val)
             elif operator == 6: #bdv
-                register["B"] = register["A"] // (2**Combo(operand))
+                registers["B"] = registers["A"] // (2**Combo(operand))
             elif operator == 7: #cdv
-                register["C"] = register["A"] // 2**Combo(operand)
+                registers["C"] = registers["A"] // 2**Combo(operand)
 
             if to_jump:
-                cmd += 2
-
+                ip += 2
             # print("D:cmd",cmd, ":", register)
         res = ",".join(map(str, output))
         
@@ -88,26 +81,28 @@ class Solution(InputAsLinesSolution):
     # I solved part 3 brute-force to get the star. Then I knew that I could decompile the program
     # and made it run the math operations. See `alternative.py`
     def Replicate(self):
-        offset = len(self.original_program)-1
+        offset = len(self.program)-1
         current_As = [0]
 
         while offset >= 0:
+            # print(current_As)
             next_As = []
-            expected = self.original_program[offset]
+            expected = self.program[offset]
             
+            # check decompile, program runs in batches of 8 commands
             for register_A in current_As:
                 new_register_A = register_A * 8
 
-                # check decompile, program runs in batches of 8 commands
-                for y in range(8):
-                    current_A = new_register_A + y
-                    output = self.Run(current_A, self.original_register_tuple, 2)
+                for i in range(8):
+                    current_A = new_register_A + i
+                    self.registers["A"] = current_A
+                    output = self.Run(self.registers, 2)
                     if output == expected:
                         next_As.append(current_A)
+                        #print(expected, current_A, next_As)
 
             offset -= 1
-            current_As = copy.deepcopy(next_As)
-
+            current_As = [item for item in next_As]
         return min(current_As)
     
     def pt1(self, input):
@@ -115,7 +110,7 @@ class Solution(InputAsLinesSolution):
 
         self.Setup(input)
 
-        res = self.Run(self.original_register_tuple[0], self.original_register_tuple)
+        res = self.Run(self.registers)
 
         return res
 

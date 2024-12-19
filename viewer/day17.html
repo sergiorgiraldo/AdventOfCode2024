@@ -36,127 +36,117 @@
 <pre>
 <span># puzzle prompt: https://adventofcode.com/2024/day/17</span>
 <span></span>
-<span>import time</span>
 <span>import sys</span>
-<span>sys.path.insert(0,"..")</span>
-<span>import copy</span>
-<span>from base.advent import *</span>
+<span>import time</span>
 <span></span>
-<span>class Solution(InputAsLinesSolution):</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>import re</span>
+<span></span>
+<span>class Solution(InputAsBlockSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 17</span>
 <span>    </span>
 <span>    _is_debugging = False</span>
 <span></span>
 <span>    def Setup(self, input):</span>
-<span>        self.OriginalRegisterList = []</span>
-<span>        for t in input:</span>
-<span>            Line = t.strip()</span>
-<span>            if Line.startswith("Reg"):</span>
-<span>                _, _, A = Line.split()</span>
-<span>                self.OriginalRegisterList.append(int(A))</span>
-<span>            elif Line.startswith("Pro"):</span>
-<span>                _, A = Line.split()</span>
-<span>                self.Originalprogram = tuple(map(int, A.split(",")))</span>
-<span>                self.CompareString = A</span>
-<span>        self.OriginalRegisterT = tuple(self.OriginalRegisterList)</span>
+<span>        regs, program = input[0], input[1]</span>
+<span>        self.registers = {}</span>
+<span>        </span>
+<span>        regex = r"(A|B|C):\ (\d+)"</span>
+<span>        for reg in regs:</span>
+<span>            match = re.search(regex, reg)</span>
+<span>            self.registers[match.group(1)] = int(match.group(2))</span>
+<span>        </span>
+<span>        self.program = [int(op) for op in program[0].split(": ")[1].split(",")]</span>
 <span></span>
-<span>    def Program(self, RegA, RegisterTuple, Part):</span>
-<span>        ProgramLength = len(self.Originalprogram)</span>
-<span>        Register = {}</span>
-<span>        for v, r in enumerate(["A","B","C"]):</span>
-<span>            Register[r] = RegisterTuple[v]</span>
-<span>        Pointer = 0</span>
-<span>        OutputList = []</span>
-<span>        Register["A"] = RegA</span>
-<span></span>
-<span>        def Combo(Operand):</span>
-<span>            if Operand < 4:</span>
-<span>                return Operand</span>
-<span>            if Operand == 4:</span>
-<span>                return Register["A"]</span>
-<span>            if Operand == 5:</span>
-<span>                return Register["B"]</span>
-<span>            if Operand == 6:</span>
-<span>                return Register["C"]</span>
+<span>    #pass registers as parameter for part 2, to simulate the program and keep regs B and c zeroed</span>
+<span>    def Run(self, registers, part = 1):</span>
+<span>        def Combo(operand):</span>
+<span>            if operand < 4:</span>
+<span>                return operand</span>
+<span>            if operand == 4:</span>
+<span>                return registers["A"]</span>
+<span>            if operand == 5:</span>
+<span>                return registers["B"]</span>
+<span>            if operand == 6:</span>
+<span>                return registers["C"]</span>
 <span>            else:</span>
-<span>                print("7 combo detected")</span>
+<span>                raise("combo 7 is reserved")</span>
 <span></span>
-<span>        while Pointer < ProgramLength-1:</span>
-<span>            PointerJump = True</span>
-<span>            Operator, Operand = self.Originalprogram[Pointer:Pointer+2]</span>
-<span>            if Operator == 0: #adv</span>
-<span>                Numerator = Register["A"]</span>
-<span>                Denom = 2**Combo(Operand)</span>
-<span>                Register["A"] = Numerator // Denom</span>
-<span>            elif Operator == 1: #bxl</span>
-<span>                B = Register["B"]</span>
-<span>                Register["B"] = B ^ Operand</span>
-<span>            elif Operator == 2: #bst</span>
-<span>                Register["B"] = Combo(Operand) % 8</span>
-<span>            elif Operator == 3: #jnz</span>
-<span>                if Register["A"] != 0:</span>
-<span>                    Pointer = Operand</span>
-<span>                    PointerJump = False</span>
-<span>            elif Operator == 4: #bxc</span>
-<span>                B, C = Register["B"], Register["C"]</span>
-<span>                Register["B"] = B ^ C</span>
-<span>            elif Operator == 5: #out</span>
-<span>                Output = Combo(Operand) % 8</span>
-<span>                if Part == 2:</span>
-<span>                    return Output, Register["A"]</span>
-<span>                OutputList.append(Output)</span>
+<span>        length = len(self.program)</span>
+<span>        ip = 0</span>
+<span>        output = []</span>
 <span></span>
-<span>            elif Operator == 6: #bdv</span>
-<span>                Numerator = Register["A"]</span>
-<span>                Denom = 2**Combo(Operand)</span>
-<span>                Register["B"] = Numerator // Denom</span>
-<span>            elif Operator == 7: #cdv</span>
-<span>                Numerator = Register["A"]</span>
-<span>                Denom = 2**Combo(Operand)</span>
-<span>                Register["C"] = Numerator // Denom</span>
+<span>        while ip < length - 1:</span>
+<span>            to_jump = True</span>
+<span>            </span>
+<span>            operator, operand = self.program[ip:ip+2]</span>
+<span>            </span>
+<span>            if operator == 0: #adv</span>
+<span>                registers["A"] = registers["A"] // (2**Combo(operand))</span>
+<span>            elif operator == 1: #bxl</span>
+<span>                registers["B"] = registers["B"] ^ operand</span>
+<span>            elif operator == 2: #bst</span>
+<span>                registers["B"] = Combo(operand) % 8</span>
+<span>            elif operator == 3: #jnz</span>
+<span>                if registers["A"] != 0:</span>
+<span>                    ip = operand</span>
+<span>                    to_jump = False</span>
+<span>            elif operator == 4: #bxc</span>
+<span>                registers["B"] = registers["B"] ^ registers["C"]</span>
+<span>            elif operator == 5: #out</span>
+<span>                val = Combo(operand) % 8</span>
+<span>                # print("D:",register, ">>", val)</span>
+<span>                if part == 2:</span>
+<span>                    return val</span>
+<span>                output.append(val)</span>
+<span>            elif operator == 6: #bdv</span>
+<span>                registers["B"] = registers["A"] // (2**Combo(operand))</span>
+<span>            elif operator == 7: #cdv</span>
+<span>                registers["C"] = registers["A"] // 2**Combo(operand)</span>
 <span></span>
-<span>            if PointerJump:</span>
-<span>                Pointer += 2</span>
+<span>            if to_jump:</span>
+<span>                ip += 2</span>
+<span>            # print("D:cmd",cmd, ":", register)</span>
+<span>        res = ",".join(map(str, output))</span>
+<span>        </span>
+<span>        return res</span>
 <span></span>
-<span>        OutputString = ""</span>
-<span>        for t in OutputList:</span>
-<span>            OutputString += str(t)</span>
-<span>            OutputString += ","</span>
-<span>        OutputString = OutputString[:-1]</span>
-<span>        if Part == 1:</span>
-<span>            return OutputString</span>
-<span>        else:</span>
-<span>            return True, OutputString</span>
-<span></span>
+<span>    # I solved part 3 brute-force to get the star. Then I knew that I could decompile the program</span>
+<span>    # and made it run the math operations. See `alternative.py`</span>
 <span>    def Replicate(self):</span>
-<span>        Place = len(self.Originalprogram)-1</span>
-<span>        CurrentRegAs = [0]</span>
+<span>        offset = len(self.program)-1</span>
+<span>        current_As = [0]</span>
 <span></span>
-<span>        while Place >= 0:</span>
-<span>            NextRegAs = []</span>
-<span>            ExpectedOutput = self.Originalprogram[Place]</span>
-<span>            #print(ExpectedOutput, Place)</span>
-<span>            for RA in CurrentRegAs:</span>
-<span>                NewRA = RA*8</span>
-<span>                for y in range(8):</span>
-<span>                    CRA = NewRA + y</span>
-<span>                    NewOutput, PassedA = self.Program(CRA, self.OriginalRegisterT, 2)</span>
-<span>                    #print(CRA, NewOutput, NewOutput==ExpectedOutput, PassedA)</span>
-<span>                    if NewOutput == ExpectedOutput:</span>
-<span>                        NextRegAs.append(CRA)</span>
+<span>        while offset >= 0:</span>
+<span>            # print(current_As)</span>
+<span>            next_As = []</span>
+<span>            expected = self.program[offset]</span>
+<span>            </span>
+<span>            # check decompile, program runs in batches of 8 commands</span>
+<span>            for register_A in current_As:</span>
+<span>                new_register_A = register_A * 8</span>
 <span></span>
-<span>            Place -= 1</span>
-<span>            CurrentRegAs = copy.deepcopy(NextRegAs)</span>
+<span>                for i in range(8):</span>
+<span>                    current_A = new_register_A + i</span>
+<span>                    self.registers["A"] = current_A</span>
+<span>                    output = self.Run(self.registers, 2)</span>
+<span>                    if output == expected:</span>
+<span>                        next_As.append(current_A)</span>
+<span>                        #print(expected, current_A, next_As)</span>
 <span></span>
-<span>        return min(CurrentRegAs)</span>
+<span>            offset -= 1</span>
+<span>            current_As = [item for item in next_As]</span>
+<span>        return min(current_As)</span>
 <span>    </span>
 <span>    def pt1(self, input):</span>
 <span>        self.debug(input)</span>
 <span></span>
 <span>        self.Setup(input)</span>
 <span></span>
-<span>        res = self.Program(self.OriginalRegisterT[0], self.OriginalRegisterT, 1)</span>
+<span>        res = self.Run(self.registers)</span>
 <span></span>
 <span>        return res</span>
 <span></span>
@@ -193,51 +183,4 @@
 <span>    solution.part_1()</span>
 <span>    </span>
 <span>    solution.part_2()</span>
-
-<span>----------------------------------------------------------------</span>
-<span> </span>
-<span></span>
-<span>import functools</span>
-<span></span> 
-<span>target_output = "2413750314475530"</span>
-<span></span>
-<span>#see `decompile`</span>
-<span>def simulate(a):</span>
-<span>  b, c = 0, 0</span>
-<span>  ans = []</span>
-<span>  while a:</span>
-<span>    b = a % 8</span>
-<span>    b = b ^ 3</span>
-<span>    c = a // (2 ** b)</span>
-<span>    a = a // 8</span>
-<span>    b = b ^ 4</span>
-<span>    b = b ^ c</span>
-<span>    ans.append(b % 8)</span>
-<span>  return ans</span>
-<span></span>
-<span>class Sim:</span>
-<span>  def __init__(self, prog):</span>
-<span>    self.prog = prog</span>
-<span>    self.minback = 1e20</span>
-<span></span>
-<span>  @functools.cache</span>
-<span>  def rec(self, back, shift):</span>
-<span>    if shift == 16:</span>
-<span>      x = simulate(back)</span>
-<span>      if x[:shift] == self.prog[:shift]:</span>
-<span>        self.minback = min(self.minback, back)</span>
-<span>      return</span>
-<span>    for i in range(256 * 8):</span>
-<span>      stable = 2 ** (3 * shift)</span>
-<span>      n = back + i * stable</span>
-<span>      x = simulate(n)</span>
-<span>      if x[:shift + 1] == self.prog[:shift + 1]:</span>
-<span>        self.rec(n % (2 ** (3 * shift + 3)), shift + 1)</span>
-<span></span>
-<span>  def search(self):</span>
-<span>    self.rec(0, 0)</span>
-<span>    return self.minback</span>
-<span></span>
-<span>s = Sim([2,4,1,3,7,5,0,3,1,4,4,7,5,5,3,0])</span>
-<span>print(s.search())</span>
 </pre>
