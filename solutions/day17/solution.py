@@ -8,6 +8,7 @@ import copy
 
 from base.advent import *
 
+
 class Solution(InputAsLinesSolution):
     _year = 2024
     _day = 17

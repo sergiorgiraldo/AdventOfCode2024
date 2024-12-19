@@ -36,7 +36,7 @@ class Tests(unittest.TestCase):
         ]
         start, end, fallen_bytes = solution.setup(input, True)
 
-        res = solution.shortest_path_to_end(start, end, fallen_bytes)
+        res = solution.FindShortestPath2Exit(start, end, fallen_bytes)
 
         self.assertEqual(res, 22, "Oops")
 
