@@ -12,7 +12,6 @@ from itertools import product
 
 from base.advent import *
 
-
 class Face(Enum):
     NORTH = 0
     EAST = 1

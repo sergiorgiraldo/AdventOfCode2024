@@ -36,12 +36,12 @@
 <pre>
 <span># puzzle prompt: https://adventofcode.com/2024/day/18</span>
 <span></span>
-<span>import time</span>
 <span>import sys</span>
+<span>import time</span>
+<span></span>
 <span>sys.path.insert(0,"..")</span>
 <span></span>
 <span>from base.advent import *</span>
-<span>import networkx as nx</span>
 <span></span>
 <span>class Solution(InputAsLinesSolution):</span>
 <span>    _year = 2024</span>
@@ -60,22 +60,29 @@
 <span>            end = 70 + 70j</span>
 <span></span>
 <span>        fallen_bytes = set()</span>
+<span></span>
 <span>        for i in range(offset):</span>
 <span>            x,y = input[i].split(",")</span>
 <span>            fallen_bytes.add((int(x) + int(y) * 1j))</span>
 <span></span>
 <span>        return start, end, fallen_bytes</span>
 <span>    </span>
-<span>    def shortest_path_to_end(self, start, end, fallen_bytes):</span>
+<span>    def FindShortestPath2Exit(self, input):</span>
+<span>        start, end, fallen_bytes = self.setup(input)</span>
+<span></span>
 <span>        queue = [(start, 0)]</span>
 <span>        visited = set()</span>
+<span></span>
 <span>        while queue:</span>
 <span>            pos, steps = queue.pop(0)</span>
 <span>            if pos == end:</span>
 <span>                return steps</span>
+<span>            </span>
 <span>            if pos in visited:</span>
 <span>                continue</span>
+<span>            </span>
 <span>            visited.add(pos)</span>
+<span></span>
 <span>            for move in [1, -1, 1j, -1j]:</span>
 <span>                new_pos = pos + move</span>
 <span>                if new_pos in fallen_bytes:</span>
@@ -87,13 +94,13 @@
 <span>                queue.append((new_pos, steps + 1))</span>
 <span>        return -1</span>
 <span></span>
-<span>    def GetExit(self, input):</span>
+<span>    def GetBadByte(self, input):</span>
 <span>        start, end, fallen_bytes = self.setup(input)</span>
 <span></span>
 <span>        for i in range(1024, len(input)):</span>
 <span>            x,y = input[i].split(",")</span>
 <span>            fallen_bytes.add((int(x) + int(y) * 1j))</span>
-<span>            if self.shortest_path_to_end(start, end, fallen_bytes) == -1:</span>
+<span>            if self.FindShortestPath2Exit(start, end, fallen_bytes) == -1:</span>
 <span>                res = input[i]</span>
 <span>                break</span>
 <span></span>
@@ -102,16 +109,14 @@
 <span>    def pt1(self, input):</span>
 <span>        self.debug(input)</span>
 <span></span>
-<span>        start, end, fallen_bytes = self.setup(input)</span>
-<span></span>
-<span>        res = self.shortest_path_to_end(start, end, fallen_bytes)</span>
+<span>        res = self.FindShortestPath2Exit(input)</span>
 <span></span>
 <span>        return res</span>
 <span></span>
 <span>    def pt2(self, input):</span>
 <span>        self.debug(input)</span>
 <span></span>
-<span>        res = self.GetExit(input)</span>
+<span>        res = self.GetBadByte(input)</span>
 <span></span>
 <span>        return res</span>
 <span>        </span>

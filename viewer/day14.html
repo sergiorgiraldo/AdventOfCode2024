@@ -124,18 +124,18 @@
 <span>        raise Exception("Easter egg not found")</span>
 <span></span>
 <span>    def draw(self, positions):</span>
-<span>        grid = [[' ' for _ in range(self.WIDTH)] for _ in range(self.HEIGHT)]</span>
+<span>        grid = [[" " for _ in range(self.WIDTH)] for _ in range(self.HEIGHT)]</span>
 <span>        pos_set = set(positions)</span>
 <span></span>
 <span>        for y in range(self.HEIGHT):</span>
 <span>            for x in range(self.WIDTH - 1):</span>
 <span>                if (x, y) in pos_set:</span>
-<span>                    grid[y][x]='#'</span>
+<span>                    grid[y][x]="#"</span>
 <span>                else:</span>
-<span>                    grid[y][x]=' '</span>
+<span>                    grid[y][x]=" "</span>
 <span></span>
 <span>        for row in grid:</span>
-<span>            print((' '.join(row)))</span>
+<span>            print((" ".join(row)))</span>
 <span></span>
 <span>    def pt1(self, input):</span>
 <span>        self.debug(input)</span>

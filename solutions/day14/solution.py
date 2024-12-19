@@ -88,18 +88,18 @@ class Solution(InputAsLinesSolution):
         raise Exception("Easter egg not found")
 
     def draw(self, positions):
-        grid = [[' ' for _ in range(self.WIDTH)] for _ in range(self.HEIGHT)]
+        grid = [[" " for _ in range(self.WIDTH)] for _ in range(self.HEIGHT)]
         pos_set = set(positions)
 
         for y in range(self.HEIGHT):
             for x in range(self.WIDTH - 1):
                 if (x, y) in pos_set:
-                    grid[y][x]='#'
+                    grid[y][x]="#"
                 else:
-                    grid[y][x]=' '
+                    grid[y][x]=" "
 
         for row in grid:
-            print((' '.join(row)))
+            print((" ".join(row)))
 
     def pt1(self, input):
         self.debug(input)
