@@ -5,8 +5,10 @@ import time
 
 sys.path.insert(0,"..")
 
-from base.advent import *
 import re
+
+from base.advent import *
+
 
 class Solution(InputAsBlockSolution):
     _year = 2024

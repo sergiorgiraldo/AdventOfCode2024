@@ -1,0 +1,128 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 20</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/20</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>from collections import defaultdict</span>
+<span>from networkx import Graph, shortest_path_length</span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 20</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    def GetMatrix(self,input):</span>
+<span>        m = defaultdict()</span>
+<span></span>
+<span>        for i, line in enumerate(input):</span>
+<span>            for j, c in enumerate(line):</span>
+<span>                coord = i + 1j * j</span>
+<span>                m[coord] = c</span>
+<span>                </span>
+<span>                if c == "S": start = coord</span>
+<span>        </span>
+<span>        return m, start</span>
+<span></span>
+<span>    def FindCheats(self, input, threshold = 100):</span>
+<span>        matrix, start = self.GetMatrix(input)</span>
+<span>        offsets = [1, 1j, -1, -1j]</span>
+<span></span>
+<span>        graph = Graph()</span>
+<span>        </span>
+<span>        for coord in matrix:</span>
+<span>            for offset in offsets:</span>
+<span>                if matrix[coord] != "#" != matrix[coord+offset]:</span>
+<span>                    graph.add_edge(coord, coord+offset)</span>
+<span></span>
+<span>        path = shortest_path_length(graph, start).items()</span>
+<span></span>
+<span>        s1 = s2 = 0</span>
+<span></span>
+<span>        # check how much can be saved</span>
+<span>        for c1, dist1 in path:</span>
+<span>            for c2, dist2 in path:</span>
+<span>                diff = int(abs((c2-c1).real) + abs((c2-c1).imag))</span>
+<span>                if dist2 - dist1 - diff >= threshold:  </span>
+<span>                    s1 += diff <= 2     # magic number from the puzzle</span>
+<span>                    s2 += diff <= 20    # magic number from the puzzle</span>
+<span></span>
+<span>        return s1, s2</span>
+<span></span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res, _ = self.FindCheats(input)</span>
+<span></span>
+<span>        return res</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        _, res = self.FindCheats(input)</span>
+<span></span>
+<span>        return res</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>
