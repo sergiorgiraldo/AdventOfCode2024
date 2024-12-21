@@ -12,7 +12,7 @@ class Solution(InputAsLinesSolution):
     _year = 2024
     _day = 1
 
-    _is_debugging = True
+    _is_debugging = False
 
     def GetArrays(self, input):
         column1, column2 = [], []

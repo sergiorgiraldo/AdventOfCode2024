@@ -1,0 +1,194 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 21</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/21</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>from collections import Counter</span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 21</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>#numeric pad</span>
+<span>#+---+---+---+</span>
+<span>#| 7 | 8 | 9 |</span>
+<span>#+---+---+---+</span>
+<span>#| 4 | 5 | 6 |</span>
+<span>#+---+---+---+</span>
+<span>#| 1 | 2 | 3 |</span>
+<span>#+---+---+---+</span>
+<span>#    | 0 | A |</span>
+<span>#    +---+---+</span>
+<span></span>
+<span>#direction pad</span>
+<span>#    +---+---+</span>
+<span>#    | ^ | A |</span>
+<span>#+---+---+---+</span>
+<span>#| < | v | > |</span>
+<span>#+---+---+---+</span>
+<span></span>
+<span>    # set coordinates for the number pad and the direction pad</span>
+<span>    def Setup(self):</span>
+<span>        num_pad_lines = ["789", "456", "123", " 0A"] # from the puzzle</span>
+<span>        num_pad = {(i,j):c for i,line in enumerate(num_pad_lines) for j,c in enumerate(line) if c != " "}</span>
+<span>        num_pad.update({v:k for k,v in num_pad.items()})</span>
+<span></span>
+<span>        dir_pad_lines = [" ^A", "<v>"] # from the puzzle</span>
+<span>        dir_pad = {(i,j):c for i,line in enumerate(dir_pad_lines) for j,c in enumerate(line) if c != " "}</span>
+<span>        dir_pad.update({v:k for k,v in dir_pad.items()})</span>
+<span>        </span>
+<span>        return num_pad, dir_pad</span>
+<span></span>
+<span>    def MoveArm(self, source, target, pad):</span>
+<span>        target_Y, target_X = pad[target]</span>
+<span>        source_Y, source_X = pad[source]</span>
+<span></span>
+<span>        distance_Y = target_Y - source_Y</span>
+<span>        distance_X = target_X - source_X</span>
+<span>        </span>
+<span>        vert  = "v" * distance_Y + "^" * -distance_Y</span>
+<span>        horiz = ">" * distance_X + "<" * -distance_X</span>
+<span>        </span>
+<span>        if distance_X > 0 and (target_Y,source_X) in pad:</span>
+<span>            return vert+horiz+"A"</span>
+<span>        </span>
+<span>        if (source_Y,target_X) in pad:</span>
+<span>            return horiz+vert+"A"</span>
+<span>        </span>
+<span>        if (target_Y,source_X) in pad:</span>
+<span>            return vert+horiz+"A"</span>
+<span>        </span>
+<span>    def FindRoute(self, path, pad, which):</span>
+<span>        route = []</span>
+<span>        start = "A"</span>
+<span>        </span>
+<span>        for end in path:</span>
+<span>            route.append(self.MoveArm(start,end,pad))</span>
+<span>            start = end</span>
+<span>        </span>
+<span>        return "".join(route) if which == 1 else Counter(route)</span>
+<span></span>
+<span>    def GetRoutesForCodes(self,input):</span>
+<span>        num_pad, _ = self.Setup()</span>
+<span></span>
+<span>        routes = [self.FindRoute(line, num_pad, 1) for line in input]</span>
+<span></span>
+<span>        return routes</span>
+<span></span>
+<span>    def TypeCodesForOneRobot(self, input):</span>
+<span>        _, dir_pad = self.Setup()</span>
+<span></span>
+<span>        routes = self.GetRoutesForCodes(input)</span>
+<span>        </span>
+<span>        robot_1_routes = [self.FindRoute(route, dir_pad, 1) for route in routes]</span>
+<span>        robot_2_routes = [self.FindRoute(route, dir_pad, 1) for route in robot_1_routes]</span>
+<span></span>
+<span>        res = sum(len(route)*int(line[:-1]) for route, line in zip(robot_2_routes,input))</span>
+<span>        </span>
+<span>        return res</span>
+<span></span>
+<span>    def TypeCodesForManyRobots(self, lines):</span>
+<span>        def len_(route):</span>
+<span>            return sum(len(k)*v for k,v in route.items())</span>
+<span></span>
+<span>        _, dir_pad = self.Setup()</span>
+<span>        </span>
+<span>        routes = self.GetRoutesForCodes(lines)</span>
+<span></span>
+<span>        robot_routes = [Counter([route]) for route in routes]</span>
+<span>        </span>
+<span>        for _ in range(25): # magic number from the puzzle</span>
+<span>            new_routes = []</span>
+<span>            for route_counter in robot_routes:</span>
+<span>                new_route = Counter()</span>
+<span>                for sub_route, qty in route_counter.items():</span>
+<span>                    new_counts = self.FindRoute(sub_route, dir_pad, 2)</span>
+<span>                    for k in new_counts:</span>
+<span>                        new_counts[k] *= qty</span>
+<span>                    new_route.update(new_counts)</span>
+<span>                new_routes.append(new_route)</span>
+<span>            robot_routes = new_routes</span>
+<span></span>
+<span>        res = sum(len_(route)*int(line[:-1]) for route, line in zip(robot_routes,lines))</span>
+<span></span>
+<span>        return res</span>
+<span></span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res = self.TypeCodesForOneRobot(input)</span>
+<span></span>
+<span>        return res</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res = self.TypeCodesForManyRobots(input)</span>
+<span></span>
+<span>        return res</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>
