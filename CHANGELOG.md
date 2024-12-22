@@ -1,5 +1,47 @@
 # Changelog
 
+## [22.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v21.0.0...v22.0.0) (2024-12-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* day 22 completed.
+
+### Features
+
+* day 22 completed. ([531be4b](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/531be4b630531b7c58e94801fc08f1f31e87fcf8))
+
+## [21.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v20.0.0...v21.0.0) (2024-12-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* day 21 completed.
+
+### Features
+
+* day 21 completed. ([3c96059](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/3c96059d027560e2433be0458de39a25f06d9cc7))
+
+## [20.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v19.1.0...v20.0.0) (2024-12-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* day 20 completed.
+* day 20 completed.
+
+### Features
+
+* day 20 completed. ([be7ba62](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/be7ba62710849a1a636281294f36b9470048a788))
+* day 20 completed. ([2c156db](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/2c156db0e39f8c09d85adf644edd86c481763b0a))
+
+## [19.1.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v19.0.0...v19.1.0) (2024-12-19)
+
+
+### Features
+
+* rebuilding some files ([bf6dfc5](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/bf6dfc55690b788adff16a6261ceb59ceae71359))
+
 ## [19.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v18.0.0...v19.0.0) (2024-12-19)
 
 ### ⚠ BREAKING CHANGES
