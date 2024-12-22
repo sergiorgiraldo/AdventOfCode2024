@@ -36,11 +36,13 @@
 <pre>
 <span># puzzle prompt: https://adventofcode.com/2024/day/22</span>
 <span></span>
-<span>import time</span>
 <span>import sys</span>
+<span>import time</span>
+<span></span>
 <span>sys.path.insert(0,"..")</span>
 <span></span>
 <span>from base.advent import *</span>
+<span></span>
 <span></span>
 <span>class Solution(InputAsLinesSolution):</span>
 <span>    _year = 2024</span>
@@ -72,8 +74,7 @@
 <span>        return secret</span>
 <span></span>
 <span>    def CreateSecrets(self, input):</span>
-<span>        secrets = [int(number) for number in input]</span>
-<span>        res = sum(self.GetNthSecret(secret, 2000) for secret in secrets)</span>
+<span>        res = sum(self.GetNthSecret(secret, 2000) for secret in input)</span>
 <span>        return res</span>
 <span></span>
 <span>    def GetPrices(self, s, n):</span>
@@ -97,7 +98,7 @@
 <span>        </span>
 <span>        for i in range(3, n):</span>
 <span>            trailing_4 = prices[i-3:i+1]</span>
-<span>            sequence = tuple(x[1] for x in trailing_4)</span>
+<span>            sequence = tuple(price_change[1] for price_change in trailing_4)</span>
 <span>            if sequence in sequences:</span>
 <span>                continue</span>
 <span>            price = prices[i][0]</span>
@@ -108,10 +109,8 @@
 <span>    def BuyBananas(self, input):</span>
 <span>        all_sequences = set()</span>
 <span>        sequence_prices = []</span>
-<span></span>
-<span>        secrets = [int(number) for number in input]</span>
 <span>        </span>
-<span>        for secret in secrets:</span>
+<span>        for secret in input:</span>
 <span>            sequences = self.GetSequences(secret, 2000)</span>
 <span>            sequence_prices.append(sequences)</span>
 <span>            for k, _ in sequences.items():</span>
@@ -159,7 +158,7 @@
 <span>        self.solve("2", res, (end_time - start_time))</span>
 <span></span>
 <span>if __name__ == '__main__':</span>
-<span>    solution = Solution()</span>
+<span>    solution = Solution(to_int=True)</span>
 <span></span>
 <span>    solution.part_1()</span>
 <span>    </span>

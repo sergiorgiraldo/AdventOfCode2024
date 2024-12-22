@@ -38,7 +38,7 @@ class Solution(InputAsLinesSolution):
     # set coordinates for the number pad and the direction pad
     # i create the dict with the coordinates in the keys. 
     # then add the reverse to have also the buttons as keys
-    # with this setup I can search for the button and calculate distance to target button
+    # with this setup I can search for the button and also calculate distance to target button
     def Setup(self):
         num_pad_lines = ["789", "456", "123", " 0A"] # from the puzzle
         num_pad = {(i,j):c for i,line in enumerate(num_pad_lines) for j,c in enumerate(line) if c != " "}
@@ -60,6 +60,10 @@ class Solution(InputAsLinesSolution):
         vert  = "v" * distance_Y + "^" * -distance_Y
         horiz = ">" * distance_X + "<" * -distance_X
         
+       # this first `if` is to handle the case where I need to move horz and vert.
+       # then robot could go horz/vert or vert/horz and both arrive in the same place.
+       # if going right (distance_X > 0) then move first vert, otherwise move first horz.
+       # i didnt know which to pick, unit test saved me :D
         if distance_X > 0 and (target_Y,source_X) in pad:
             return vert+horiz+"A"
         

@@ -43,6 +43,7 @@
 <span></span>
 <span>from base.advent import *</span>
 <span></span>
+<span></span>
 <span>class Solution(InputAsLinesSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 18</span>
@@ -51,24 +52,24 @@
 <span></span>
 <span>    def setup(self, input, test = False):</span>
 <span>        if test:</span>
-<span>            offset = 12</span>
+<span>            bytes_limit = 12</span>
 <span>            start = 0</span>
 <span>            end = 6 + 6j</span>
 <span>        else:</span>
-<span>            offset = 1024</span>
+<span>            bytes_limit = 1024</span>
 <span>            start = 0</span>
 <span>            end = 70 + 70j</span>
 <span></span>
 <span>        fallen_bytes = set()</span>
 <span></span>
-<span>        for i in range(offset):</span>
+<span>        for i in range(bytes_limit):</span>
 <span>            x,y = input[i].split(",")</span>
 <span>            fallen_bytes.add((int(x) + int(y) * 1j))</span>
 <span></span>
-<span>        return start, end, fallen_bytes</span>
+<span>        return start, end, fallen_bytes, bytes_limit</span>
 <span>    </span>
-<span>    def FindShortestPath2Exit(self, input):</span>
-<span>        start, end, fallen_bytes = self.setup(input)</span>
+<span>    def FindShortestPath2Exit(self, start, end, fallen_bytes):</span>
+<span>        offsets = [1, -1, 1j, -1j]</span>
 <span></span>
 <span>        queue = [(start, 0)]</span>
 <span>        visited = set()</span>
@@ -83,21 +84,21 @@
 <span>            </span>
 <span>            visited.add(pos)</span>
 <span></span>
-<span>            for move in [1, -1, 1j, -1j]:</span>
-<span>                new_pos = pos + move</span>
-<span>                if new_pos in fallen_bytes:</span>
+<span>            for offset in offsets:</span>
+<span>                new_pos = pos + offset</span>
+<span></span>
+<span>                if new_pos in fallen_bytes              or \</span>
+<span>                   new_pos.real < 0 or new_pos.imag < 0 or \</span>
+<span>                   new_pos.real > end.real or new_pos.imag > end.imag:</span>
 <span>                    continue</span>
-<span>                if new_pos.real < 0 or new_pos.imag < 0:</span>
-<span>                    continue</span>
-<span>                if new_pos.real > end.real or new_pos.imag > end.imag:</span>
-<span>                    continue</span>
+<span>                </span>
 <span>                queue.append((new_pos, steps + 1))</span>
 <span>        return -1</span>
 <span></span>
-<span>    def GetBadByte(self, input):</span>
-<span>        start, end, fallen_bytes = self.setup(input)</span>
+<span>    def GetBadByte(self, input, test=False):</span>
+<span>        start, end, fallen_bytes, bytes_limit = self.setup(input, test)</span>
 <span></span>
-<span>        for i in range(1024, len(input)):</span>
+<span>        for i in range(bytes_limit, len(input)):</span>
 <span>            x,y = input[i].split(",")</span>
 <span>            fallen_bytes.add((int(x) + int(y) * 1j))</span>
 <span>            if self.FindShortestPath2Exit(start, end, fallen_bytes) == -1:</span>
@@ -109,7 +110,9 @@
 <span>    def pt1(self, input):</span>
 <span>        self.debug(input)</span>
 <span></span>
-<span>        res = self.FindShortestPath2Exit(input)</span>
+<span>        start, end, fallen_bytes, _ = self.setup(input)</span>
+<span></span>
+<span>        res = self.FindShortestPath2Exit(start, end, fallen_bytes)</span>
 <span></span>
 <span>        return res</span>
 <span></span>

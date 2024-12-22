@@ -27,7 +27,11 @@ class BaseSolution(ABC):
         to_int=False,
     ):
         if lines:
-            cls.input = cls.read_input().splitlines()
+            if to_int:
+                lines = cls.read_input().splitlines()
+                cls.input = [int(d) for d in lines]
+            else:
+                cls.input = cls.read_input().splitlines()
         else:
             if csv:
                 lines = cls.read_input().splitlines()
@@ -153,6 +157,7 @@ class InputAsStringSolution(BaseSolution):
             two_dimensional=False,
             int_csvline=False,
             block=False,
+            separator=",",
             to_int=False,
         )
 
@@ -161,9 +166,15 @@ class InputAsStringSolution(BaseSolution):
 
 
 class InputAsLinesSolution(BaseSolution):
-    def __init__(self):
+    def __init__(self, to_int=False):
         super().__init__(
-            lines=True, csv=False, two_dimensional=False, int_csvline=False, block=False
+            lines=True, 
+            csv=False, 
+            two_dimensional=False, 
+            int_csvline=False, 
+            block=False,
+            separator=",",
+            to_int=to_int,
         )
 
     def dummy(self):
@@ -195,6 +206,7 @@ class InputAsIntCSVLineSolution(BaseSolution):
             int_csvline=True,
             block=False,
             separator=separator,
+            to_int=False,
         )
 
     def dummy(self):
@@ -204,7 +216,13 @@ class InputAsIntCSVLineSolution(BaseSolution):
 class InputAs2DSolution(BaseSolution):
     def __init__(self):
         super().__init__(
-            lines=False, csv=False, two_dimensional=True, int_csvline=False, block=False
+            lines=False, 
+            csv=False, 
+            two_dimensional=True, 
+            int_csvline=False, 
+            block=False,
+            separator=",",
+            to_int=False,
         )
 
     def dummy(self):
@@ -214,7 +232,13 @@ class InputAs2DSolution(BaseSolution):
 class InputAsBlockSolution(BaseSolution):
     def __init__(self):
         super().__init__(
-            lines=False, csv=False, two_dimensional=False, int_csvline=False, block=True
+            lines=False, 
+            csv=False, 
+            two_dimensional=False, 
+            int_csvline=False, 
+            block=True,
+            separator=",",
+            to_int=False,
         )
 
     def dummy(self):
