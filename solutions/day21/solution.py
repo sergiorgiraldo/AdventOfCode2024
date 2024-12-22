@@ -16,25 +16,29 @@ class Solution(InputAsLinesSolution):
     
     _is_debugging = False
 
-#numeric pad
-#+---+---+---+
-#| 7 | 8 | 9 |
-#+---+---+---+
-#| 4 | 5 | 6 |
-#+---+---+---+
-#| 1 | 2 | 3 |
-#+---+---+---+
-#    | 0 | A |
-#    +---+---+
+    #  0   1   2
+    #numeric pad
+    #+---+---+---+
+ #0 #| 7 | 8 | 9 |
+    #+---+---+---+
+ #1 #| 4 | 5 | 6 |
+    #+---+---+---+
+ #2 #| 1 | 2 | 3 |
+    #+---+---+---+
+ #3 #    | 0 | A |
+    #    +---+---+
 
-#direction pad
-#    +---+---+
-#    | ^ | A |
-#+---+---+---+
-#| < | v | > |
-#+---+---+---+
+    #direction pad
+    #    +---+---+
+ #0 #    | ^ | A |
+    #+---+---+---+
+ #1 #| < | v | > |
+    #+---+---+---+
 
     # set coordinates for the number pad and the direction pad
+    # i create the dict with the coordinates in the keys. 
+    # then add the reverse to have also the buttons as keys
+    # with this setup I can search for the button and calculate distance to target button
     def Setup(self):
         num_pad_lines = ["789", "456", "123", " 0A"] # from the puzzle
         num_pad = {(i,j):c for i,line in enumerate(num_pad_lines) for j,c in enumerate(line) if c != " "}
@@ -65,7 +69,7 @@ class Solution(InputAsLinesSolution):
         if (target_Y,source_X) in pad:
             return vert+horiz+"A"
         
-    def FindRoute(self, path, pad, which):
+    def FindRoute(self, path, pad, part):
         route = []
         start = "A"
         
@@ -73,19 +77,17 @@ class Solution(InputAsLinesSolution):
             route.append(self.MoveArm(start,end,pad))
             start = end
         
-        return "".join(route) if which == 1 else Counter(route)
+        return "".join(route) if part == 1 else Counter(route)
 
-    def GetRoutesForCodes(self,input):
-        num_pad, _ = self.Setup()
-
+    def GetRoutesForCodes(self,input,num_pad):
         routes = [self.FindRoute(line, num_pad, 1) for line in input]
 
         return routes
 
     def TypeCodesForOneRobot(self, input):
-        _, dir_pad = self.Setup()
+        num_pad, dir_pad = self.Setup()
 
-        routes = self.GetRoutesForCodes(input)
+        routes = self.GetRoutesForCodes(input, num_pad)
         
         robot_1_routes = [self.FindRoute(route, dir_pad, 1) for route in routes]
         robot_2_routes = [self.FindRoute(route, dir_pad, 1) for route in robot_1_routes]
@@ -94,13 +96,13 @@ class Solution(InputAsLinesSolution):
         
         return res
 
-    def TypeCodesForManyRobots(self, lines):
+    def TypeCodesForManyRobots(self, input):
         def len_(route):
             return sum(len(k)*v for k,v in route.items())
 
-        _, dir_pad = self.Setup()
+        num_pad, dir_pad = self.Setup()
         
-        routes = self.GetRoutesForCodes(lines)
+        routes = self.GetRoutesForCodes(input, num_pad)
 
         robot_routes = [Counter([route]) for route in routes]
         
@@ -116,7 +118,7 @@ class Solution(InputAsLinesSolution):
                 new_routes.append(new_route)
             robot_routes = new_routes
 
-        res = sum(len_(route)*int(line[:-1]) for route, line in zip(robot_routes,lines))
+        res = sum(len_(route)*int(line[:-1]) for route, line in zip(robot_routes,input))
 
         return res
 
