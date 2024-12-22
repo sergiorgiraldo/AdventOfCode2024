@@ -60,6 +60,10 @@ class Solution(InputAsLinesSolution):
         vert  = "v" * distance_Y + "^" * -distance_Y
         horiz = ">" * distance_X + "<" * -distance_X
         
+       # this first `if` is to handle the case where I need to move horz and vert.
+       # then robot could go horz/vert or vert/horz and both arrive in the same place.
+       # if going right (distance_X > 0) then move first vert, otherwise move first horz.
+       # i didnt know which to pick, unit test saved me :D
         if distance_X > 0 and (target_Y,source_X) in pad:
             return vert+horiz+"A"
         
