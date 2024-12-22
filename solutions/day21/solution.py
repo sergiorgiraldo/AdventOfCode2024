@@ -38,7 +38,7 @@ class Solution(InputAsLinesSolution):
     # set coordinates for the number pad and the direction pad
     # i create the dict with the coordinates in the keys. 
     # then add the reverse to have also the buttons as keys
-    # with this setup I can search for the button and calculate distance to target button
+    # with this setup I can search for the button and also calculate distance to target button
     def Setup(self):
         num_pad_lines = ["789", "456", "123", " 0A"] # from the puzzle
         num_pad = {(i,j):c for i,line in enumerate(num_pad_lines) for j,c in enumerate(line) if c != " "}

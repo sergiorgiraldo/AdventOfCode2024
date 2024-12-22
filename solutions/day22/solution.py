@@ -38,8 +38,7 @@ class Solution(InputAsLinesSolution):
         return secret
 
     def CreateSecrets(self, input):
-        secrets = [int(number) for number in input]
-        res = sum(self.GetNthSecret(secret, 2000) for secret in secrets)
+        res = sum(self.GetNthSecret(secret, 2000) for secret in input)
         return res
 
     def GetPrices(self, s, n):
@@ -63,7 +62,7 @@ class Solution(InputAsLinesSolution):
         
         for i in range(3, n):
             trailing_4 = prices[i-3:i+1]
-            sequence = tuple(x[1] for x in trailing_4)
+            sequence = tuple(price_change[1] for price_change in trailing_4)
             if sequence in sequences:
                 continue
             price = prices[i][0]
@@ -74,10 +73,8 @@ class Solution(InputAsLinesSolution):
     def BuyBananas(self, input):
         all_sequences = set()
         sequence_prices = []
-
-        secrets = [int(number) for number in input]
         
-        for secret in secrets:
+        for secret in input:
             sequences = self.GetSequences(secret, 2000)
             sequence_prices.append(sequences)
             for k, _ in sequences.items():
@@ -125,7 +122,7 @@ class Solution(InputAsLinesSolution):
         self.solve("2", res, (end_time - start_time))
 
 if __name__ == '__main__':
-    solution = Solution()
+    solution = Solution(to_int=True)
 
     solution.part_1()
     
