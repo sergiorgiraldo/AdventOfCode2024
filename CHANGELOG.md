@@ -1,5 +1,12 @@
 # Changelog
 
+## [22.1.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v22.0.0...v22.1.0) (2024-12-22)
+
+
+### Features
+
+* inputasline now can convert to int;advent.py in viewer ([51839b5](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/51839b514ef4672e5b4fd0e201d461d0bb5c92bd))
+
 ## [22.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v21.0.0...v22.0.0) (2024-12-22)
 
 
