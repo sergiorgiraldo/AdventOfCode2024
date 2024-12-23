@@ -1,0 +1,104 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 23</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/23</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>import networkx as nx</span>
+<span></span>
+<span>class Solution(InputAsCSVSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 23</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    # this year I learned about networkx, what a great library</span>
+<span>    def Go2LANParty(self, input):</span>
+<span>        G = nx.Graph(input)</span>
+<span>        self.debug(G.edges)</span>
+<span>        self.debug(G.nodes)</span>
+<span>        </span>
+<span>        cliques = list(nx.enumerate_all_cliques(G))</span>
+<span></span>
+<span>        # Chief historian computer starts with "t"</span>
+<span>        res1 = sum(any(a[0]=="t" for a in c) for c in cliques if len(c) == 3)</span>
+<span>        res2 = ",".join(sorted(cliques[-1]))</span>
+<span></span>
+<span>        return res1, res2</span>
+<span></span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res1, _ = self.Go2LANParty(input)</span>
+<span></span>
+<span>        return res1</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        _, res2 = self.Go2LANParty(input)</span>
+<span></span>
+<span>        return res2</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution(separator="-")</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>
