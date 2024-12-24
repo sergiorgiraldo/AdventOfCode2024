@@ -5,6 +5,7 @@ import time
 
 sys.path.insert(0,"..")
 
+import matplotlib.pyplot as plt
 import networkx as nx
 from base.advent import *
 
@@ -18,8 +19,14 @@ class Solution(InputAsCSVSolution):
     # this year I learned about networkx, what a great library
     def Go2LANParty(self, input):
         G = nx.Graph(input)
-        self.debug(G.edges)
+
         self.debug(G.nodes)
+        
+        if self._is_debugging:
+            # plotting the graph
+            nx.draw(G, with_labels=True)
+            plt.draw()
+            plt.show()
         
         cliques = list(nx.enumerate_all_cliques(G))
 

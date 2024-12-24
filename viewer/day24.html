@@ -1,0 +1,260 @@
+<style>
+        pre {
+    background: #303030;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border-top: 4px solid #00aeef;
+    -moz-box-shadow: inset 0 0 10px #000;
+    box-shadow: inset 0 0 10px #000;
+    counter-reset: line;
+    }
+    pre span {
+    display: block;
+    line-height: 1.5rem;
+    }
+    pre span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+    }
+    span{
+        font-family: monospace;
+        font-size: 16px;
+    }
+    </style>
+<script src="script.js"></script>
+<div id="navigation">
+<button onclick="navigateTo('prev')">Previous Day</button>
+<button onclick="navigateTo('next')">Next Day</button>
+</div>
+<h1>Day 24</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2024/day/24</span>
+<span></span>
+<span>'''</span>
+<span>Part 1</span>
+<span>The output wires depend on two input wires, forming a tree structure where input wires </span>
+<span>(x's and y's) are the leaves. </span>
+<span>By processing each gate or output in order of tree depth, dependencies are resolved as we progress. This structure, though perhaps overly meticulous for simulation, ensures reliability.</span>
+<span></span>
+<span>Part 2</span>
+<span>The puzzle is a ripple carry adder (a circuit to add 2 binary numbers), specifically a 44-block variant. </span>
+<span>Output wires correspond to internal configurations identifiable by operands (^, &, |) and </span>
+<span>inputs. </span>
+<span>The function iterates from lower to higher-indexed blocks, ensuring computation flows from </span>
+<span>LSB to MSB. Higher-indexed blocks depend on the correctness of lower-indexed ones, i.e., if higher blocks</span>
+<span>are correct, lower blocks must be correct.</span>
+<span></span>
+<span>Verification occurs when specific gates output the z wires. </span>
+<span>If correct, all dependent wires are correct, adding relevant wires to a correct set. </span>
+<span>If not, the last correct block and correct set are returned.</span>
+<span></span>
+<span>So:</span>
+<span>- Execute the function once to establish base correctness.</span>
+<span>- Swap output wires of gate pairs not in the correct set.</span>
+<span>- Re-run the function to check improvements and validate swaps.</span>
+<span>- Repeat this process four times (there are 4 gates to swap) to achieve a fully functional ripple-carry adder.</span>
+<span>'''</span>
+<span></span>
+<span>import time</span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>import re</span>
+<span>from itertools import combinations</span>
+<span></span>
+<span>class Solution(InputAsBlockSolution):</span>
+<span>    _year = 2024</span>
+<span>    _day = 24</span>
+<span>    </span>
+<span>    _is_debugging = False</span>
+<span></span>
+<span>    def Parse(self, input):</span>
+<span>        inputs, gates = input[0], input[1]</span>
+<span></span>
+<span>        input_pattern = r"([xy]\d\d): ([10])"</span>
+<span>        finished = {}</span>
+<span>        for line in inputs:</span>
+<span>            match = re.search(input_pattern, line)</span>
+<span>            input_name, val = match.groups()</span>
+<span>            val = int(val)</span>
+<span>            finished[input_name] = val</span>
+<span></span>
+<span>        gate_pattern = r"([a-z0-9]{3}) ([XORAND]+) ([a-z0-9]{3}) -> ([a-z0-9]{3})"</span>
+<span>        ops = set()</span>
+<span>        op_list = []</span>
+<span>        for line in gates:</span>
+<span>            match = re.search(gate_pattern, line)</span>
+<span>            x1, op, x2, res = match.groups()</span>
+<span>            ops.add((x1, x2, res, op))</span>
+<span>            op_list.append((x1, x2, res, op))</span>
+<span></span>
+<span>        return finished, ops, op_list</span>
+<span></span>
+<span>    def GetDepth(self, reg, finished, parents):</span>
+<span>        if reg in finished:</span>
+<span>            return 0</span>
+<span></span>
+<span>        x1, x2 = parents[reg]</span>
+<span></span>
+<span>        # Need to finish x1 and x2 first</span>
+<span>        return max(self.GetDepth(x1, finished, parents), self.GetDepth(x2, finished, parents)) + 1</span>
+<span></span>
+<span>    # Dependencies create a hierarchical arrangement, </span>
+<span>    # with initial nodes at the base. Handle nodes based on their hierarchy level.</span>
+<span>    # This ensures operand availability when arriving at any particular gate.</span>
+<span>    def Simulate(self, input):</span>
+<span>        finished, ops, _ = self.Parse(input)</span>
+<span></span>
+<span>        # Calculating the structure of the tree</span>
+<span>        parents = {}</span>
+<span>        op_map = {}  # Mapping output name to corresponding operation (XOR, OR, AND)</span>
+<span>        for x1, x2, res, op in ops:</span>
+<span>            parents[res] = (x1, x2)</span>
+<span>            op_map[res] = op</span>
+<span></span>
+<span>        # Calculate in optimal order</span>
+<span>        vars = [(res, self.GetDepth(res, finished, parents)) for _, _, res, _ in ops]</span>
+<span>        vars.sort(key=lambda x: x[1])  # Process lower depth first</span>
+<span></span>
+<span>        for reg, _ in vars:</span>
+<span>            x1, x2 = parents[reg]</span>
+<span>            v1, v2 = finished[x1], finished[x2]</span>
+<span></span>
+<span>            op = op_map[reg]</span>
+<span></span>
+<span>            val = {</span>
+<span>                "XOR": lambda a, b: a ^ b,</span>
+<span>                "OR": lambda a, b: a | b,</span>
+<span>                "AND": lambda a, b: a & b,</span>
+<span>            }[op](v1, v2)</span>
+<span></span>
+<span>            finished[reg] = val</span>
+<span></span>
+<span>        # Concatenate outputs -> binary -> decimal</span>
+<span>        regs = list(finished.items())</span>
+<span>        regs.sort(key=lambda x: x[0])</span>
+<span>        num_out = int(str(regs[-1][0])[-2:]) + 1</span>
+<span>        bin_str = "".join(str(val) for _, val in regs[-num_out:])</span>
+<span>        return int(bin_str[::-1], 2)</span>
+<span>        </span>
+<span>    # Examine the operation sequence to gauge progress and record wires requiring accuracy.</span>
+<span>    # Identified corresponding input lines for the ripple-carry adder wires.</span>
+<span>    # The "Validation point" is when the output aligns with z15 or another reference --</span>
+<span>    # ensuring all dependent outputs are accurate.</span>
+<span>    def SeeHowFarWeMade(self, op_list):</span>
+<span>        ops = {}</span>
+<span>        for x1, x2, res, op in op_list:</span>
+<span>            ops[(frozenset([x1, x2]), op)] = res  # hashability reason</span>
+<span></span>
+<span>        # here, x1 and x2 can be provided in any order :)</span>
+<span>        def get_res(x1, x2, op):</span>
+<span>            return ops.get((frozenset([x1, x2]), op), None)</span>
+<span></span>
+<span>        carries = {}</span>
+<span>        correct = set()</span>
+<span>        prev_intermediates = set()</span>
+<span>        for i in range(45):</span>
+<span>            pos = f"0{i}" if i < 10 else str(i)</span>
+<span>            predigit = get_res(f"x{pos}", f"y{pos}", "XOR")</span>
+<span>            precarry1 = get_res(f"x{pos}", f"y{pos}", "AND")</span>
+<span>            if i == 0:</span>
+<span>                # only two, XOR and AND</span>
+<span>                carries[i] = precarry1</span>
+<span>                continue</span>
+<span>            digit = get_res(carries[i - 1], predigit, "XOR")</span>
+<span>            if digit != f"z{pos}":</span>
+<span>                return i - 1, correct</span>
+<span></span>
+<span>            # If it DID work, we know carries[i-1] and predigit were correct</span>
+<span>            correct.add(carries[i - 1])</span>
+<span>            correct.add(predigit)</span>
+<span>            # Also add variables from previous position's ripple-carry adder module</span>
+<span>            for wire in prev_intermediates:</span>
+<span>                correct.add(wire)</span>
+<span></span>
+<span>            # Next, we compute the carries</span>
+<span>            precarry2 = get_res(carries[i - 1], predigit, "AND")</span>
+<span>            carry_out = get_res(precarry1, precarry2, "OR")</span>
+<span>            carries[i] = carry_out</span>
+<span>            prev_intermediates = set([precarry1, precarry2])</span>
+<span></span>
+<span>        return 45, correct</span>
+<span></span>
+<span>    def Swap(self, input):</span>
+<span>        _, _, op_list = self.Parse(input)</span>
+<span></span>
+<span>        swaps = set()</span>
+<span></span>
+<span>        base, base_used = self.SeeHowFarWeMade(op_list)  # Everything up to 20 is fine</span>
+<span>        for _ in range(4): # 4 pairs of gates to swap</span>
+<span>            # try swapping</span>
+<span>            for i, j in combinations(range(len(op_list)), 2):</span>
+<span>                x1_i, x2_i, res_i, op_i = op_list[i]</span>
+<span>                x1_j, x2_j, res_j, op_j = op_list[j]</span>
+<span>                # Don't switch z00 out</span>
+<span>                if "z00" in (res_i, res_j):</span>
+<span>                    continue</span>
+<span>                # Don't switch if these wires have already been used</span>
+<span>                if res_i in base_used or res_j in base_used:</span>
+<span>                    continue</span>
+<span>                # Switch output wires</span>
+<span>                op_list[i] = x1_i, x2_i, res_j, op_i</span>
+<span>                op_list[j] = x1_j, x2_j, res_i, op_j</span>
+<span>                attempt, attempt_used = self.SeeHowFarWeMade(op_list)</span>
+<span>                if attempt > base:</span>
+<span>                    # print(f"Swap. Got to a higher block: {attempt}")</span>
+<span>                    swaps.add((res_i, res_j))</span>
+<span>                    base, base_used = attempt, attempt_used</span>
+<span>                    break</span>
+<span>                # Switch output wires back</span>
+<span>                op_list[i] = x1_i, x2_i, res_i, op_i</span>
+<span>                op_list[j] = x1_j, x2_j, res_j, op_j</span>
+<span></span>
+<span>        return ",".join(sorted(sum(swaps, start=tuple())))</span>
+<span></span>
+<span>    def pt1(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res = self.Simulate(input)</span>
+<span></span>
+<span>        return res</span>
+<span></span>
+<span>    def pt2(self, input):</span>
+<span>        self.debug(input)</span>
+<span></span>
+<span>        res = self.Swap(input)</span>
+<span></span>
+<span>        return res</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt1(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("1", res, (end_time - start_time))</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        start_time = time.time()</span>
+<span></span>
+<span>        res = self.pt2(self.input)</span>
+<span></span>
+<span>        end_time = time.time()</span>
+<span></span>
+<span>        self.solve("2", res, (end_time - start_time))</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>

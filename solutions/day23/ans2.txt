@@ -1,2 +1,2 @@
 bu,fq,fz,pn,rr,st,sv,tr,un,uy,zf,zi,zy
-550 msecs
+672 msecs
