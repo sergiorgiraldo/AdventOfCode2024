@@ -1,5 +1,16 @@
 # Changelog
 
+## [24.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v23.0.0...v24.0.0) (2024-12-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* day 24 completed.
+
+### Features
+
+* day 24 completed. ([1afbbbc](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/1afbbbc6a5bc7672b3b683899468820ebbc032c6))
+
 ## [23.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v22.1.0...v23.0.0) (2024-12-23)
 
 
