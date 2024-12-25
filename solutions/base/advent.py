@@ -30,6 +30,8 @@ class BaseSolution(ABC):
             if to_int:
                 lines = cls.read_input().splitlines()
                 cls.input = [int(d) for d in lines]
+            if block:
+                cls.input = cls.read_input().split("\n\n")
             else:
                 cls.input = cls.read_input().splitlines()
         else:
@@ -166,13 +168,13 @@ class InputAsStringSolution(BaseSolution):
 
 
 class InputAsLinesSolution(BaseSolution):
-    def __init__(self, to_int=False):
+    def __init__(self, to_int=False, block=False):
         super().__init__(
             lines=True, 
             csv=False, 
             two_dimensional=False, 
             int_csvline=False, 
-            block=False,
+            block=block,
             separator=",",
             to_int=to_int,
         )
