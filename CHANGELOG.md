@@ -1,5 +1,45 @@
 # Changelog
 
+## [25.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v24.0.0...v25.0.0) (2024-12-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* day 25 completed.
+
+### Features
+
+* day 25 completed. ([f569254](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/f569254b9869259e10b2847bf1b24543a38d4a59))
+
+## [24.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v23.0.0...v24.0.0) (2024-12-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* day 24 completed.
+
+### Features
+
+* day 24 completed. ([1afbbbc](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/1afbbbc6a5bc7672b3b683899468820ebbc032c6))
+
+## [23.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v22.1.0...v23.0.0) (2024-12-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* day 23 completed.
+
+### Features
+
+* day 23 completed. ([bf4c492](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/bf4c4921512b54584f706413daf45f990c3a1269))
+
+## [22.1.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v22.0.0...v22.1.0) (2024-12-22)
+
+
+### Features
+
+* inputasline now can convert to int;advent.py in viewer ([51839b5](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/51839b514ef4672e5b4fd0e201d461d0bb5c92bd))
+
 ## [22.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v21.0.0...v22.0.0) (2024-12-22)
 
 ### ⚠ BREAKING CHANGES
