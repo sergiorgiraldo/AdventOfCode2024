@@ -32,59 +32,59 @@
 <button onclick="navigateTo('prev')">Previous Day</button>
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
-<h1>Day 23</h1>
+<h1>Day 25</h1>
 <pre>
-<span># puzzle prompt: https://adventofcode.com/2024/day/23</span>
+<span># puzzle prompt: https://adventofcode.com/2024/day/25</span>
 <span></span>
-<span>import sys</span>
 <span>import time</span>
-<span></span>
+<span>import sys</span>
 <span>sys.path.insert(0,"..")</span>
 <span></span>
-<span>import matplotlib.pyplot as plt</span>
-<span>import networkx as nx</span>
 <span>from base.advent import *</span>
 <span></span>
-<span></span>
-<span>class Solution(InputAsCSVSolution):</span>
+<span>class Solution(InputAsBlockSolution):</span>
 <span>    _year = 2024</span>
-<span>    _day = 23</span>
+<span>    _day = 25</span>
 <span>    </span>
 <span>    _is_debugging = False</span>
 <span></span>
-<span>    # this year I learned about networkx, what a great library</span>
-<span>    def Go2LANParty(self, input):</span>
-<span>        G = nx.Graph(input)</span>
+<span>    def FindPairs(self, input):</span>
+<span>        locks = set()</span>
+<span>        keys = set()</span>
 <span></span>
-<span>        self.debug(G.nodes)</span>
-<span>        </span>
-<span>        if self._is_debugging:</span>
-<span>            # plotting the graph</span>
-<span>            nx.draw(G, with_labels=True)</span>
-<span>            plt.draw()</span>
-<span>            plt.show()</span>
-<span>        </span>
-<span>        cliques = list(nx.enumerate_all_cliques(G))</span>
+<span>        max_height = len(input[0][0])</span>
 <span></span>
-<span>        # Chief historian computer starts with "t"</span>
-<span>        res1 = sum(any(a[0]=="t" for a in c) for c in cliques if len(c) == 3)</span>
-<span>        res2 = ",".join(sorted(cliques[-1]))</span>
+<span>        for schematic in input:</span>
 <span></span>
-<span>        return res1, res2</span>
+<span>            heights = tuple(len([pin[i] for pin in schematic if pin[i] == "#"]) - 1 </span>
+<span>                            for i in range(len(schematic[0])))</span>
+<span>            </span>
+<span>            is_lock = "." not in schematic[0]</span>
+<span>            </span>
+<span>            locks.add(heights) if is_lock else keys.add(heights)</span>
+<span></span>
+<span>        fit_count = sum(map(</span>
+<span>                        lambda lock: sum(self.SeeIfFits(lock, key, max_height) for key in keys), </span>
+<span>                        locks))</span>
+<span></span>
+<span>        return fit_count</span>
+<span></span>
+<span>    def SeeIfFits(self, lock, key, max_height):</span>
+<span>        return all(map(</span>
+<span>                    lambda i: lock[i] + key[i] <= max_height, </span>
+<span>                    range(len(lock))))</span>
 <span></span>
 <span>    def pt1(self, input):</span>
 <span>        self.debug(input)</span>
 <span></span>
-<span>        res1, _ = self.Go2LANParty(input)</span>
+<span>        res = self.FindPairs(input)</span>
 <span></span>
-<span>        return res1</span>
+<span>        return res</span>
 <span></span>
 <span>    def pt2(self, input):</span>
 <span>        self.debug(input)</span>
 <span></span>
-<span>        _, res2 = self.Go2LANParty(input)</span>
-<span></span>
-<span>        return res2</span>
+<span>        return ""</span>
 <span>        </span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
@@ -102,12 +102,12 @@
 <span></span>
 <span>        end_time = time.time()</span>
 <span></span>
-<span>        self.solve("2", res, (end_time - start_time))</span>
+<span>        # self.solve("2", res, (end_time - start_time))</span>
 <span></span>
 <span>if __name__ == '__main__':</span>
-<span>    solution = Solution(separator="-")</span>
+<span>    solution = Solution()</span>
 <span></span>
 <span>    solution.part_1()</span>
 <span>    </span>
-<span>    solution.part_2()</span>
+<span>    # solution.part_2()</span>
 </pre>
