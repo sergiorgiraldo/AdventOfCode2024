@@ -3,7 +3,7 @@
 import sys
 import time
 
-sys.path.insert(0,"..")
+sys.path.insert(0, "..")
 
 import re
 
@@ -14,7 +14,7 @@ from base.advent import *
 class Solution(InputAsBlockSolution):
     _year = 2024
     _day = 13
-    
+
     _is_debugging = False
 
     # Z3! this is learned day 24 in 2023
@@ -26,20 +26,24 @@ class Solution(InputAsBlockSolution):
         for block in input:
             machine = "".join(block)
 
-            (a_x,a_y), (b_x,b_y), (prize_x,prize_y) = [map(int, val) for val in re.findall(regex, machine)]
+            (a_x, a_y), (b_x, b_y), (prize_x, prize_y) = [
+                map(int, val) for val in re.findall(regex, machine)
+            ]
 
-            for i, add in enumerate([0, 10_000_000_000_000]): #magic number from the puzzle
+            for i, add in enumerate(
+                [0, 10_000_000_000_000]
+            ):  # magic number from the puzzle
                 solver = z3.Optimize()
 
-                #variables
+                # variables
                 a, b = z3.Int("a"), z3.Int("b")
 
-                #constraints
+                # constraints
                 solver.add(prize_x + add == a * a_x + b * b_x)
                 solver.add(prize_y + add == a * a_y + b * b_y)
-                
-                #equation
-                solver.minimize(a * 3 + b) #token a costs 3, token b costs 1
+
+                # equation
+                solver.minimize(a * 3 + b)  # token a costs 3, token b costs 1
 
                 if solver.check() == z3.sat:
                     model = solver.model()
@@ -60,7 +64,7 @@ class Solution(InputAsBlockSolution):
         res = self.GetThePrize(input)[1]
 
         return res
-        
+
     def part_1(self):
         start_time = time.time()
 
@@ -79,9 +83,10 @@ class Solution(InputAsBlockSolution):
 
         self.solve("2", res, (end_time - start_time))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     solution = Solution()
 
     solution.part_1()
-    
+
     solution.part_2()

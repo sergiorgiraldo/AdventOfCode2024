@@ -15,7 +15,7 @@ class Tests(unittest.TestCase):
             "45678903",
             "32019012",
             "01329801",
-            "10456732"
+            "10456732",
         ]
         self.assertEqual(solution.pt1(input), 36, "Oops")
 
@@ -28,7 +28,7 @@ class Tests(unittest.TestCase):
             "45678903",
             "32019012",
             "01329801",
-            "10456732"
+            "10456732",
         ]
         self.assertEqual(solution.pt2(input), 81, "Oops")
 

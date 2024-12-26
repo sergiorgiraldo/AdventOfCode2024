@@ -9,32 +9,14 @@ class Tests(unittest.TestCase):
     def test_part1(self):
         input = [
             ["r, wr, b, g, bwu, rb, gb, br"],
-            [
-                "brwrr",
-                "bggr",
-                "gbbr",
-                "rrbgbr",
-                "ubwu",
-                "bwurrg",
-                "brgr",
-                "bbrgwb"
-            ]
+            ["brwrr", "bggr", "gbbr", "rrbgbr", "ubwu", "bwurrg", "brgr", "bbrgwb"],
         ]
         self.assertEqual(solution.pt1(input), 6, "Oops")
 
     def test_part2(self):
         input = [
             ["r, wr, b, g, bwu, rb, gb, br"],
-            [
-                "brwrr",
-                "bggr",
-                "gbbr",
-                "rrbgbr",
-                "ubwu",
-                "bwurrg",
-                "brgr",
-                "bbrgwb"
-            ]
+            ["brwrr", "bggr", "gbbr", "rrbgbr", "ubwu", "bwurrg", "brgr", "bbrgwb"],
         ]
         self.assertEqual(solution.pt2(input), 16, "Oops")
 

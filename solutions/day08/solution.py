@@ -3,7 +3,7 @@
 import sys
 import time
 
-sys.path.insert(0,"..")
+sys.path.insert(0, "..")
 
 from collections import defaultdict
 from math import gcd
@@ -14,7 +14,7 @@ from base.advent import *
 class Solution(InputAsLinesSolution):
     _year = 2024
     _day = 8
-    
+
     _is_debugging = False
 
     def GetNodes(self, input):
@@ -29,9 +29,9 @@ class Solution(InputAsLinesSolution):
 
     def FindUniqueLocations(self, input):
         def get_distance(a, b):
-            return (a[0] - b[0], a[1] - b[1])        
-        
-        nodes, map = self.GetNodes(input)    
+            return (a[0] - b[0], a[1] - b[1])
+
+        nodes, map = self.GetNodes(input)
 
         antinodes = set()
         antinodes_antennas = set()
@@ -43,26 +43,36 @@ class Solution(InputAsLinesSolution):
                     if antenna_1 == antenna_2:
                         continue
                     distance = get_distance(antenna_1, antenna_2)
-                    div = gcd(abs(distance[0]), abs(distance[1])) # antinodes in line but not multiple of distance between antennas
+                    div = gcd(
+                        abs(distance[0]), abs(distance[1])
+                    )  # antinodes in line but not multiple of distance between antennas
                     distance = (distance[0] // div, distance[1] // div)
-                    
+
                     try:
-                        candidate = (antenna_1[0] + distance[0], antenna_1[1] + distance[1])
-                        map[candidate] # hack: check out of bounds
+                        candidate = (
+                            antenna_1[0] + distance[0],
+                            antenna_1[1] + distance[1],
+                        )
+                        map[candidate]  # hack: check out of bounds
 
                         antinodes.add(candidate)
                         antinodes_antennas.add(candidate)
-                        
+
                         while True:
                             # antinodes in line: i keep adding the distance until out of bounds
-                            candidate = (candidate[0] + distance[0], candidate[1] + distance[1])
-                            map[candidate] # hack: check out of bounds
-                            
+                            candidate = (
+                                candidate[0] + distance[0],
+                                candidate[1] + distance[1],
+                            )
+                            map[candidate]  # hack: check out of bounds
+
                             antinodes_antennas.add(candidate)
-                    except KeyError: # thrown when out of bounds (when accesing the map)
+                    except (
+                        KeyError
+                    ):  # thrown when out of bounds (when accesing the map)
                         continue
 
-        return antinodes, antinodes_antennas 
+        return antinodes, antinodes_antennas
 
     def pt1(self, input):
         self.debug(input)
@@ -77,7 +87,7 @@ class Solution(InputAsLinesSolution):
         _, res = self.FindUniqueLocations(input)
 
         return len(res)
-        
+
     def part_1(self):
         start_time = time.time()
 
@@ -96,9 +106,10 @@ class Solution(InputAsLinesSolution):
 
         self.solve("2", res, (end_time - start_time))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     solution = Solution()
 
     solution.part_1()
-    
+
     solution.part_2()

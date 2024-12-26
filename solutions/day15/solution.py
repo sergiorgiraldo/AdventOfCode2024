@@ -3,7 +3,7 @@
 import sys
 import time
 
-sys.path.insert(0,"..")
+sys.path.insert(0, "..")
 
 from base.advent import *
 
@@ -11,7 +11,7 @@ from base.advent import *
 class Solution(InputAsBlockSolution):
     _year = 2024
     _day = 15
-    
+
     _is_debugging = False
 
     def GetCoord(self, position):
@@ -26,14 +26,19 @@ class Solution(InputAsBlockSolution):
                 grid[location] = cell
                 if cell == "@":
                     self.curr_location = location
-                    
+
         return grid
 
     def GetWiderGrid(self, input):
         wider_input = []
 
         for item in input:
-            new_item = item.replace("#","##").replace("O", "[]").replace(".", "..").replace("@", "@.")
+            new_item = (
+                item.replace("#", "##")
+                .replace("O", "[]")
+                .replace(".", "..")
+                .replace("@", "@.")
+            )
             wider_input.append(new_item)
 
         grid = self.GetGrid(wider_input)
@@ -41,34 +46,35 @@ class Solution(InputAsBlockSolution):
         return grid
 
     def CollectBoxes(self, input, wider=False):
-        offset = {
-            ">": 1,
-            "<": -1,
-            "^": -1j,
-            "v": 1j
-        }
+        offset = {">": 1, "<": -1, "^": -1j, "v": 1j}
 
         field, instructions = input
 
         if wider:
-            grid = self.GetWiderGrid(field) 
+            grid = self.GetWiderGrid(field)
             condition = "["
-        else: 
+        else:
             grid = self.GetGrid(field)
             condition = "O"
 
         for moves in instructions:
             for move in moves:
-                if wider: 
+                if wider:
                     self.curr_location = self.WalkTheRobot_wh2(grid, offset[move])
-                else: 
+                else:
                     self.curr_location = self.WalkTheRobot_wh1(grid, offset[move])
-                
-        gps = sum([self.GetCoord(position) for position, cell in grid.items() if cell == condition ])
-        
+
+        gps = sum(
+            [
+                self.GetCoord(position)
+                for position, cell in grid.items()
+                if cell == condition
+            ]
+        )
+
         return gps
 
-    def WalkTheRobot_wh1(self,grid, move):
+    def WalkTheRobot_wh1(self, grid, move):
         new_location = self.curr_location + move
         boxes_to_push = []
         while grid[new_location] == "O":
@@ -84,16 +90,20 @@ class Solution(InputAsBlockSolution):
             self.curr_location = self.curr_location + move
             grid[self.curr_location] = "@"
             return self.curr_location
-    
+
     def WalkTheRobot_wh2(self, grid, move):
         if grid[self.curr_location + move] == "#":
             return self.curr_location
-        
+
         locations_to_push_from = [self.curr_location]
         boxes_to_push = []
 
-        while any([grid[location + move] in "[]" for location in locations_to_push_from]):
-            if any([grid[location + move] == "#" for location in locations_to_push_from]):
+        while any(
+            [grid[location + move] in "[]" for location in locations_to_push_from]
+        ):
+            if any(
+                [grid[location + move] == "#" for location in locations_to_push_from]
+            ):
                 return self.curr_location
             new_locations_to_push_from = []
             for location in locations_to_push_from:
@@ -110,7 +120,7 @@ class Solution(InputAsBlockSolution):
                 new_locations_to_push_from.extend(boxes)
             locations_to_push_from = new_locations_to_push_from
 
-        if any([grid[box+move] == "#" for box in boxes_to_push]):
+        if any([grid[box + move] == "#" for box in boxes_to_push]):
             return self.curr_location
 
         new_symbols = {}
@@ -141,7 +151,7 @@ class Solution(InputAsBlockSolution):
         res = self.CollectBoxes(input, True)
 
         return res
-        
+
     def part_1(self):
         start_time = time.time()
 
@@ -160,9 +170,10 @@ class Solution(InputAsBlockSolution):
 
         self.solve("2", res, (end_time - start_time))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     solution = Solution()
 
     solution.part_1()
-    
+
     solution.part_2()

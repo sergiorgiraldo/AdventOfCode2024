@@ -3,7 +3,7 @@
 import sys
 import time
 
-sys.path.insert(0,"..")
+sys.path.insert(0, "..")
 
 from collections import defaultdict
 
@@ -13,16 +13,16 @@ from base.advent import *
 class Solution(InputAsLinesSolution):
     _year = 2024
     _day = 12
-    
+
     _is_debugging = False
 
     # complex numbers, same idea from day 04
-    def GetMatrix(self,input):
+    def GetMatrix(self, input):
         matrix = defaultdict()
 
         for i, line in enumerate(input):
             for j, c in enumerate(line):
-                matrix[i + 1j * j] = c  
+                matrix[i + 1j * j] = c
 
         return matrix
 
@@ -50,7 +50,7 @@ class Solution(InputAsLinesSolution):
         # x . x
         # . o .
         # x . x
-        plot_corners = [.5+.5j, .5-.5j, -.5+.5j, -.5-.5j]
+        plot_corners = [0.5 + 0.5j, 0.5 - 0.5j, -0.5 + 0.5j, -0.5 - 0.5j]
 
         self.visited = set()
 
@@ -59,15 +59,22 @@ class Solution(InputAsLinesSolution):
         for coord, _ in matrix.items():
             self.debug(coord)
 
-            if coord in self.visited: continue
+            if coord in self.visited:
+                continue
 
             perimeter, corners = 0, set()
 
             for r in (region := self.FillGarden(matrix, coord)):
-                perimeter += sum(adjacent not in region for adjacent in self.FindAdjacent(r))
+                perimeter += sum(
+                    adjacent not in region for adjacent in self.FindAdjacent(r)
+                )
 
                 for corner in self.FindAdjacent(r, plot_corners):
-                    k = [adjacent for adjacent in self.FindAdjacent(corner, plot_corners) if adjacent in region]
+                    k = [
+                        adjacent
+                        for adjacent in self.FindAdjacent(corner, plot_corners)
+                        if adjacent in region
+                    ]
                     self.debug("adjacents", k)
 
                     #  ⎯
@@ -76,17 +83,17 @@ class Solution(InputAsLinesSolution):
                     #  _
                     # |_
 
-                    # _ 
+                    # _
                     # _|
 
                     #  | |
                     #   ⎯
                     if len(k) in [1, 3]:
-                        self.debug("if",corner)
+                        self.debug("if", corner)
                         corners.add(corner)
                     # Each straight section of fence counts as a side, regardless of how long it is.
                     elif abs(k[0] - k[1]) > 1:
-                        self.debug("else",corner, corner + 0.5)
+                        self.debug("else", corner, corner + 0.5)
                         corners.add(corner)
                         corners.add(corner + 0.5)
 
@@ -94,7 +101,7 @@ class Solution(InputAsLinesSolution):
 
             price_1 += perimeter * regions
             price_2 += len(corners) * regions
-        
+
         return price_1, price_2
 
     def pt1(self, input):
@@ -110,7 +117,7 @@ class Solution(InputAsLinesSolution):
         _, res = self.CheckGarden(input)
 
         return res
-        
+
     def part_1(self):
         start_time = time.time()
 
@@ -129,9 +136,10 @@ class Solution(InputAsLinesSolution):
 
         self.solve("2", res, (end_time - start_time))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     solution = Solution()
 
     solution.part_1()
-    
+
     solution.part_2()

@@ -19,7 +19,7 @@ class Tests(unittest.TestCase):
             "........A...",
             ".........A..",
             "............",
-            "............"
+            "............",
         ]
         self.assertEqual(solution.pt1(input), 14, "Oops")
 
@@ -36,7 +36,7 @@ class Tests(unittest.TestCase):
             "........A...",
             ".........A..",
             "............",
-            "............"
+            "............",
         ]
         self.assertEqual(solution.pt2(input), 34, "Oops")
 

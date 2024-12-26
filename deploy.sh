@@ -8,7 +8,7 @@ fi
 
 ./build-viewer $param
 
-./ruff.sh
+black .
 
 markdownlint-cli2 "*.md" --fix
 

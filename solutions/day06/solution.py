@@ -3,7 +3,7 @@
 import sys
 import time
 
-sys.path.insert(0,"..")
+sys.path.insert(0, "..")
 
 from base.advent import *
 
@@ -11,7 +11,7 @@ from base.advent import *
 class Solution(InputAsLinesSolution):
     _year = 2024
     _day = 6
-    
+
     _is_debugging = False
 
     def GetMaze(self, input):
@@ -26,7 +26,7 @@ class Solution(InputAsLinesSolution):
         return maze, curr
 
     # just walk the maze until out of bounds
-    def GetGuardRoute(self,input):
+    def GetGuardRoute(self, input):
         def Set():
             maze[curr] = "."
             maze[curr] = "^"
@@ -43,7 +43,7 @@ class Solution(InputAsLinesSolution):
 
         while True:
             if direction == "up":
-                if curr[0] - 1 < 0: # out of bounds
+                if curr[0] - 1 < 0:  # out of bounds
                     break
                 elif maze[(curr[0] - 1, curr[1])] == "#":
                     direction = "right"
@@ -51,7 +51,7 @@ class Solution(InputAsLinesSolution):
                     curr = (curr[0] - 1, curr[1])
                     Set()
             elif direction == "down":
-                if curr[0] + 1 >= height:# out of bounds
+                if curr[0] + 1 >= height:  # out of bounds
                     break
                 elif maze[(curr[0] + 1, curr[1])] == "#":
                     direction = "left"
@@ -59,7 +59,7 @@ class Solution(InputAsLinesSolution):
                     curr = (curr[0] + 1, curr[1])
                     Set()
             elif direction == "right":
-                if curr[1] + 1 >= width:# out of bounds
+                if curr[1] + 1 >= width:  # out of bounds
                     break
                 elif maze[(curr[0], curr[1] + 1)] == "#":
                     direction = "down"
@@ -67,7 +67,7 @@ class Solution(InputAsLinesSolution):
                     curr = (curr[0], curr[1] + 1)
                     Set()
             elif direction == "left":
-                if curr[1] - 1 < 0:# out of bounds
+                if curr[1] - 1 < 0:  # out of bounds
                     break
                 elif maze[(curr[0], curr[1] - 1)] == "#":
                     direction = "up"
@@ -86,7 +86,7 @@ class Solution(InputAsLinesSolution):
             else:
                 visited.add((curr, direction))
                 return False
-            
+
         maze, start = self.GetMaze(input)
         obstructions = 0
 
@@ -97,7 +97,7 @@ class Solution(InputAsLinesSolution):
             if maze[cell] != ".":
                 continue
 
-            maze[cell] = "#" #obstruction
+            maze[cell] = "#"  # obstruction
 
             curr = start
             direction = "up"
@@ -115,7 +115,9 @@ class Solution(InputAsLinesSolution):
                         curr = (curr[0] - 1, curr[1])
                         maze[curr] = "^"
 
-                        if InLoop():obstructions += 1;break
+                        if InLoop():
+                            obstructions += 1
+                            break
                 elif direction == "down":
                     if curr[0] + 1 >= height:
                         break
@@ -126,7 +128,9 @@ class Solution(InputAsLinesSolution):
                         curr = (curr[0] + 1, curr[1])
                         maze[curr] = "^"
 
-                        if InLoop():obstructions += 1;break
+                        if InLoop():
+                            obstructions += 1
+                            break
                 elif direction == "right":
                     if curr[1] + 1 >= width:
                         break
@@ -137,7 +141,9 @@ class Solution(InputAsLinesSolution):
                         curr = (curr[0], curr[1] + 1)
                         maze[curr] = "^"
 
-                        if InLoop():obstructions += 1;break
+                        if InLoop():
+                            obstructions += 1
+                            break
                 elif direction == "left":
                     if curr[1] - 1 < 0:
                         break
@@ -148,11 +154,13 @@ class Solution(InputAsLinesSolution):
                         curr = (curr[0], curr[1] - 1)
                         maze[curr] = "^"
 
-                        if InLoop():obstructions += 1;break
+                        if InLoop():
+                            obstructions += 1
+                            break
 
             # restore the original cells
             maze[curr] = "."
-            maze[cell] = "." 
+            maze[cell] = "."
 
         return obstructions
 
@@ -169,7 +177,7 @@ class Solution(InputAsLinesSolution):
         res = self.TrapTheGuard(input)
 
         return res
-        
+
     def part_1(self):
         start_time = time.time()
 
@@ -188,9 +196,10 @@ class Solution(InputAsLinesSolution):
 
         self.solve("2", res, (end_time - start_time))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     solution = Solution()
 
     solution.part_1()
-    
+
     solution.part_2()

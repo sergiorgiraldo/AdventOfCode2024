@@ -170,10 +170,10 @@ class InputAsStringSolution(BaseSolution):
 class InputAsLinesSolution(BaseSolution):
     def __init__(self, to_int=False, block=False):
         super().__init__(
-            lines=True, 
-            csv=False, 
-            two_dimensional=False, 
-            int_csvline=False, 
+            lines=True,
+            csv=False,
+            two_dimensional=False,
+            int_csvline=False,
             block=block,
             separator=",",
             to_int=to_int,
@@ -218,10 +218,10 @@ class InputAsIntCSVLineSolution(BaseSolution):
 class InputAs2DSolution(BaseSolution):
     def __init__(self):
         super().__init__(
-            lines=False, 
-            csv=False, 
-            two_dimensional=True, 
-            int_csvline=False, 
+            lines=False,
+            csv=False,
+            two_dimensional=True,
+            int_csvline=False,
             block=False,
             separator=",",
             to_int=False,
@@ -234,10 +234,10 @@ class InputAs2DSolution(BaseSolution):
 class InputAsBlockSolution(BaseSolution):
     def __init__(self):
         super().__init__(
-            lines=False, 
-            csv=False, 
-            two_dimensional=False, 
-            int_csvline=False, 
+            lines=False,
+            csv=False,
+            two_dimensional=False,
+            int_csvline=False,
             block=True,
             separator=",",
             to_int=False,

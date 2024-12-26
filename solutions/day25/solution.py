@@ -3,7 +3,7 @@
 import sys
 import time
 
-sys.path.insert(0,"..")
+sys.path.insert(0, "..")
 
 from base.advent import *
 
@@ -11,7 +11,7 @@ from base.advent import *
 class Solution(InputAsBlockSolution):
     _year = 2024
     _day = 25
-    
+
     _is_debugging = False
 
     def FindPairs(self, input):
@@ -21,24 +21,26 @@ class Solution(InputAsBlockSolution):
         max_height = len(input[0][0])
 
         for schematic in input:
+            heights = tuple(
+                len([pin[i] for pin in schematic if pin[i] == "#"]) - 1
+                for i in range(len(schematic[0]))
+            )
 
-            heights = tuple(len([pin[i] for pin in schematic if pin[i] == "#"]) - 1 
-                            for i in range(len(schematic[0])))
-            
             is_lock = "." not in schematic[0]
-            
+
             locks.add(heights) if is_lock else keys.add(heights)
 
-        fit_count = sum(map(
-                        lambda lock: sum(self.SeeIfFits(lock, key, max_height) for key in keys), 
-                        locks))
+        fit_count = sum(
+            map(
+                lambda lock: sum(self.SeeIfFits(lock, key, max_height) for key in keys),
+                locks,
+            )
+        )
 
         return fit_count
 
     def SeeIfFits(self, lock, key, max_height):
-        return all(map(
-                    lambda i: lock[i] + key[i] <= max_height, 
-                    range(len(lock))))
+        return all(map(lambda i: lock[i] + key[i] <= max_height, range(len(lock))))
 
     def pt1(self, input):
         self.debug(input)
@@ -51,7 +53,7 @@ class Solution(InputAsBlockSolution):
         self.debug(input)
 
         return ""
-        
+
     def part_1(self):
         start_time = time.time()
 
@@ -70,9 +72,10 @@ class Solution(InputAsBlockSolution):
 
         # self.solve("2", res, (end_time - start_time))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     solution = Solution()
 
     solution.part_1()
-    
+
     # solution.part_2()
