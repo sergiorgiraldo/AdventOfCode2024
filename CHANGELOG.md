@@ -2,13 +2,11 @@
 
 ## [25.1.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v25.0.0...v25.1.0) (2024-12-26)
 
-
 ### Features
 
 * moving configuration to pyproject.toml ([a1808e5](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/a1808e56c48375bc9627970473395c237403d4ac))
 
 ## [25.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v24.0.0...v25.0.0) (2024-12-25)
-
 
 ### ⚠ BREAKING CHANGES
 
@@ -20,7 +18,6 @@
 
 ## [24.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v23.0.0...v24.0.0) (2024-12-24)
 
-
 ### ⚠ BREAKING CHANGES
 
 * day 24 completed.
@@ -31,7 +28,6 @@
 
 ## [23.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v22.1.0...v23.0.0) (2024-12-23)
 
-
 ### ⚠ BREAKING CHANGES
 
 * day 23 completed.
@@ -41,7 +37,6 @@
 * day 23 completed. ([bf4c492](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/bf4c4921512b54584f706413daf45f990c3a1269))
 
 ## [22.1.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v22.0.0...v22.1.0) (2024-12-22)
-
 
 ### Features
 
