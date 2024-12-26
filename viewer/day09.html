@@ -39,7 +39,7 @@
 <span>import sys</span>
 <span>import time</span>
 <span></span>
-<span>sys.path.insert(0,"..")</span>
+<span>sys.path.insert(0, "..")</span>
 <span></span>
 <span>from base.advent import *</span>
 <span></span>
@@ -47,14 +47,16 @@
 <span>class Solution(InputAsStringSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 9</span>
-<span>    </span>
+<span></span>
 <span>    _is_debugging = False</span>
 <span></span>
 <span>    def ComputeChecksum(self, disk):</span>
 <span>        return sum(</span>
-<span>                    map(lambda item: int(item[1]) * item[0], </span>
-<span>                        filter(lambda item: item[1] != ".", enumerate(disk)))</span>
-<span>                    )</span>
+<span>            map(</span>
+<span>                lambda item: int(item[1]) * item[0],</span>
+<span>                filter(lambda item: item[1] != ".", enumerate(disk)),</span>
+<span>            )</span>
+<span>        )</span>
 <span></span>
 <span>    def GetOriginalState(self, input):</span>
 <span>        disk = []</span>
@@ -71,14 +73,14 @@
 <span>                for _ in range(amount):</span>
 <span>                    disk.append(str(id))</span>
 <span>                id += 1</span>
-<span>            free = not free # switch between free and used</span>
+<span>            free = not free  # switch between free and used</span>
 <span></span>
 <span>        return disk, free_space</span>
-<span>    </span>
+<span></span>
 <span>    def CompactByBlocks(self, input):</span>
 <span>        disk, _ = self.GetOriginalState(input)</span>
 <span></span>
-<span>        for i, c in enumerate(disk): #find first free space</span>
+<span>        for i, c in enumerate(disk):  # find first free space</span>
 <span>            if c == ".":</span>
 <span>                l = i</span>
 <span>                break</span>
@@ -102,7 +104,7 @@
 <span>        disk, free_space = self.GetOriginalState(input)</span>
 <span></span>
 <span>        r = len(disk) - 1</span>
-<span>        </span>
+<span></span>
 <span>        seen = set()</span>
 <span></span>
 <span>        while r > 0:</span>
@@ -121,7 +123,9 @@
 <span>                file_size += 1</span>
 <span>                r -= 1</span>
 <span></span>
-<span>            candidates = [(k, v) for (k, v) in free_space.items() if k <= r and v >= file_size]</span>
+<span>            candidates = [</span>
+<span>                (k, v) for (k, v) in free_space.items() if k <= r and v >= file_size</span>
+<span>            ]</span>
 <span>            if len(candidates) == 0:</span>
 <span>                continue</span>
 <span></span>
@@ -143,7 +147,7 @@
 <span>        better_disk = self.CompactByBlocks(input)</span>
 <span></span>
 <span>        checksum = self.ComputeChecksum(better_disk)</span>
-<span>        </span>
+<span></span>
 <span>        return checksum</span>
 <span></span>
 <span>    def pt2(self, input):</span>
@@ -152,9 +156,9 @@
 <span>        better_disk = self.CompactByFiles(input)</span>
 <span></span>
 <span>        checksum = self.ComputeChecksum(better_disk)</span>
-<span>        </span>
+<span></span>
 <span>        return checksum</span>
-<span>        </span>
+<span></span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
 <span></span>
@@ -173,10 +177,12 @@
 <span></span>
 <span>        self.solve("2", res, (end_time - start_time))</span>
 <span></span>
-<span>if __name__ == '__main__':</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
 <span>    solution = Solution()</span>
 <span></span>
 <span>    solution.part_1()</span>
-<span>    </span>
+<span></span>
 <span>    solution.part_2()</span>
+<span></span>
 </pre>

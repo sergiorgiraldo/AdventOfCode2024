@@ -39,7 +39,7 @@
 <span>import sys</span>
 <span>import time</span>
 <span></span>
-<span>sys.path.insert(0,"..")</span>
+<span>sys.path.insert(0, "..")</span>
 <span></span>
 <span>from base.advent import *</span>
 <span></span>
@@ -47,10 +47,10 @@
 <span>class Solution(InputAsLinesSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 22</span>
-<span>    </span>
+<span></span>
 <span>    _is_debugging = False</span>
 <span></span>
-<span>    def CalcAndMixAndPrune(self, secret): #recipe from the puzzle</span>
+<span>    def CalcAndMixAndPrune(self, secret):  # recipe from the puzzle</span>
 <span>        next_secret = secret</span>
 <span></span>
 <span>        x = next_secret * 64</span>
@@ -81,35 +81,35 @@
 <span>        prices = []</span>
 <span></span>
 <span>        previous_price = s % 10</span>
-<span>        </span>
+<span></span>
 <span>        for _ in range(n):</span>
 <span>            s = self.CalcAndMixAndPrune(s)</span>
 <span>            price = s % 10</span>
 <span>            change = price - previous_price</span>
 <span>            prices.append((price, change))</span>
 <span>            previous_price = price</span>
-<span>        </span>
+<span></span>
 <span>        return prices</span>
 <span></span>
 <span>    def GetSequences(self, s, n):</span>
 <span>        sequences = {}</span>
-<span>        </span>
+<span></span>
 <span>        prices = self.GetPrices(s, n)</span>
-<span>        </span>
+<span></span>
 <span>        for i in range(3, n):</span>
-<span>            trailing_4 = prices[i-3:i+1]</span>
+<span>            trailing_4 = prices[i - 3 : i + 1]</span>
 <span>            sequence = tuple(price_change[1] for price_change in trailing_4)</span>
 <span>            if sequence in sequences:</span>
 <span>                continue</span>
 <span>            price = prices[i][0]</span>
 <span>            sequences[sequence] = price</span>
-<span>        </span>
+<span></span>
 <span>        return sequences</span>
 <span></span>
 <span>    def BuyBananas(self, input):</span>
 <span>        all_sequences = set()</span>
 <span>        sequence_prices = []</span>
-<span>        </span>
+<span></span>
 <span>        for secret in input:</span>
 <span>            sequences = self.GetSequences(secret, 2000)</span>
 <span>            sequence_prices.append(sequences)</span>
@@ -117,7 +117,7 @@
 <span>                all_sequences.add(k)</span>
 <span></span>
 <span>        best_price = 0</span>
-<span>        </span>
+<span></span>
 <span>        for sequence in all_sequences:</span>
 <span>            total_price = sum(price.get(sequence, 0) for price in sequence_prices)</span>
 <span>            if total_price > best_price:</span>
@@ -138,7 +138,7 @@
 <span>        res = self.BuyBananas(input)</span>
 <span></span>
 <span>        return res</span>
-<span>        </span>
+<span></span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
 <span></span>
@@ -157,10 +157,12 @@
 <span></span>
 <span>        self.solve("2", res, (end_time - start_time))</span>
 <span></span>
-<span>if __name__ == '__main__':</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
 <span>    solution = Solution(to_int=True)</span>
 <span></span>
 <span>    solution.part_1()</span>
-<span>    </span>
+<span></span>
 <span>    solution.part_2()</span>
+<span></span>
 </pre>

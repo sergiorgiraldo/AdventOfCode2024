@@ -39,7 +39,7 @@
 <span>import sys</span>
 <span>import time</span>
 <span></span>
-<span>sys.path.insert(0,"..")</span>
+<span>sys.path.insert(0, "..")</span>
 <span></span>
 <span>from base.advent import *</span>
 <span></span>
@@ -47,7 +47,7 @@
 <span>class Solution(InputAsBlockSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 15</span>
-<span>    </span>
+<span></span>
 <span>    _is_debugging = False</span>
 <span></span>
 <span>    def GetCoord(self, position):</span>
@@ -62,14 +62,19 @@
 <span>                grid[location] = cell</span>
 <span>                if cell == "@":</span>
 <span>                    self.curr_location = location</span>
-<span>                    </span>
+<span></span>
 <span>        return grid</span>
 <span></span>
 <span>    def GetWiderGrid(self, input):</span>
 <span>        wider_input = []</span>
 <span></span>
 <span>        for item in input:</span>
-<span>            new_item = item.replace("#","##").replace("O", "[]").replace(".", "..").replace("@", "@.")</span>
+<span>            new_item = (</span>
+<span>                item.replace("#", "##")</span>
+<span>                .replace("O", "[]")</span>
+<span>                .replace(".", "..")</span>
+<span>                .replace("@", "@.")</span>
+<span>            )</span>
 <span>            wider_input.append(new_item)</span>
 <span></span>
 <span>        grid = self.GetGrid(wider_input)</span>
@@ -77,34 +82,35 @@
 <span>        return grid</span>
 <span></span>
 <span>    def CollectBoxes(self, input, wider=False):</span>
-<span>        offset = {</span>
-<span>            ">": 1,</span>
-<span>            "<": -1,</span>
-<span>            "^": -1j,</span>
-<span>            "v": 1j</span>
-<span>        }</span>
+<span>        offset = {">": 1, "<": -1, "^": -1j, "v": 1j}</span>
 <span></span>
 <span>        field, instructions = input</span>
 <span></span>
 <span>        if wider:</span>
-<span>            grid = self.GetWiderGrid(field) </span>
+<span>            grid = self.GetWiderGrid(field)</span>
 <span>            condition = "["</span>
-<span>        else: </span>
+<span>        else:</span>
 <span>            grid = self.GetGrid(field)</span>
 <span>            condition = "O"</span>
 <span></span>
 <span>        for moves in instructions:</span>
 <span>            for move in moves:</span>
-<span>                if wider: </span>
+<span>                if wider:</span>
 <span>                    self.curr_location = self.WalkTheRobot_wh2(grid, offset[move])</span>
-<span>                else: </span>
+<span>                else:</span>
 <span>                    self.curr_location = self.WalkTheRobot_wh1(grid, offset[move])</span>
-<span>                </span>
-<span>        gps = sum([self.GetCoord(position) for position, cell in grid.items() if cell == condition ])</span>
-<span>        </span>
+<span></span>
+<span>        gps = sum(</span>
+<span>            [</span>
+<span>                self.GetCoord(position)</span>
+<span>                for position, cell in grid.items()</span>
+<span>                if cell == condition</span>
+<span>            ]</span>
+<span>        )</span>
+<span></span>
 <span>        return gps</span>
 <span></span>
-<span>    def WalkTheRobot_wh1(self,grid, move):</span>
+<span>    def WalkTheRobot_wh1(self, grid, move):</span>
 <span>        new_location = self.curr_location + move</span>
 <span>        boxes_to_push = []</span>
 <span>        while grid[new_location] == "O":</span>
@@ -120,16 +126,20 @@
 <span>            self.curr_location = self.curr_location + move</span>
 <span>            grid[self.curr_location] = "@"</span>
 <span>            return self.curr_location</span>
-<span>    </span>
+<span></span>
 <span>    def WalkTheRobot_wh2(self, grid, move):</span>
 <span>        if grid[self.curr_location + move] == "#":</span>
 <span>            return self.curr_location</span>
-<span>        </span>
+<span></span>
 <span>        locations_to_push_from = [self.curr_location]</span>
 <span>        boxes_to_push = []</span>
 <span></span>
-<span>        while any([grid[location + move] in "[]" for location in locations_to_push_from]):</span>
-<span>            if any([grid[location + move] == "#" for location in locations_to_push_from]):</span>
+<span>        while any(</span>
+<span>            [grid[location + move] in "[]" for location in locations_to_push_from]</span>
+<span>        ):</span>
+<span>            if any(</span>
+<span>                [grid[location + move] == "#" for location in locations_to_push_from]</span>
+<span>            ):</span>
 <span>                return self.curr_location</span>
 <span>            new_locations_to_push_from = []</span>
 <span>            for location in locations_to_push_from:</span>
@@ -146,7 +156,7 @@
 <span>                new_locations_to_push_from.extend(boxes)</span>
 <span>            locations_to_push_from = new_locations_to_push_from</span>
 <span></span>
-<span>        if any([grid[box+move] == "#" for box in boxes_to_push]):</span>
+<span>        if any([grid[box + move] == "#" for box in boxes_to_push]):</span>
 <span>            return self.curr_location</span>
 <span></span>
 <span>        new_symbols = {}</span>
@@ -177,7 +187,7 @@
 <span>        res = self.CollectBoxes(input, True)</span>
 <span></span>
 <span>        return res</span>
-<span>        </span>
+<span></span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
 <span></span>
@@ -196,10 +206,12 @@
 <span></span>
 <span>        self.solve("2", res, (end_time - start_time))</span>
 <span></span>
-<span>if __name__ == '__main__':</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
 <span>    solution = Solution()</span>
 <span></span>
 <span>    solution.part_1()</span>
-<span>    </span>
+<span></span>
 <span>    solution.part_2()</span>
+<span></span>
 </pre>

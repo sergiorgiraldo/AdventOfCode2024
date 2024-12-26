@@ -39,7 +39,7 @@
 <span>import sys</span>
 <span>import time</span>
 <span></span>
-<span>sys.path.insert(0,"..")</span>
+<span>sys.path.insert(0, "..")</span>
 <span></span>
 <span>from base.advent import *</span>
 <span></span>
@@ -47,7 +47,7 @@
 <span>class Solution(InputAsLinesSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 6</span>
-<span>    </span>
+<span></span>
 <span>    _is_debugging = False</span>
 <span></span>
 <span>    def GetMaze(self, input):</span>
@@ -62,7 +62,7 @@
 <span>        return maze, curr</span>
 <span></span>
 <span>    # just walk the maze until out of bounds</span>
-<span>    def GetGuardRoute(self,input):</span>
+<span>    def GetGuardRoute(self, input):</span>
 <span>        def Set():</span>
 <span>            maze[curr] = "."</span>
 <span>            maze[curr] = "^"</span>
@@ -79,7 +79,7 @@
 <span></span>
 <span>        while True:</span>
 <span>            if direction == "up":</span>
-<span>                if curr[0] - 1 < 0: # out of bounds</span>
+<span>                if curr[0] - 1 < 0:  # out of bounds</span>
 <span>                    break</span>
 <span>                elif maze[(curr[0] - 1, curr[1])] == "#":</span>
 <span>                    direction = "right"</span>
@@ -87,7 +87,7 @@
 <span>                    curr = (curr[0] - 1, curr[1])</span>
 <span>                    Set()</span>
 <span>            elif direction == "down":</span>
-<span>                if curr[0] + 1 >= height:# out of bounds</span>
+<span>                if curr[0] + 1 >= height:  # out of bounds</span>
 <span>                    break</span>
 <span>                elif maze[(curr[0] + 1, curr[1])] == "#":</span>
 <span>                    direction = "left"</span>
@@ -95,7 +95,7 @@
 <span>                    curr = (curr[0] + 1, curr[1])</span>
 <span>                    Set()</span>
 <span>            elif direction == "right":</span>
-<span>                if curr[1] + 1 >= width:# out of bounds</span>
+<span>                if curr[1] + 1 >= width:  # out of bounds</span>
 <span>                    break</span>
 <span>                elif maze[(curr[0], curr[1] + 1)] == "#":</span>
 <span>                    direction = "down"</span>
@@ -103,7 +103,7 @@
 <span>                    curr = (curr[0], curr[1] + 1)</span>
 <span>                    Set()</span>
 <span>            elif direction == "left":</span>
-<span>                if curr[1] - 1 < 0:# out of bounds</span>
+<span>                if curr[1] - 1 < 0:  # out of bounds</span>
 <span>                    break</span>
 <span>                elif maze[(curr[0], curr[1] - 1)] == "#":</span>
 <span>                    direction = "up"</span>
@@ -122,7 +122,7 @@
 <span>            else:</span>
 <span>                visited.add((curr, direction))</span>
 <span>                return False</span>
-<span>            </span>
+<span></span>
 <span>        maze, start = self.GetMaze(input)</span>
 <span>        obstructions = 0</span>
 <span></span>
@@ -133,7 +133,7 @@
 <span>            if maze[cell] != ".":</span>
 <span>                continue</span>
 <span></span>
-<span>            maze[cell] = "#" #obstruction</span>
+<span>            maze[cell] = "#"  # obstruction</span>
 <span></span>
 <span>            curr = start</span>
 <span>            direction = "up"</span>
@@ -151,7 +151,9 @@
 <span>                        curr = (curr[0] - 1, curr[1])</span>
 <span>                        maze[curr] = "^"</span>
 <span></span>
-<span>                        if InLoop():obstructions += 1;break</span>
+<span>                        if InLoop():</span>
+<span>                            obstructions += 1</span>
+<span>                            break</span>
 <span>                elif direction == "down":</span>
 <span>                    if curr[0] + 1 >= height:</span>
 <span>                        break</span>
@@ -162,7 +164,9 @@
 <span>                        curr = (curr[0] + 1, curr[1])</span>
 <span>                        maze[curr] = "^"</span>
 <span></span>
-<span>                        if InLoop():obstructions += 1;break</span>
+<span>                        if InLoop():</span>
+<span>                            obstructions += 1</span>
+<span>                            break</span>
 <span>                elif direction == "right":</span>
 <span>                    if curr[1] + 1 >= width:</span>
 <span>                        break</span>
@@ -173,7 +177,9 @@
 <span>                        curr = (curr[0], curr[1] + 1)</span>
 <span>                        maze[curr] = "^"</span>
 <span></span>
-<span>                        if InLoop():obstructions += 1;break</span>
+<span>                        if InLoop():</span>
+<span>                            obstructions += 1</span>
+<span>                            break</span>
 <span>                elif direction == "left":</span>
 <span>                    if curr[1] - 1 < 0:</span>
 <span>                        break</span>
@@ -184,11 +190,13 @@
 <span>                        curr = (curr[0], curr[1] - 1)</span>
 <span>                        maze[curr] = "^"</span>
 <span></span>
-<span>                        if InLoop():obstructions += 1;break</span>
+<span>                        if InLoop():</span>
+<span>                            obstructions += 1</span>
+<span>                            break</span>
 <span></span>
 <span>            # restore the original cells</span>
 <span>            maze[curr] = "."</span>
-<span>            maze[cell] = "." </span>
+<span>            maze[cell] = "."</span>
 <span></span>
 <span>        return obstructions</span>
 <span></span>
@@ -205,7 +213,7 @@
 <span>        res = self.TrapTheGuard(input)</span>
 <span></span>
 <span>        return res</span>
-<span>        </span>
+<span></span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
 <span></span>
@@ -224,10 +232,12 @@
 <span></span>
 <span>        self.solve("2", res, (end_time - start_time))</span>
 <span></span>
-<span>if __name__ == '__main__':</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
 <span>    solution = Solution()</span>
 <span></span>
 <span>    solution.part_1()</span>
-<span>    </span>
+<span></span>
 <span>    solution.part_2()</span>
+<span></span>
 </pre>

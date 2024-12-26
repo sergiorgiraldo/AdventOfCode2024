@@ -39,7 +39,7 @@
 <span>import sys</span>
 <span>import time</span>
 <span></span>
-<span>sys.path.insert(0,"..")</span>
+<span>sys.path.insert(0, "..")</span>
 <span></span>
 <span>from operator import add, mul</span>
 <span></span>
@@ -49,38 +49,47 @@
 <span>class Solution(InputAsLinesSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 7</span>
-<span>    </span>
+<span></span>
 <span>    _is_debugging = False</span>
 <span></span>
-<span>    CONCAT  = lambda self, x, y: int(f"{x}{y}")</span>
+<span>    CONCAT = lambda self, x, y: int(f"{x}{y}")</span>
 <span></span>
 <span>    def GetEquations(self, input):</span>
 <span>        equations = [equation.split(": ") for equation in input]</span>
 <span></span>
-<span>        equations = [(int(result), list(map(int, numbers.split()))) for result, numbers in equations]</span>
+<span>        equations = [</span>
+<span>            (int(result), list(map(int, numbers.split())))</span>
+<span>            for result, numbers in equations</span>
+<span>        ]</span>
 <span></span>
 <span>        return equations</span>
-<span>    </span>
-<span>    #straightforward solution, try all combinations of operators between numbers</span>
-<span>    def SolveEquation(self,result, numbers, operators):</span>
+<span></span>
+<span>    # straightforward solution, try all combinations of operators between numbers</span>
+<span>    def SolveEquation(self, result, numbers, operators):</span>
 <span>        def calc(result, numbers, curr):</span>
 <span>            if curr > result:</span>
 <span>                return False</span>
 <span>            match numbers:</span>
-<span>                case []: # no more numbers, test the result</span>
+<span>                case []:  # no more numbers, test the result</span>
 <span>                    return curr == result</span>
-<span>                case [arg, *rest]: # test the next number with all operators</span>
-<span>                    return any(calc(result, rest, operator(curr, arg)) for operator in operators)</span>
+<span>                case [arg, *rest]:  # test the next number with all operators</span>
+<span>                    return any(</span>
+<span>                        calc(result, rest, operator(curr, arg))</span>
+<span>                        for operator in operators</span>
+<span>                    )</span>
 <span></span>
-<span>        return calc(result, numbers[1:], numbers[0]) </span>
+<span>        return calc(result, numbers[1:], numbers[0])</span>
 <span></span>
 <span>    def pt1(self, input):</span>
 <span>        self.debug(input)</span>
 <span></span>
 <span>        equations = self.GetEquations(input)</span>
 <span></span>
-<span>        res = sum(result for result, numbers in equations </span>
-<span>                  if self.SolveEquation(result, numbers, [add, mul]))</span>
+<span>        res = sum(</span>
+<span>            result</span>
+<span>            for result, numbers in equations</span>
+<span>            if self.SolveEquation(result, numbers, [add, mul])</span>
+<span>        )</span>
 <span></span>
 <span>        return res</span>
 <span></span>
@@ -89,11 +98,14 @@
 <span></span>
 <span>        equations = self.GetEquations(input)</span>
 <span></span>
-<span>        res = sum(result for result, numbers in equations </span>
-<span>                  if self.SolveEquation(result, numbers, [add, mul, self.CONCAT]))</span>
+<span>        res = sum(</span>
+<span>            result</span>
+<span>            for result, numbers in equations</span>
+<span>            if self.SolveEquation(result, numbers, [add, mul, self.CONCAT])</span>
+<span>        )</span>
 <span></span>
 <span>        return res</span>
-<span>        </span>
+<span></span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
 <span></span>
@@ -112,10 +124,12 @@
 <span></span>
 <span>        self.solve("2", res, (end_time - start_time))</span>
 <span></span>
-<span>if __name__ == '__main__':</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
 <span>    solution = Solution()</span>
 <span></span>
 <span>    solution.part_1()</span>
-<span>    </span>
+<span></span>
 <span>    solution.part_2()</span>
+<span></span>
 </pre>

@@ -39,7 +39,7 @@
 <span>import sys</span>
 <span>import time</span>
 <span></span>
-<span>sys.path.insert(0,"..")</span>
+<span>sys.path.insert(0, "..")</span>
 <span></span>
 <span>from collections import Counter</span>
 <span></span>
@@ -49,41 +49,51 @@
 <span>class Solution(InputAsLinesSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 21</span>
-<span>    </span>
+<span></span>
 <span>    _is_debugging = False</span>
 <span></span>
 <span>    #  0   1   2</span>
-<span>    #numeric pad</span>
-<span>    #+---+---+---+</span>
-<span> #0 #| 7 | 8 | 9 |</span>
-<span>    #+---+---+---+</span>
-<span> #1 #| 4 | 5 | 6 |</span>
-<span>    #+---+---+---+</span>
-<span> #2 #| 1 | 2 | 3 |</span>
-<span>    #+---+---+---+</span>
-<span> #3 #    | 0 | A |</span>
+<span>    # numeric pad</span>
+<span>    # +---+---+---+</span>
+<span>    # 0 #| 7 | 8 | 9 |</span>
+<span>    # +---+---+---+</span>
+<span>    # 1 #| 4 | 5 | 6 |</span>
+<span>    # +---+---+---+</span>
+<span>    # 2 #| 1 | 2 | 3 |</span>
+<span>    # +---+---+---+</span>
+<span>    # 3 #    | 0 | A |</span>
 <span>    #    +---+---+</span>
 <span></span>
-<span>    #direction pad</span>
+<span>    # direction pad</span>
 <span>    #    +---+---+</span>
-<span> #0 #    | ^ | A |</span>
-<span>    #+---+---+---+</span>
-<span> #1 #| < | v | > |</span>
-<span>    #+---+---+---+</span>
+<span>    # 0 #    | ^ | A |</span>
+<span>    # +---+---+---+</span>
+<span>    # 1 #| < | v | > |</span>
+<span>    # +---+---+---+</span>
 <span></span>
 <span>    # set coordinates for the number pad and the direction pad</span>
-<span>    # i create the dict with the coordinates in the keys. </span>
+<span>    # i create the dict with the coordinates in the keys.</span>
 <span>    # then add the reverse to have also the buttons as keys</span>
 <span>    # with this setup I can search for the button and also calculate distance to target button</span>
 <span>    def Setup(self):</span>
-<span>        num_pad_lines = ["789", "456", "123", " 0A"] # from the puzzle</span>
-<span>        num_pad = {(i,j):c for i,line in enumerate(num_pad_lines) for j,c in enumerate(line) if c != " "}</span>
-<span>        num_pad.update({v:k for k,v in num_pad.items()})</span>
+<span>        num_pad_lines = ["789", "456", "123", " 0A"]  # from the puzzle</span>
+<span>        num_pad = {</span>
+<span>            (i, j): c</span>
+<span>            for i, line in enumerate(num_pad_lines)</span>
+<span>            for j, c in enumerate(line)</span>
+<span>            if c != " "</span>
+<span>        }</span>
+<span>        num_pad.update({v: k for k, v in num_pad.items()})</span>
 <span></span>
-<span>        dir_pad_lines = [" ^A", "<v>"] # from the puzzle</span>
-<span>        dir_pad = {(i,j):c for i,line in enumerate(dir_pad_lines) for j,c in enumerate(line) if c != " "}</span>
-<span>        dir_pad.update({v:k for k,v in dir_pad.items()})</span>
-<span>        </span>
+<span>        dir_pad_lines = [" ^A", "<v>"]  # from the puzzle</span>
+<span>        dir_pad = {</span>
+<span>            (i, j): c</span>
+<span>            for i, line in enumerate(dir_pad_lines)</span>
+<span>            for j, c in enumerate(line)</span>
+<span>            if c != " "</span>
+<span>        }</span>
+<span>        dir_pad.update({v: k for k, v in dir_pad.items()})</span>
+<span></span>
 <span>        return num_pad, dir_pad</span>
 <span></span>
 <span>    def MoveArm(self, source, target, pad):</span>
@@ -92,34 +102,34 @@
 <span></span>
 <span>        distance_Y = target_Y - source_Y</span>
 <span>        distance_X = target_X - source_X</span>
-<span>        </span>
-<span>        vert  = "v" * distance_Y + "^" * -distance_Y</span>
+<span></span>
+<span>        vert = "v" * distance_Y + "^" * -distance_Y</span>
 <span>        horiz = ">" * distance_X + "<" * -distance_X</span>
-<span>        </span>
-<span>       # this first `if` is to handle the case where I need to move horz and vert.</span>
-<span>       # then robot could go horz/vert or vert/horz and both arrive in the same place.</span>
-<span>       # if going right (distance_X > 0) then move first vert, otherwise move first horz.</span>
-<span>       # i didnt know which to pick, unit test saved me :D</span>
-<span>        if distance_X > 0 and (target_Y,source_X) in pad:</span>
-<span>            return vert+horiz+"A"</span>
-<span>        </span>
-<span>        if (source_Y,target_X) in pad:</span>
-<span>            return horiz+vert+"A"</span>
-<span>        </span>
-<span>        if (target_Y,source_X) in pad:</span>
-<span>            return vert+horiz+"A"</span>
-<span>        </span>
+<span></span>
+<span>        # this first `if` is to handle the case where I need to move horz and vert.</span>
+<span>        # then robot could go horz/vert or vert/horz and both arrive in the same place.</span>
+<span>        # if going right (distance_X > 0) then move first vert, otherwise move first horz.</span>
+<span>        # i didnt know which to pick, unit test saved me :D</span>
+<span>        if distance_X > 0 and (target_Y, source_X) in pad:</span>
+<span>            return vert + horiz + "A"</span>
+<span></span>
+<span>        if (source_Y, target_X) in pad:</span>
+<span>            return horiz + vert + "A"</span>
+<span></span>
+<span>        if (target_Y, source_X) in pad:</span>
+<span>            return vert + horiz + "A"</span>
+<span></span>
 <span>    def FindRoute(self, path, pad, part):</span>
 <span>        route = []</span>
 <span>        start = "A"</span>
-<span>        </span>
+<span></span>
 <span>        for end in path:</span>
-<span>            route.append(self.MoveArm(start,end,pad))</span>
+<span>            route.append(self.MoveArm(start, end, pad))</span>
 <span>            start = end</span>
-<span>        </span>
+<span></span>
 <span>        return "".join(route) if part == 1 else Counter(route)</span>
 <span></span>
-<span>    def GetRoutesForCodes(self,input,num_pad):</span>
+<span>    def GetRoutesForCodes(self, input, num_pad):</span>
 <span>        routes = [self.FindRoute(line, num_pad, 1) for line in input]</span>
 <span></span>
 <span>        return routes</span>
@@ -128,25 +138,27 @@
 <span>        num_pad, dir_pad = self.Setup()</span>
 <span></span>
 <span>        routes = self.GetRoutesForCodes(input, num_pad)</span>
-<span>        </span>
+<span></span>
 <span>        robot_1_routes = [self.FindRoute(route, dir_pad, 1) for route in routes]</span>
 <span>        robot_2_routes = [self.FindRoute(route, dir_pad, 1) for route in robot_1_routes]</span>
 <span></span>
-<span>        res = sum(len(route)*int(line[:-1]) for route, line in zip(robot_2_routes,input))</span>
-<span>        </span>
+<span>        res = sum(</span>
+<span>            len(route) * int(line[:-1]) for route, line in zip(robot_2_routes, input)</span>
+<span>        )</span>
+<span></span>
 <span>        return res</span>
 <span></span>
 <span>    def TypeCodesForManyRobots(self, input):</span>
 <span>        def len_(route):</span>
-<span>            return sum(len(k)*v for k,v in route.items())</span>
+<span>            return sum(len(k) * v for k, v in route.items())</span>
 <span></span>
 <span>        num_pad, dir_pad = self.Setup()</span>
-<span>        </span>
+<span></span>
 <span>        routes = self.GetRoutesForCodes(input, num_pad)</span>
 <span></span>
 <span>        robot_routes = [Counter([route]) for route in routes]</span>
-<span>        </span>
-<span>        for _ in range(25): # magic number from the puzzle</span>
+<span></span>
+<span>        for _ in range(25):  # magic number from the puzzle</span>
 <span>            new_routes = []</span>
 <span>            for route_counter in robot_routes:</span>
 <span>                new_route = Counter()</span>
@@ -158,7 +170,9 @@
 <span>                new_routes.append(new_route)</span>
 <span>            robot_routes = new_routes</span>
 <span></span>
-<span>        res = sum(len_(route)*int(line[:-1]) for route, line in zip(robot_routes,input))</span>
+<span>        res = sum(</span>
+<span>            len_(route) * int(line[:-1]) for route, line in zip(robot_routes, input)</span>
+<span>        )</span>
 <span></span>
 <span>        return res</span>
 <span></span>
@@ -175,7 +189,7 @@
 <span>        res = self.TypeCodesForManyRobots(input)</span>
 <span></span>
 <span>        return res</span>
-<span>        </span>
+<span></span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
 <span></span>
@@ -194,10 +208,12 @@
 <span></span>
 <span>        self.solve("2", res, (end_time - start_time))</span>
 <span></span>
-<span>if __name__ == '__main__':</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
 <span>    solution = Solution()</span>
 <span></span>
 <span>    solution.part_1()</span>
-<span>    </span>
+<span></span>
 <span>    solution.part_2()</span>
+<span></span>
 </pre>

@@ -36,16 +36,18 @@
 <pre>
 <span># puzzle prompt: https://adventofcode.com/2024/day/25</span>
 <span></span>
-<span>import time</span>
 <span>import sys</span>
-<span>sys.path.insert(0,"..")</span>
+<span>import time</span>
+<span></span>
+<span>sys.path.insert(0, "..")</span>
 <span></span>
 <span>from base.advent import *</span>
+<span></span>
 <span></span>
 <span>class Solution(InputAsBlockSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 25</span>
-<span>    </span>
+<span></span>
 <span>    _is_debugging = False</span>
 <span></span>
 <span>    def FindPairs(self, input):</span>
@@ -55,24 +57,26 @@
 <span>        max_height = len(input[0][0])</span>
 <span></span>
 <span>        for schematic in input:</span>
+<span>            heights = tuple(</span>
+<span>                len([pin[i] for pin in schematic if pin[i] == "#"]) - 1</span>
+<span>                for i in range(len(schematic[0]))</span>
+<span>            )</span>
 <span></span>
-<span>            heights = tuple(len([pin[i] for pin in schematic if pin[i] == "#"]) - 1 </span>
-<span>                            for i in range(len(schematic[0])))</span>
-<span>            </span>
 <span>            is_lock = "." not in schematic[0]</span>
-<span>            </span>
+<span></span>
 <span>            locks.add(heights) if is_lock else keys.add(heights)</span>
 <span></span>
-<span>        fit_count = sum(map(</span>
-<span>                        lambda lock: sum(self.SeeIfFits(lock, key, max_height) for key in keys), </span>
-<span>                        locks))</span>
+<span>        fit_count = sum(</span>
+<span>            map(</span>
+<span>                lambda lock: sum(self.SeeIfFits(lock, key, max_height) for key in keys),</span>
+<span>                locks,</span>
+<span>            )</span>
+<span>        )</span>
 <span></span>
 <span>        return fit_count</span>
 <span></span>
 <span>    def SeeIfFits(self, lock, key, max_height):</span>
-<span>        return all(map(</span>
-<span>                    lambda i: lock[i] + key[i] <= max_height, </span>
-<span>                    range(len(lock))))</span>
+<span>        return all(map(lambda i: lock[i] + key[i] <= max_height, range(len(lock))))</span>
 <span></span>
 <span>    def pt1(self, input):</span>
 <span>        self.debug(input)</span>
@@ -85,7 +89,7 @@
 <span>        self.debug(input)</span>
 <span></span>
 <span>        return ""</span>
-<span>        </span>
+<span></span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
 <span></span>
@@ -104,10 +108,12 @@
 <span></span>
 <span>        # self.solve("2", res, (end_time - start_time))</span>
 <span></span>
-<span>if __name__ == '__main__':</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
 <span>    solution = Solution()</span>
 <span></span>
 <span>    solution.part_1()</span>
-<span>    </span>
+<span></span>
 <span>    # solution.part_2()</span>
+<span></span>
 </pre>
