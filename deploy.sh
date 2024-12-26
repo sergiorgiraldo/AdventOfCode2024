@@ -10,7 +10,7 @@ fi
 
 ./ruff.sh
 
-black .
+./black.sh
 
 markdownlint-cli2 "*.md" --fix
 
