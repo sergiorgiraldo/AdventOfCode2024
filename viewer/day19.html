@@ -39,7 +39,7 @@
 <span>import sys</span>
 <span>import time</span>
 <span></span>
-<span>sys.path.insert(0,"..")</span>
+<span>sys.path.insert(0, "..")</span>
 <span></span>
 <span>from itertools import product</span>
 <span></span>
@@ -49,7 +49,7 @@
 <span>class Solution(InputAsBlockSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 19</span>
-<span>    </span>
+<span></span>
 <span>    _is_debugging = False</span>
 <span></span>
 <span>    def DesignTowels(self, input):</span>
@@ -64,13 +64,14 @@
 <span>        candidate = [1] + [0] * len(design)</span>
 <span></span>
 <span>        positions = [</span>
-<span>                (i, pattern) for i, pattern in product(range(len(design)), patterns)</span>
-<span>                if design[i:].startswith(pattern)</span>
-<span>            ]</span>
-<span>            </span>
+<span>            (i, pattern)</span>
+<span>            for i, pattern in product(range(len(design)), patterns)</span>
+<span>            if design[i:].startswith(pattern)</span>
+<span>        ]</span>
+<span></span>
 <span>        for i, pattern in positions:</span>
 <span>            candidate[i + len(pattern)] += candidate[i]</span>
-<span>        </span>
+<span></span>
 <span>        return candidate[-1]</span>
 <span></span>
 <span>    def pt1(self, input):</span>
@@ -86,7 +87,7 @@
 <span>        _, res = self.DesignTowels(input)</span>
 <span></span>
 <span>        return res</span>
-<span>        </span>
+<span></span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
 <span></span>
@@ -105,10 +106,12 @@
 <span></span>
 <span>        self.solve("2", res, (end_time - start_time))</span>
 <span></span>
-<span>if __name__ == '__main__':</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
 <span>    solution = Solution()</span>
 <span></span>
 <span>    solution.part_1()</span>
-<span>    </span>
+<span></span>
 <span>    solution.part_2()</span>
+<span></span>
 </pre>

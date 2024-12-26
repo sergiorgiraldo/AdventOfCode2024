@@ -50,12 +50,16 @@
 <span></span>
 <span>    _is_debugging = False</span>
 <span></span>
-<span>    def GetMiddlePages(self, input, reorder = False):</span>
+<span>    def GetMiddlePages(self, input, reorder=False):</span>
 <span>        rules = {tuple(r.split("|")) for r in input[0]}</span>
 <span></span>
 <span>        totals = [0, 0]</span>
 <span></span>
-<span>        longest = len(max(input[1], key=lambda x: len(x.split(","))).split(",")) if reorder else 1</span>
+<span>        longest = (</span>
+<span>            len(max(input[1], key=lambda x: len(x.split(","))).split(","))</span>
+<span>            if reorder</span>
+<span>            else 1</span>
+<span>        )</span>
 <span></span>
 <span>        for pages in input[1]:</span>
 <span>            original, fixed = pages.split(","), []</span>
@@ -64,7 +68,7 @@
 <span>            # I would need to iterate over and over again to order pages for part 2,</span>
 <span>            # if I replicate the pages, then I can iterate over the rules using all.</span>
 <span>            # I use the longest line for the worst case when pages are all wrong in reverse order</span>
-<span>            for page in (original * longest):  </span>
+<span>            for page in original * longest:</span>
 <span>                if reorder and page in fixed:</span>
 <span>                    continue  # since I replicated the pages for part 2, i need to account for duplicates</span>
 <span></span>
@@ -74,7 +78,7 @@
 <span>            # in part 1, we want the sum of middle pages without reorder (fixed == current)</span>
 <span>            # in part 2, we want the sum of middle pages with reorder (fixed != current)</span>
 <span>            # so, flip the bool</span>
-<span>            totals[fixed != original] += int(fixed[len(fixed) // 2])  </span>
+<span>            totals[fixed != original] += int(fixed[len(fixed) // 2])</span>
 <span></span>
 <span>        return totals</span>
 <span></span>

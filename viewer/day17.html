@@ -39,7 +39,7 @@
 <span>import sys</span>
 <span>import time</span>
 <span></span>
-<span>sys.path.insert(0,"..")</span>
+<span>sys.path.insert(0, "..")</span>
 <span></span>
 <span>import re</span>
 <span></span>
@@ -49,22 +49,22 @@
 <span>class Solution(InputAsBlockSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 17</span>
-<span>    </span>
+<span></span>
 <span>    _is_debugging = False</span>
 <span></span>
 <span>    def Setup(self, input):</span>
 <span>        regs, program = input[0], input[1]</span>
 <span>        self.registers = {}</span>
-<span>        </span>
+<span></span>
 <span>        regex = r"(A|B|C):\ (\d+)"</span>
 <span>        for reg in regs:</span>
 <span>            match = re.search(regex, reg)</span>
 <span>            self.registers[match.group(1)] = int(match.group(2))</span>
-<span>        </span>
+<span></span>
 <span>        self.program = [int(op) for op in program[0].split(": ")[1].split(",")]</span>
 <span></span>
-<span>    #pass registers as parameter for part 2, to simulate the program and keep regs B and c zeroed</span>
-<span>    def Run(self, registers, part = 1):</span>
+<span>    # pass registers as parameter for part 2, to simulate the program and keep regs B and c zeroed</span>
+<span>    def Run(self, registers, part=1):</span>
 <span>        def Combo(operand):</span>
 <span>            if operand < 4:</span>
 <span>                return operand</span>
@@ -75,7 +75,7 @@
 <span>            if operand == 6:</span>
 <span>                return registers["C"]</span>
 <span>            else:</span>
-<span>                raise("combo 7 is reserved")</span>
+<span>                raise ("combo 7 is reserved")</span>
 <span></span>
 <span>        length = len(self.program)</span>
 <span>        ip = 0</span>
@@ -83,50 +83,50 @@
 <span></span>
 <span>        while ip < length - 1:</span>
 <span>            to_jump = True</span>
-<span>            </span>
-<span>            operator, operand = self.program[ip:ip+2]</span>
-<span>            </span>
-<span>            if operator == 0: #adv</span>
-<span>                registers["A"] = registers["A"] // (2**Combo(operand))</span>
-<span>            elif operator == 1: #bxl</span>
+<span></span>
+<span>            operator, operand = self.program[ip : ip + 2]</span>
+<span></span>
+<span>            if operator == 0:  # adv</span>
+<span>                registers["A"] = registers["A"] // (2 ** Combo(operand))</span>
+<span>            elif operator == 1:  # bxl</span>
 <span>                registers["B"] = registers["B"] ^ operand</span>
-<span>            elif operator == 2: #bst</span>
+<span>            elif operator == 2:  # bst</span>
 <span>                registers["B"] = Combo(operand) % 8</span>
-<span>            elif operator == 3: #jnz</span>
+<span>            elif operator == 3:  # jnz</span>
 <span>                if registers["A"] != 0:</span>
 <span>                    ip = operand</span>
 <span>                    to_jump = False</span>
-<span>            elif operator == 4: #bxc</span>
+<span>            elif operator == 4:  # bxc</span>
 <span>                registers["B"] = registers["B"] ^ registers["C"]</span>
-<span>            elif operator == 5: #out</span>
+<span>            elif operator == 5:  # out</span>
 <span>                val = Combo(operand) % 8</span>
 <span>                # print("D:",register, ">>", val)</span>
 <span>                if part == 2:</span>
 <span>                    return val</span>
 <span>                output.append(val)</span>
-<span>            elif operator == 6: #bdv</span>
-<span>                registers["B"] = registers["A"] // (2**Combo(operand))</span>
-<span>            elif operator == 7: #cdv</span>
-<span>                registers["C"] = registers["A"] // 2**Combo(operand)</span>
+<span>            elif operator == 6:  # bdv</span>
+<span>                registers["B"] = registers["A"] // (2 ** Combo(operand))</span>
+<span>            elif operator == 7:  # cdv</span>
+<span>                registers["C"] = registers["A"] // 2 ** Combo(operand)</span>
 <span></span>
 <span>            if to_jump:</span>
 <span>                ip += 2</span>
 <span>            # print("D:cmd",cmd, ":", register)</span>
 <span>        res = ",".join(map(str, output))</span>
-<span>        </span>
+<span></span>
 <span>        return res</span>
 <span></span>
 <span>    # I solved part 3 brute-force to get the star. Then I knew that I could decompile the program</span>
 <span>    # and made it run the math operations. See `alternative.py`</span>
 <span>    def Replicate(self):</span>
-<span>        offset = len(self.program)-1</span>
+<span>        offset = len(self.program) - 1</span>
 <span>        current_As = [0]</span>
 <span></span>
 <span>        while offset >= 0:</span>
 <span>            # print(current_As)</span>
 <span>            next_As = []</span>
 <span>            expected = self.program[offset]</span>
-<span>            </span>
+<span></span>
 <span>            # check decompile, program runs in batches of 8 commands</span>
 <span>            for register_A in current_As:</span>
 <span>                new_register_A = register_A * 8</span>
@@ -137,12 +137,12 @@
 <span>                    output = self.Run(self.registers, 2)</span>
 <span>                    if output == expected:</span>
 <span>                        next_As.append(current_A)</span>
-<span>                        #print(expected, current_A, next_As)</span>
+<span>                        # print(expected, current_A, next_As)</span>
 <span></span>
 <span>            offset -= 1</span>
 <span>            current_As = [item for item in next_As]</span>
 <span>        return min(current_As)</span>
-<span>    </span>
+<span></span>
 <span>    def pt1(self, input):</span>
 <span>        self.debug(input)</span>
 <span></span>
@@ -160,7 +160,7 @@
 <span>        res = self.Replicate()</span>
 <span></span>
 <span>        return res</span>
-<span>        </span>
+<span></span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
 <span></span>
@@ -179,10 +179,12 @@
 <span></span>
 <span>        self.solve("2", res, (end_time - start_time))</span>
 <span></span>
-<span>if __name__ == '__main__':</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
 <span>    solution = Solution()</span>
 <span></span>
 <span>    solution.part_1()</span>
-<span>    </span>
+<span></span>
 <span>    solution.part_2()</span>
+<span></span>
 </pre>

@@ -39,7 +39,7 @@
 <span>import sys</span>
 <span>import time</span>
 <span></span>
-<span>sys.path.insert(0,"..")</span>
+<span>sys.path.insert(0, "..")</span>
 <span></span>
 <span>from collections import defaultdict, deque</span>
 <span>from enum import Enum</span>
@@ -61,17 +61,18 @@
 <span>    def RotateClockwise(self):</span>
 <span>        return Face((self.value + 1) % 4)</span>
 <span></span>
+<span></span>
 <span>class Solution(InputAsLinesSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 16</span>
-<span>    </span>
+<span></span>
 <span>    _is_debugging = False</span>
 <span></span>
 <span>    DIRECTION = {</span>
-<span>        Face.NORTH: (-1,  0),</span>
-<span>        Face.EAST:  ( 0,  1),</span>
-<span>        Face.SOUTH: ( 1,  0),</span>
-<span>        Face.WEST:  ( 0, -1)</span>
+<span>        Face.NORTH: (-1, 0),</span>
+<span>        Face.EAST: (0, 1),</span>
+<span>        Face.SOUTH: (1, 0),</span>
+<span>        Face.WEST: (0, -1),</span>
 <span>    }</span>
 <span></span>
 <span>    def FindRobot(self, grid, face):</span>
@@ -83,7 +84,7 @@
 <span></span>
 <span>    def draw(self, grid, path):</span>
 <span>        for row in range(len(grid)):</span>
-<span>            print()   </span>
+<span>            print()</span>
 <span>            for col in range(len(grid[0])):</span>
 <span>                if (row, col) in path and grid[row][col] == ".":</span>
 <span>                    print("X", end="")</span>
@@ -186,7 +187,7 @@
 <span>        res = self.FindSeat(input)</span>
 <span></span>
 <span>        return res</span>
-<span>        </span>
+<span></span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
 <span></span>
@@ -205,10 +206,12 @@
 <span></span>
 <span>        self.solve("2", res, (end_time - start_time))</span>
 <span></span>
-<span>if __name__ == '__main__':</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
 <span>    solution = Solution()</span>
 <span></span>
 <span>    solution.part_1()</span>
-<span>    </span>
+<span></span>
 <span>    solution.part_2()</span>
+<span></span>
 </pre>

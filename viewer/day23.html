@@ -39,7 +39,7 @@
 <span>import sys</span>
 <span>import time</span>
 <span></span>
-<span>sys.path.insert(0,"..")</span>
+<span>sys.path.insert(0, "..")</span>
 <span></span>
 <span>import matplotlib.pyplot as plt</span>
 <span>import networkx as nx</span>
@@ -49,7 +49,7 @@
 <span>class Solution(InputAsCSVSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 23</span>
-<span>    </span>
+<span></span>
 <span>    _is_debugging = False</span>
 <span></span>
 <span>    # this year I learned about networkx, what a great library</span>
@@ -57,17 +57,17 @@
 <span>        G = nx.Graph(input)</span>
 <span></span>
 <span>        self.debug(G.nodes)</span>
-<span>        </span>
+<span></span>
 <span>        if self._is_debugging:</span>
 <span>            # plotting the graph</span>
 <span>            nx.draw(G, with_labels=True)</span>
 <span>            plt.draw()</span>
 <span>            plt.show()</span>
-<span>        </span>
+<span></span>
 <span>        cliques = list(nx.enumerate_all_cliques(G))</span>
 <span></span>
 <span>        # Chief historian computer starts with "t"</span>
-<span>        res1 = sum(any(a[0]=="t" for a in c) for c in cliques if len(c) == 3)</span>
+<span>        res1 = sum(any(a[0] == "t" for a in c) for c in cliques if len(c) == 3)</span>
 <span>        res2 = ",".join(sorted(cliques[-1]))</span>
 <span></span>
 <span>        return res1, res2</span>
@@ -85,7 +85,7 @@
 <span>        _, res2 = self.Go2LANParty(input)</span>
 <span></span>
 <span>        return res2</span>
-<span>        </span>
+<span></span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
 <span></span>
@@ -104,10 +104,12 @@
 <span></span>
 <span>        self.solve("2", res, (end_time - start_time))</span>
 <span></span>
-<span>if __name__ == '__main__':</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
 <span>    solution = Solution(separator="-")</span>
 <span></span>
 <span>    solution.part_1()</span>
-<span>    </span>
+<span></span>
 <span>    solution.part_2()</span>
+<span></span>
 </pre>

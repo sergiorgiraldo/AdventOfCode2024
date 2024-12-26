@@ -39,7 +39,7 @@
 <span>import sys</span>
 <span>import time</span>
 <span></span>
-<span>sys.path.insert(0,"..")</span>
+<span>sys.path.insert(0, "..")</span>
 <span></span>
 <span>import re</span>
 <span></span>
@@ -50,7 +50,7 @@
 <span>class Solution(InputAsBlockSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 13</span>
-<span>    </span>
+<span></span>
 <span>    _is_debugging = False</span>
 <span></span>
 <span>    # Z3! this is learned day 24 in 2023</span>
@@ -62,20 +62,24 @@
 <span>        for block in input:</span>
 <span>            machine = "".join(block)</span>
 <span></span>
-<span>            (a_x,a_y), (b_x,b_y), (prize_x,prize_y) = [map(int, val) for val in re.findall(regex, machine)]</span>
+<span>            (a_x, a_y), (b_x, b_y), (prize_x, prize_y) = [</span>
+<span>                map(int, val) for val in re.findall(regex, machine)</span>
+<span>            ]</span>
 <span></span>
-<span>            for i, add in enumerate([0, 10_000_000_000_000]): #magic number from the puzzle</span>
+<span>            for i, add in enumerate(</span>
+<span>                [0, 10_000_000_000_000]</span>
+<span>            ):  # magic number from the puzzle</span>
 <span>                solver = z3.Optimize()</span>
 <span></span>
-<span>                #variables</span>
+<span>                # variables</span>
 <span>                a, b = z3.Int("a"), z3.Int("b")</span>
 <span></span>
-<span>                #constraints</span>
+<span>                # constraints</span>
 <span>                solver.add(prize_x + add == a * a_x + b * b_x)</span>
 <span>                solver.add(prize_y + add == a * a_y + b * b_y)</span>
-<span>                </span>
-<span>                #equation</span>
-<span>                solver.minimize(a * 3 + b) #token a costs 3, token b costs 1</span>
+<span></span>
+<span>                # equation</span>
+<span>                solver.minimize(a * 3 + b)  # token a costs 3, token b costs 1</span>
 <span></span>
 <span>                if solver.check() == z3.sat:</span>
 <span>                    model = solver.model()</span>
@@ -96,7 +100,7 @@
 <span>        res = self.GetThePrize(input)[1]</span>
 <span></span>
 <span>        return res</span>
-<span>        </span>
+<span></span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
 <span></span>
@@ -115,10 +119,12 @@
 <span></span>
 <span>        self.solve("2", res, (end_time - start_time))</span>
 <span></span>
-<span>if __name__ == '__main__':</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
 <span>    solution = Solution()</span>
 <span></span>
 <span>    solution.part_1()</span>
-<span>    </span>
+<span></span>
 <span>    solution.part_2()</span>
+<span></span>
 </pre>

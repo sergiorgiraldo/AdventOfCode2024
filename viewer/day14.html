@@ -39,7 +39,7 @@
 <span>import sys</span>
 <span>import time</span>
 <span></span>
-<span>sys.path.insert(0,"..")</span>
+<span>sys.path.insert(0, "..")</span>
 <span></span>
 <span>import operator</span>
 <span>import re</span>
@@ -52,14 +52,14 @@
 <span>class Solution(InputAsLinesSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 14</span>
-<span>    </span>
+<span></span>
 <span>    _is_debugging = False</span>
 <span></span>
-<span>    WIDTH = 101 #magic numbers from the puzzle</span>
+<span>    WIDTH = 101  # magic numbers from the puzzle</span>
 <span>    HEIGHT = 103</span>
-<span>  </span>
+<span></span>
 <span>    def GetSpaceForTest(self):</span>
-<span>        self.WIDTH = 11 #magic numbers from the puzzle</span>
+<span>        self.WIDTH = 11  # magic numbers from the puzzle</span>
 <span>        self.HEIGHT = 7</span>
 <span></span>
 <span>    def GetRobots(self, input):</span>
@@ -78,12 +78,12 @@
 <span></span>
 <span>    def FindQuadrant(self, position):</span>
 <span>        px, py = position</span>
-<span>        </span>
+<span></span>
 <span>        if px == self.WIDTH // 2 or py == self.HEIGHT // 2:</span>
 <span>            return None</span>
-<span>        </span>
+<span></span>
 <span>        return (px < self.WIDTH // 2, py < self.HEIGHT // 2)</span>
-<span>    </span>
+<span></span>
 <span>    def CountRobots(self, input):</span>
 <span>        robots = self.GetRobots(input)</span>
 <span></span>
@@ -107,20 +107,22 @@
 <span>            for x in range(self.WIDTH - 1):</span>
 <span>                if (x, y) in pos_set and (x + 1, y) in pos_set:</span>
 <span>                    adjacents += 1</span>
-<span>        </span>
+<span></span>
 <span>        return adjacents</span>
 <span></span>
-<span>    #the tree must be a set of connected positions i.e. adjacent to each other</span>
+<span>    # the tree must be a set of connected positions i.e. adjacent to each other</span>
 <span>    def FindEasterEgg(self, input):</span>
 <span>        robots = self.GetRobots(input)</span>
 <span></span>
-<span>        for time in range(10000): #arbitrary time limit, tried with 1000, 5000, then 10000</span>
+<span>        for time in range(</span>
+<span>            10000</span>
+<span>        ):  # arbitrary time limit, tried with 1000, 5000, then 10000</span>
 <span>            positions = [self.EvaluatePosition(robot, time) for robot in robots]</span>
 <span>            adjacencies = self.FindAdjacent(positions)</span>
-<span>            if adjacencies > 100: #arbitrary number of points</span>
+<span>            if adjacencies > 100:  # arbitrary number of points</span>
 <span>                # self.draw(positions)</span>
 <span>                return time</span>
-<span>        </span>
+<span></span>
 <span>        raise Exception("Easter egg not found")</span>
 <span></span>
 <span>    def draw(self, positions):</span>
@@ -130,9 +132,9 @@
 <span>        for y in range(self.HEIGHT):</span>
 <span>            for x in range(self.WIDTH - 1):</span>
 <span>                if (x, y) in pos_set:</span>
-<span>                    grid[y][x]="#"</span>
+<span>                    grid[y][x] = "#"</span>
 <span>                else:</span>
-<span>                    grid[y][x]=" "</span>
+<span>                    grid[y][x] = " "</span>
 <span></span>
 <span>        for row in grid:</span>
 <span>            print((" ".join(row)))</span>
@@ -150,7 +152,7 @@
 <span>        time = self.FindEasterEgg(input)</span>
 <span></span>
 <span>        return time</span>
-<span>        </span>
+<span></span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
 <span></span>
@@ -169,10 +171,12 @@
 <span></span>
 <span>        self.solve("2", res, (end_time - start_time))</span>
 <span></span>
-<span>if __name__ == '__main__':</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
 <span>    solution = Solution()</span>
 <span></span>
 <span>    solution.part_1()</span>
-<span>    </span>
+<span></span>
 <span>    solution.part_2()</span>
+<span></span>
 </pre>

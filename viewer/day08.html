@@ -39,7 +39,7 @@
 <span>import sys</span>
 <span>import time</span>
 <span></span>
-<span>sys.path.insert(0,"..")</span>
+<span>sys.path.insert(0, "..")</span>
 <span></span>
 <span>from collections import defaultdict</span>
 <span>from math import gcd</span>
@@ -50,7 +50,7 @@
 <span>class Solution(InputAsLinesSolution):</span>
 <span>    _year = 2024</span>
 <span>    _day = 8</span>
-<span>    </span>
+<span></span>
 <span>    _is_debugging = False</span>
 <span></span>
 <span>    def GetNodes(self, input):</span>
@@ -65,9 +65,9 @@
 <span></span>
 <span>    def FindUniqueLocations(self, input):</span>
 <span>        def get_distance(a, b):</span>
-<span>            return (a[0] - b[0], a[1] - b[1])        </span>
-<span>        </span>
-<span>        nodes, map = self.GetNodes(input)    </span>
+<span>            return (a[0] - b[0], a[1] - b[1])</span>
+<span></span>
+<span>        nodes, map = self.GetNodes(input)</span>
 <span></span>
 <span>        antinodes = set()</span>
 <span>        antinodes_antennas = set()</span>
@@ -79,26 +79,36 @@
 <span>                    if antenna_1 == antenna_2:</span>
 <span>                        continue</span>
 <span>                    distance = get_distance(antenna_1, antenna_2)</span>
-<span>                    div = gcd(abs(distance[0]), abs(distance[1])) # antinodes in line but not multiple of distance between antennas</span>
+<span>                    div = gcd(</span>
+<span>                        abs(distance[0]), abs(distance[1])</span>
+<span>                    )  # antinodes in line but not multiple of distance between antennas</span>
 <span>                    distance = (distance[0] // div, distance[1] // div)</span>
-<span>                    </span>
+<span></span>
 <span>                    try:</span>
-<span>                        candidate = (antenna_1[0] + distance[0], antenna_1[1] + distance[1])</span>
-<span>                        map[candidate] # hack: check out of bounds</span>
+<span>                        candidate = (</span>
+<span>                            antenna_1[0] + distance[0],</span>
+<span>                            antenna_1[1] + distance[1],</span>
+<span>                        )</span>
+<span>                        map[candidate]  # hack: check out of bounds</span>
 <span></span>
 <span>                        antinodes.add(candidate)</span>
 <span>                        antinodes_antennas.add(candidate)</span>
-<span>                        </span>
+<span></span>
 <span>                        while True:</span>
 <span>                            # antinodes in line: i keep adding the distance until out of bounds</span>
-<span>                            candidate = (candidate[0] + distance[0], candidate[1] + distance[1])</span>
-<span>                            map[candidate] # hack: check out of bounds</span>
-<span>                            </span>
+<span>                            candidate = (</span>
+<span>                                candidate[0] + distance[0],</span>
+<span>                                candidate[1] + distance[1],</span>
+<span>                            )</span>
+<span>                            map[candidate]  # hack: check out of bounds</span>
+<span></span>
 <span>                            antinodes_antennas.add(candidate)</span>
-<span>                    except KeyError: # thrown when out of bounds (when accesing the map)</span>
+<span>                    except (</span>
+<span>                        KeyError</span>
+<span>                    ):  # thrown when out of bounds (when accesing the map)</span>
 <span>                        continue</span>
 <span></span>
-<span>        return antinodes, antinodes_antennas </span>
+<span>        return antinodes, antinodes_antennas</span>
 <span></span>
 <span>    def pt1(self, input):</span>
 <span>        self.debug(input)</span>
@@ -113,7 +123,7 @@
 <span>        _, res = self.FindUniqueLocations(input)</span>
 <span></span>
 <span>        return len(res)</span>
-<span>        </span>
+<span></span>
 <span>    def part_1(self):</span>
 <span>        start_time = time.time()</span>
 <span></span>
@@ -132,10 +142,12 @@
 <span></span>
 <span>        self.solve("2", res, (end_time - start_time))</span>
 <span></span>
-<span>if __name__ == '__main__':</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
 <span>    solution = Solution()</span>
 <span></span>
 <span>    solution.part_1()</span>
-<span>    </span>
+<span></span>
 <span>    solution.part_2()</span>
+<span></span>
 </pre>
