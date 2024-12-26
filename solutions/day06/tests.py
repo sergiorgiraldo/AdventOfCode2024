@@ -17,7 +17,7 @@ class Tests(unittest.TestCase):
             ".#..^.....",
             "........#.",
             "#.........",
-            "......#..."
+            "......#...",
         ]
         self.assertEqual(solution.pt1(input), 41, "Oops")
 
@@ -32,7 +32,7 @@ class Tests(unittest.TestCase):
             ".#..^.....",
             "........#.",
             "#.........",
-            "......#..."
+            "......#...",
         ]
         self.assertEqual(solution.pt2(input), 6, "Oops")
 

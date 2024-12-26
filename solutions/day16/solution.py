@@ -3,7 +3,7 @@
 import sys
 import time
 
-sys.path.insert(0,"..")
+sys.path.insert(0, "..")
 
 from collections import defaultdict, deque
 from enum import Enum
@@ -25,17 +25,18 @@ class Face(Enum):
     def RotateClockwise(self):
         return Face((self.value + 1) % 4)
 
+
 class Solution(InputAsLinesSolution):
     _year = 2024
     _day = 16
-    
+
     _is_debugging = False
 
     DIRECTION = {
-        Face.NORTH: (-1,  0),
-        Face.EAST:  ( 0,  1),
-        Face.SOUTH: ( 1,  0),
-        Face.WEST:  ( 0, -1)
+        Face.NORTH: (-1, 0),
+        Face.EAST: (0, 1),
+        Face.SOUTH: (1, 0),
+        Face.WEST: (0, -1),
     }
 
     def FindRobot(self, grid, face):
@@ -47,7 +48,7 @@ class Solution(InputAsLinesSolution):
 
     def draw(self, grid, path):
         for row in range(len(grid)):
-            print()   
+            print()
             for col in range(len(grid[0])):
                 if (row, col) in path and grid[row][col] == ".":
                     print("X", end="")
@@ -150,7 +151,7 @@ class Solution(InputAsLinesSolution):
         res = self.FindSeat(input)
 
         return res
-        
+
     def part_1(self):
         start_time = time.time()
 
@@ -169,9 +170,10 @@ class Solution(InputAsLinesSolution):
 
         self.solve("2", res, (end_time - start_time))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     solution = Solution()
 
     solution.part_1()
-    
+
     solution.part_2()

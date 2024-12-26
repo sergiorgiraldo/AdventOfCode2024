@@ -3,7 +3,7 @@
 import sys
 import time
 
-sys.path.insert(0,"..")
+sys.path.insert(0, "..")
 
 from base.advent import *
 
@@ -11,14 +11,16 @@ from base.advent import *
 class Solution(InputAsStringSolution):
     _year = 2024
     _day = 9
-    
+
     _is_debugging = False
 
     def ComputeChecksum(self, disk):
         return sum(
-                    map(lambda item: int(item[1]) * item[0], 
-                        filter(lambda item: item[1] != ".", enumerate(disk)))
-                    )
+            map(
+                lambda item: int(item[1]) * item[0],
+                filter(lambda item: item[1] != ".", enumerate(disk)),
+            )
+        )
 
     def GetOriginalState(self, input):
         disk = []
@@ -35,14 +37,14 @@ class Solution(InputAsStringSolution):
                 for _ in range(amount):
                     disk.append(str(id))
                 id += 1
-            free = not free # switch between free and used
+            free = not free  # switch between free and used
 
         return disk, free_space
-    
+
     def CompactByBlocks(self, input):
         disk, _ = self.GetOriginalState(input)
 
-        for i, c in enumerate(disk): #find first free space
+        for i, c in enumerate(disk):  # find first free space
             if c == ".":
                 l = i
                 break
@@ -66,7 +68,7 @@ class Solution(InputAsStringSolution):
         disk, free_space = self.GetOriginalState(input)
 
         r = len(disk) - 1
-        
+
         seen = set()
 
         while r > 0:
@@ -85,7 +87,9 @@ class Solution(InputAsStringSolution):
                 file_size += 1
                 r -= 1
 
-            candidates = [(k, v) for (k, v) in free_space.items() if k <= r and v >= file_size]
+            candidates = [
+                (k, v) for (k, v) in free_space.items() if k <= r and v >= file_size
+            ]
             if len(candidates) == 0:
                 continue
 
@@ -107,7 +111,7 @@ class Solution(InputAsStringSolution):
         better_disk = self.CompactByBlocks(input)
 
         checksum = self.ComputeChecksum(better_disk)
-        
+
         return checksum
 
     def pt2(self, input):
@@ -116,9 +120,9 @@ class Solution(InputAsStringSolution):
         better_disk = self.CompactByFiles(input)
 
         checksum = self.ComputeChecksum(better_disk)
-        
+
         return checksum
-        
+
     def part_1(self):
         start_time = time.time()
 
@@ -137,9 +141,10 @@ class Solution(InputAsStringSolution):
 
         self.solve("2", res, (end_time - start_time))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     solution = Solution()
 
     solution.part_1()
-    
+
     solution.part_2()

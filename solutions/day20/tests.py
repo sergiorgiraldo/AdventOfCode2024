@@ -22,7 +22,7 @@ class Tests(unittest.TestCase):
             "#.#...#.#.#...#",
             "#.#.#.#.#.#.###",
             "#...#...#...###",
-            "###############"
+            "###############",
         ]
         res, _ = solution.FindCheats(input, 20)
         self.assertEqual(res, 5, "Oops")
@@ -43,7 +43,7 @@ class Tests(unittest.TestCase):
             "#.#...#.#.#...#",
             "#.#.#.#.#.#.###",
             "#...#...#...###",
-            "###############"
+            "###############",
         ]
         _, res = solution.FindCheats(input, 74)
         self.assertEqual(res, 7, "Oops")

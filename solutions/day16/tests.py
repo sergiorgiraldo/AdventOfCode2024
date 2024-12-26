@@ -4,6 +4,7 @@ from solution import Solution
 
 solution = Solution()
 
+
 class Tests(unittest.TestCase):
     def test_part1(self):
         input = [
@@ -23,7 +24,7 @@ class Tests(unittest.TestCase):
             "#.#.#.........#.#",
             "#.#.#.#########.#",
             "#S#.............#",
-            "#################"
+            "#################",
         ]
         self.assertEqual(solution.pt1(input), 11048, "Oops")
 
@@ -45,12 +46,13 @@ class Tests(unittest.TestCase):
             "#.#.#.........#.#",
             "#.#.#.#########.#",
             "#S#.............#",
-            "#################"
+            "#################",
         ]
         self.assertEqual(solution.pt2(input), 64, "Oops")
 
     def test_sanity_check(self):
         self.assertEqual(1 + 1, 2, "Oops")
+
 
 if __name__ == "__main__":
     unittest.main()

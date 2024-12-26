@@ -10,6 +10,8 @@ fi
 
 ./ruff.sh
 
+black .
+
 markdownlint-cli2 "*.md" --fix
 
 git bumpmajor

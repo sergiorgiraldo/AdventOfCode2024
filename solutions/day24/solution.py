@@ -1,6 +1,6 @@
 # puzzle prompt: https://adventofcode.com/2024/day/24
 
-'''
+"""
 Part 1
 The output wires depend on two input wires, forming a tree structure where input wires 
 (x's and y's) are the leaves. 
@@ -23,12 +23,12 @@ So:
 - Swap output wires of gate pairs not in the correct set.
 - Re-run the function to check improvements and validate swaps.
 - Repeat this process four times (there are 4 gates to swap) to achieve a fully functional ripple-carry adder.
-'''
+"""
 
 import sys
 import time
 
-sys.path.insert(0,"..")
+sys.path.insert(0, "..")
 
 import re
 from itertools import combinations
@@ -39,7 +39,7 @@ from base.advent import *
 class Solution(InputAsBlockSolution):
     _year = 2024
     _day = 24
-    
+
     _is_debugging = False
 
     def Parse(self, input):
@@ -71,9 +71,15 @@ class Solution(InputAsBlockSolution):
         x1, x2 = parents[reg]
 
         # Need to finish x1 and x2 first
-        return max(self.GetDepth(x1, finished, parents), self.GetDepth(x2, finished, parents)) + 1
+        return (
+            max(
+                self.GetDepth(x1, finished, parents),
+                self.GetDepth(x2, finished, parents),
+            )
+            + 1
+        )
 
-    # Dependencies create a hierarchical arrangement, 
+    # Dependencies create a hierarchical arrangement,
     # with initial nodes at the base. Handle nodes based on their hierarchy level.
     # This ensures operand availability when arriving at any particular gate.
     def Simulate(self, input):
@@ -110,7 +116,7 @@ class Solution(InputAsBlockSolution):
         num_out = int(str(regs[-1][0])[-2:]) + 1
         bin_str = "".join(str(val) for _, val in regs[-num_out:])
         return int(bin_str[::-1], 2)
-        
+
     # Examine the operation sequence to gauge progress and record wires requiring accuracy.
     # Identified corresponding input lines for the ripple-carry adder wires.
     # The "Validation point" is when the output aligns with z15 or another reference --
@@ -160,7 +166,7 @@ class Solution(InputAsBlockSolution):
         swaps = set()
 
         base, base_used = self.SeeHowFarWeMade(op_list)  # Everything up to 20 is fine
-        for _ in range(4): # 4 pairs of gates to swap
+        for _ in range(4):  # 4 pairs of gates to swap
             # try swapping
             for i, j in combinations(range(len(op_list)), 2):
                 x1_i, x2_i, res_i, op_i = op_list[i]
@@ -199,7 +205,7 @@ class Solution(InputAsBlockSolution):
         res = self.Swap(input)
 
         return res
-        
+
     def part_1(self):
         start_time = time.time()
 
@@ -218,9 +224,10 @@ class Solution(InputAsBlockSolution):
 
         self.solve("2", res, (end_time - start_time))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     solution = Solution()
 
     solution.part_1()
-    
+
     solution.part_2()

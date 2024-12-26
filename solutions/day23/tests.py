@@ -39,7 +39,7 @@ class Tests(unittest.TestCase):
             ["co", "tc"],
             ["wh", "qp"],
             ["tb", "vc"],
-            ["td", "yn"]
+            ["td", "yn"],
         ]
         self.assertEqual(solution.pt1(input), 7, "Oops")
 
@@ -76,7 +76,7 @@ class Tests(unittest.TestCase):
             ["co", "tc"],
             ["wh", "qp"],
             ["tb", "vc"],
-            ["td", "yn"]
+            ["td", "yn"],
         ]
         self.assertEqual(solution.pt2(input), "co,de,ka,ta", "Oops")
 

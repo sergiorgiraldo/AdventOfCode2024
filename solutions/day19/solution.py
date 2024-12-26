@@ -3,7 +3,7 @@
 import sys
 import time
 
-sys.path.insert(0,"..")
+sys.path.insert(0, "..")
 
 from itertools import product
 
@@ -13,7 +13,7 @@ from base.advent import *
 class Solution(InputAsBlockSolution):
     _year = 2024
     _day = 19
-    
+
     _is_debugging = False
 
     def DesignTowels(self, input):
@@ -28,13 +28,14 @@ class Solution(InputAsBlockSolution):
         candidate = [1] + [0] * len(design)
 
         positions = [
-                (i, pattern) for i, pattern in product(range(len(design)), patterns)
-                if design[i:].startswith(pattern)
-            ]
-            
+            (i, pattern)
+            for i, pattern in product(range(len(design)), patterns)
+            if design[i:].startswith(pattern)
+        ]
+
         for i, pattern in positions:
             candidate[i + len(pattern)] += candidate[i]
-        
+
         return candidate[-1]
 
     def pt1(self, input):
@@ -50,7 +51,7 @@ class Solution(InputAsBlockSolution):
         _, res = self.DesignTowels(input)
 
         return res
-        
+
     def part_1(self):
         start_time = time.time()
 
@@ -69,9 +70,10 @@ class Solution(InputAsBlockSolution):
 
         self.solve("2", res, (end_time - start_time))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     solution = Solution()
 
     solution.part_1()
-    
+
     solution.part_2()

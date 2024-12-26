@@ -52,13 +52,13 @@ Lint and format markdown files
 
 Lint
 
-#### Usage
+### black
 
-> `./ruff.sh`
+Format
 
 ### `./deploy.sh`
 
-Lint, format, create viewer, commit to Github and make PR
+Lint (using Ruff), format (using Black), create viewer, commit to Github and make PR
 
 #### Usage
 

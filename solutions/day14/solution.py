@@ -3,7 +3,7 @@
 import sys
 import time
 
-sys.path.insert(0,"..")
+sys.path.insert(0, "..")
 
 import operator
 import re
@@ -16,14 +16,14 @@ from base.advent import *
 class Solution(InputAsLinesSolution):
     _year = 2024
     _day = 14
-    
+
     _is_debugging = False
 
-    WIDTH = 101 #magic numbers from the puzzle
+    WIDTH = 101  # magic numbers from the puzzle
     HEIGHT = 103
-  
+
     def GetSpaceForTest(self):
-        self.WIDTH = 11 #magic numbers from the puzzle
+        self.WIDTH = 11  # magic numbers from the puzzle
         self.HEIGHT = 7
 
     def GetRobots(self, input):
@@ -42,12 +42,12 @@ class Solution(InputAsLinesSolution):
 
     def FindQuadrant(self, position):
         px, py = position
-        
+
         if px == self.WIDTH // 2 or py == self.HEIGHT // 2:
             return None
-        
+
         return (px < self.WIDTH // 2, py < self.HEIGHT // 2)
-    
+
     def CountRobots(self, input):
         robots = self.GetRobots(input)
 
@@ -71,20 +71,22 @@ class Solution(InputAsLinesSolution):
             for x in range(self.WIDTH - 1):
                 if (x, y) in pos_set and (x + 1, y) in pos_set:
                     adjacents += 1
-        
+
         return adjacents
 
-    #the tree must be a set of connected positions i.e. adjacent to each other
+    # the tree must be a set of connected positions i.e. adjacent to each other
     def FindEasterEgg(self, input):
         robots = self.GetRobots(input)
 
-        for time in range(10000): #arbitrary time limit, tried with 1000, 5000, then 10000
+        for time in range(
+            10000
+        ):  # arbitrary time limit, tried with 1000, 5000, then 10000
             positions = [self.EvaluatePosition(robot, time) for robot in robots]
             adjacencies = self.FindAdjacent(positions)
-            if adjacencies > 100: #arbitrary number of points
+            if adjacencies > 100:  # arbitrary number of points
                 # self.draw(positions)
                 return time
-        
+
         raise Exception("Easter egg not found")
 
     def draw(self, positions):
@@ -94,9 +96,9 @@ class Solution(InputAsLinesSolution):
         for y in range(self.HEIGHT):
             for x in range(self.WIDTH - 1):
                 if (x, y) in pos_set:
-                    grid[y][x]="#"
+                    grid[y][x] = "#"
                 else:
-                    grid[y][x]=" "
+                    grid[y][x] = " "
 
         for row in grid:
             print((" ".join(row)))
@@ -114,7 +116,7 @@ class Solution(InputAsLinesSolution):
         time = self.FindEasterEgg(input)
 
         return time
-        
+
     def part_1(self):
         start_time = time.time()
 
@@ -133,9 +135,10 @@ class Solution(InputAsLinesSolution):
 
         self.solve("2", res, (end_time - start_time))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     solution = Solution()
 
     solution.part_1()
-    
+
     solution.part_2()
