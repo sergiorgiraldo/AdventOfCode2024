@@ -1,5 +1,12 @@
 # Changelog
 
+## [25.1.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v25.0.0...v25.1.0) (2024-12-26)
+
+
+### Features
+
+* moving configuration to pyproject.toml ([a1808e5](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/a1808e56c48375bc9627970473395c237403d4ac))
+
 ## [25.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v24.0.0...v25.0.0) (2024-12-25)
 
 
