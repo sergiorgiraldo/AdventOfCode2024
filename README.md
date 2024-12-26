@@ -50,11 +50,11 @@ Lint and format markdown files
 
 ### `./ruff.sh`
 
-Lint
+Lint, options in `pyproject.toml`
 
-### black
+### `./black.sh`
 
-Format
+Format, options in `pyproject.toml`
 
 ### `./deploy.sh`
 
