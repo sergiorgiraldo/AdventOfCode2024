@@ -41,6 +41,7 @@ class Tests(unittest.TestCase):
             ["tb", "vc"],
             ["td", "yn"],
         ]
+        solution._is_debugging = True
         self.assertEqual(solution.pt1(input), 7, "Oops")
 
     def test_part2(self):
