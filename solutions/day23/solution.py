@@ -8,6 +8,7 @@ sys.path.insert(0, "..")
 import matplotlib.pyplot as plt
 import networkx as nx
 from base.advent import *
+from collections import defaultdict
 
 
 class Solution(InputAsCSVSolution):
@@ -15,6 +16,41 @@ class Solution(InputAsCSVSolution):
     _day = 23
 
     _is_debugging = False
+
+    # Bron–Kerbosch algorithm
+    # https://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm
+    # so many solutions using this algorithm, lets learn it.
+    # Algorithmm from networkx is Zhang, et al. (2005) (https://doi.org/10.1109/SC.2005.29)
+    def part2_alternative(self, input):
+        def parse_input():
+            g = defaultdict(list)
+            for line in input:
+                u, v = line[0], line[1]
+                g[u].append(v)
+                g[v].append(u)
+            return g
+
+        def bron_kerbosch(r, p, x, cur):
+            if not p and not x:
+                return max(r, cur, key=len)
+
+            pivot = next(iter(p | x))
+
+            for v in list(p - set(G[pivot])):
+                cur = max(
+                    cur,
+                    bron_kerbosch(r | {v}, p & set(G[v]), x & set(G[v]), cur),
+                    key=len,
+                )
+                p -= {v}
+                x |= {v}
+            return cur
+
+        G = parse_input()
+        res = ",".join(sorted(bron_kerbosch(set(), set(G.keys()), set(), set())))
+
+        print("\nAlternative solution for part 2")
+        print("Part 2 ::", res)
 
     # this year I learned about networkx, what a great library
     def Go2LANParty(self, input):
@@ -75,3 +111,5 @@ if __name__ == "__main__":
     solution.part_1()
 
     solution.part_2()
+
+    solution.part2_alternative(solution.input)
