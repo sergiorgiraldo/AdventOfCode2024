@@ -17,8 +17,8 @@ class Solution(InputAsCSVSolution):
 
     _is_debugging = False
 
-    # Bron–Kerbosch algorithm
-    # https://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm
+    # Clique problem: https://en.wikipedia.org/wiki/Clique_problem
+    # Bron–Kerbosch algorithm : https://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm
     # so many solutions using this algorithm, lets learn it.
     # Algorithmm from networkx is Zhang, et al. (2005) (https://doi.org/10.1109/SC.2005.29)
     def part2_alternative(self, input):
@@ -66,9 +66,10 @@ class Solution(InputAsCSVSolution):
 
         cliques = list(nx.enumerate_all_cliques(G))
 
-        # Chief historian computer starts with "t"
-        res1 = sum(any(a[0] == "t" for a in c) for c in cliques if len(c) == 3)
-        res2 = ",".join(sorted(cliques[-1]))
+        # Chief Historian computer starts with "t"
+        # 3 connections is a magic number from the puzzle
+        res1 = sum(any(a[0] == "t" for a in c) for c in cliques if len(c) == 3) 
+        res2 = ",".join(sorted(cliques[-1])) # last one is the maximum clique
 
         return res1, res2
 
