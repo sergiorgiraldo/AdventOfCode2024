@@ -1,5 +1,12 @@
 # Changelog
 
+## [25.2.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v25.1.0...v25.2.0) (2024-12-29)
+
+
+### Features
+
+* implementing Bron–Kerbosch algorithm for day 23 ([eb036b5](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/eb036b5900910cb97b11492c77513b4a7e67440e))
+
 ## [25.1.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v25.0.0...v25.1.0) (2024-12-26)
 
 ### Features
