@@ -152,7 +152,7 @@ class BaseSolution(ABC):
 
 # Concrete Solutions
 class InputAsStringSolution(BaseSolution):
-    def __init__(self):
+    def __init__(self, to_int=False):
         super().__init__(
             lines=False,
             csv=False,
@@ -160,7 +160,7 @@ class InputAsStringSolution(BaseSolution):
             int_csvline=False,
             block=False,
             separator=",",
-            to_int=False,
+            to_int=to_int,
         )
 
     def dummy(self):
