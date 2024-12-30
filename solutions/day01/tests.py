@@ -8,7 +8,7 @@ solution = Solution()
 class Tests(unittest.TestCase):
     def test_part1(self):
         input = ["3   4", "4   3", "2   5", "1   3", "3   9", "3   3"]
-        self.assertEqual(solution.pt1(input), 11, "Oops")
+        self.assertEqual(solution.pt1(input), 121, "Oops")
 
     def test_part2(self):
         input = ["3   4", "4   3", "2   5", "1   3", "3   9", "3   3"]

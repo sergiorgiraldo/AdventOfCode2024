@@ -72,6 +72,13 @@ if __name__ == "__main__":
 
     # end get input ##############
 
+    ## puzzle
+
+    command = "get-puzzles " + str(day) + " 2024"
+    result = subprocess.run(command, shell=True, text=True)
+
+    # end get puzzle ##############
+
     solution_path = Path(day_dir, "solution.py")
     tests_path = Path(day_dir, "tests.py")
 

@@ -4,23 +4,21 @@ import requests
 import datetime
 from bs4 import BeautifulSoup
 import os
+import sys
 
 def get_puzzles():
     year = datetime.datetime.now().year
+
+    for day in range(1, 26):
+        get_puzzle_from(day, year)
+
+def get_puzzle_from(day, year):
+    print("Getting day " + str(day) + " of year " + str(year))
 
     folder = "puzzles"
     if not os.path.exists(folder):
         os.makedirs(folder)
 
-    for day in range(1, 26):
-        print("Getting day " + str(day) + " of year " + str(year))
-
-        content = get_puzzle_from(day, year)
-        if content is not None:
-            with open(folder + "/day" + str(day) + ".txt", "w") as f:
-                f.write(content)
-
-def get_puzzle_from(day, year):
     with open("./.env", "r") as dotenv:
         cookie = dotenv.read()
     
@@ -40,9 +38,15 @@ def get_puzzle_from(day, year):
     soup = BeautifulSoup(request.text, "html.parser")
 
     articles = soup.find_all("article", class_="day-desc")
-    contents = [article.get_text() for article in articles]
+    puzzle = [article.get_text() for article in articles]
+    content = puzzle[0].strip().replace(" ---", " ---\n") + "\n\n" + puzzle[1].strip().replace(" ---", " ---\n")
 
-    return contents[0].strip().replace(" ---", " ---\n") + "\n\n" + contents[1].strip().replace(" ---", " ---\n")
+    if content is not None:
+        with open(folder + "/day" + str(day) + ".txt", "w") as f:
+            f.write(content)
 
 if __name__ == "__main__":
-    get_puzzles()
+    if len(sys.argv) != 3:
+        get_puzzles()
+    else:
+        get_puzzle_from(sys.argv[1], sys.argv[2])
