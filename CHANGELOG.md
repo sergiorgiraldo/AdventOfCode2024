@@ -1,5 +1,16 @@
 # Changelog
 
+## [26.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v25.2.0...v26.0.0) (2024-12-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* AOC 2024 completed.
+
+### Features
+
+* AOC 2024 completed. ([f769357](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/f7693576edc9e26092e5f1a4aa0980b48e0b055b))
+
 ## [25.2.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v25.1.0...v25.2.0) (2024-12-29)
 
 ### Features
