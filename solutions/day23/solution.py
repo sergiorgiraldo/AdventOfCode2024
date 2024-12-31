@@ -5,10 +5,11 @@ import time
 
 sys.path.insert(0, "..")
 
+from collections import defaultdict
+
 import matplotlib.pyplot as plt
 import networkx as nx
 from base.advent import *
-from collections import defaultdict
 
 
 class Solution(InputAsCSVSolution):
@@ -68,8 +69,8 @@ class Solution(InputAsCSVSolution):
 
         # Chief Historian computer starts with "t"
         # 3 connections is a magic number from the puzzle
-        res1 = sum(any(a[0] == "t" for a in c) for c in cliques if len(c) == 3) 
-        res2 = ",".join(sorted(cliques[-1])) # last one is the maximum clique
+        res1 = sum(any(a[0] == "t" for a in c) for c in cliques if len(c) == 3)
+        res2 = ",".join(sorted(cliques[-1]))  # last one is the maximum clique
 
         return res1, res2
 

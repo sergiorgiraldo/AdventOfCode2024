@@ -44,6 +44,7 @@
 <span>import matplotlib.pyplot as plt</span>
 <span>import networkx as nx</span>
 <span>from base.advent import *</span>
+<span>from collections import defaultdict</span>
 <span></span>
 <span></span>
 <span>class Solution(InputAsCSVSolution):</span>
@@ -51,6 +52,41 @@
 <span>    _day = 23</span>
 <span></span>
 <span>    _is_debugging = False</span>
+<span></span>
+<span>    # Clique problem: https://en.wikipedia.org/wiki/Clique_problem</span>
+<span>    # Bron–Kerbosch algorithm : https://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm</span>
+<span>    # so many solutions using this algorithm, lets learn it.</span>
+<span>    # Algorithmm from networkx is Zhang, et al. (2005) (https://doi.org/10.1109/SC.2005.29)</span>
+<span>    def part2_alternative(self, input):</span>
+<span>        def parse_input():</span>
+<span>            g = defaultdict(list)</span>
+<span>            for line in input:</span>
+<span>                u, v = line[0], line[1]</span>
+<span>                g[u].append(v)</span>
+<span>                g[v].append(u)</span>
+<span>            return g</span>
+<span></span>
+<span>        def bron_kerbosch(r, p, x, cur):</span>
+<span>            if not p and not x:</span>
+<span>                return max(r, cur, key=len)</span>
+<span></span>
+<span>            pivot = next(iter(p | x))</span>
+<span></span>
+<span>            for v in list(p - set(G[pivot])):</span>
+<span>                cur = max(</span>
+<span>                    cur,</span>
+<span>                    bron_kerbosch(r | {v}, p & set(G[v]), x & set(G[v]), cur),</span>
+<span>                    key=len,</span>
+<span>                )</span>
+<span>                p -= {v}</span>
+<span>                x |= {v}</span>
+<span>            return cur</span>
+<span></span>
+<span>        G = parse_input()</span>
+<span>        res = ",".join(sorted(bron_kerbosch(set(), set(G.keys()), set(), set())))</span>
+<span></span>
+<span>        print("\nAlternative solution for part 2")</span>
+<span>        print("Part 2 ::", res)</span>
 <span></span>
 <span>    # this year I learned about networkx, what a great library</span>
 <span>    def Go2LANParty(self, input):</span>
@@ -66,9 +102,10 @@
 <span></span>
 <span>        cliques = list(nx.enumerate_all_cliques(G))</span>
 <span></span>
-<span>        # Chief historian computer starts with "t"</span>
-<span>        res1 = sum(any(a[0] == "t" for a in c) for c in cliques if len(c) == 3)</span>
-<span>        res2 = ",".join(sorted(cliques[-1]))</span>
+<span>        # Chief Historian computer starts with "t"</span>
+<span>        # 3 connections is a magic number from the puzzle</span>
+<span>        res1 = sum(any(a[0] == "t" for a in c) for c in cliques if len(c) == 3) </span>
+<span>        res2 = ",".join(sorted(cliques[-1])) # last one is the maximum clique</span>
 <span></span>
 <span>        return res1, res2</span>
 <span></span>
@@ -111,5 +148,7 @@
 <span>    solution.part_1()</span>
 <span></span>
 <span>    solution.part_2()</span>
+<span></span>
+<span>    solution.part2_alternative(solution.input)</span>
 <span></span>
 </pre>
