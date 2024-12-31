@@ -74,7 +74,7 @@ if __name__ == "__main__":
 
     ## puzzle
 
-    command = "get-puzzles " + str(day) + " 2024"
+    command = "./get-puzzles " + str(day) + " 2024"
     result = subprocess.run(command, shell=True, text=True)
 
     # end get puzzle ##############
