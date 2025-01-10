@@ -10,7 +10,7 @@ for day in $(ls -d day*); do
     
     python -m tests --verbose
     if [ $? -ne 0 ]; then
-        echo "Tests failed. Exiting final.sh."
+        echo "Tests failed. Exiting finish.sh."
         exit 1
     fi
     cd ..
