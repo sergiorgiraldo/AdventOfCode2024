@@ -23,6 +23,11 @@ So:
 - Swap output wires of gate pairs not in the correct set.
 - Re-run the function to check improvements and validate swaps.
 - Repeat this process four times (there are 4 gates to swap) to achieve a fully functional ripple-carry adder.
+
+- Thank you, Professor Mário Dias Ferraretto :)
+- https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=FNC0224
+- Discipline is not offered anymore, since 2009, one of the best courses I've ever taken.
+
 """
 
 import sys
