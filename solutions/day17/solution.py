@@ -43,11 +43,11 @@ class Solution(InputAsBlockSolution):
 
         length = len(self.program)
         ip = 0
+        cmd = 1
         output = []
 
         while ip < length - 1:
             to_jump = True
-
             operator, operand = self.program[ip : ip + 2]
 
             if operator == 0:  # adv
@@ -64,7 +64,9 @@ class Solution(InputAsBlockSolution):
                 registers["B"] = registers["B"] ^ registers["C"]
             elif operator == 5:  # out
                 val = Combo(operand) % 8
-                # print("D:",register, ">>", val)
+                cmd = 1
+                # print("D:",registers, " >> ", val)
+                # print("")
                 if part == 2:
                     return val
                 output.append(val)
@@ -75,12 +77,14 @@ class Solution(InputAsBlockSolution):
 
             if to_jump:
                 ip += 2
-            # print("D:cmd",cmd, ":", register)
+            # print("D:cmd",cmd, " : ", registers)
+            cmd += 1
+
         res = ",".join(map(str, output))
 
         return res
 
-    # I solved part 3 brute-force to get the star. Then I knew that I could decompile the program
+    # I solved part 2 by brute-force to get the star. I knew that I could decompile the program
     # and made it run the math operations. See `alternative.py`
     def Replicate(self):
         offset = len(self.program) - 1
@@ -91,7 +95,7 @@ class Solution(InputAsBlockSolution):
             next_As = []
             expected = self.program[offset]
 
-            # check decompile, program runs in batches of 8 commands
+            # check output, program runs in batches of 8 commands
             for register_A in current_As:
                 new_register_A = register_A * 8
 
@@ -149,4 +153,4 @@ if __name__ == "__main__":
 
     solution.part_1()
 
-    solution.part_2()
+    # solution.part_2()
