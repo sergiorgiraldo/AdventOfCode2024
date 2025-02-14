@@ -84,7 +84,7 @@ class Solution(InputAsLinesSolution):
             positions = [self.EvaluatePosition(robot, time) for robot in robots]
             adjacencies = self.FindAdjacent(positions)
             if adjacencies > 100:  # arbitrary number of points
-                # self.draw(positions)
+                self.draw(positions)
                 return time
 
         raise Exception("Easter egg not found")
@@ -100,9 +100,11 @@ class Solution(InputAsLinesSolution):
                 else:
                     grid[y][x] = " "
 
-        for row in grid:
-            print((" ".join(row)))
-
+        # with open('tree.txt', 'w') as file:
+        #     for row in grid:
+        #         print((" ".join(row)))
+        #         file.write(" ".join(row))
+        #         file.write("\n")
     def pt1(self, input):
         self.debug(input)
 
