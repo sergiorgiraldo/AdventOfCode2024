@@ -2,7 +2,8 @@
 
 My solutions to [Advent of Code 2024](https://adventofcode.com/2024) done in Python
 
-[Viewer](https://sergiorgiraldo.github.io/AdventOfCode2024/viewer/)
+[Viewer 1-GH](https://sergiorgiraldo.github.io/AdventOfCode2024/viewer/)
+[Viewer 2-Cloudfare](https://adventofcode2024.pages.dev/)
 
 ## Performance
 
