@@ -17,7 +17,7 @@ class Solution(InputAsLinesSolution):
     _year = 2024
     _day = 14
 
-    _is_debugging = False
+    _is_debugging = True
 
     WIDTH = 101  # magic numbers from the puzzle
     HEIGHT = 103
@@ -99,12 +99,14 @@ class Solution(InputAsLinesSolution):
                     grid[y][x] = "#"
                 else:
                     grid[y][x] = " "
+        for row in grid:
+            print((" ".join(row)))
 
-        # with open('tree.txt', 'w') as file:
-        #     for row in grid:
-        #         print((" ".join(row)))
-        #         file.write(" ".join(row))
-        #         file.write("\n")
+        with open('tree.txt', 'w') as file:
+            for row in grid:
+                print((" ".join(row)))
+                file.write(" ".join(row))
+                file.write("\n")
     def pt1(self, input):
         self.debug(input)
 
@@ -140,6 +142,9 @@ class Solution(InputAsLinesSolution):
 
 if __name__ == "__main__":
     solution = Solution()
+
+    if solution._is_debugging:
+        solution.draw(solution.input)
 
     solution.part_1()
 

@@ -45,7 +45,6 @@ fi
 
 # Activate virtual environment
 if [ -f "venv/bin/activate" ]; then
-    echo "xxxxxxxxx"
     source venv/bin/activate
 else
     echo "Error: Virtual environment not found at 'venv/bin/activate'"
