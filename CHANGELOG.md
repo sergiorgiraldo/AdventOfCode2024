@@ -1,5 +1,12 @@
 # Changelog
 
+## [26.0.1](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v26.0.0...v26.0.1) (2025-11-03)
+
+
+### Bug Fixes
+
+* name of script ([63add5d](https://github.com/sergiorgiraldo/AdventOfCode2024/commit/63add5d8ba2cc8109e8e56a885949dd3426b64fe))
+
 ## [26.0.0](https://github.com/sergiorgiraldo/AdventOfCode2024/compare/v25.2.0...v26.0.0) (2024-12-31)
 
 
